@@ -99,7 +99,7 @@ var fluffArray = [{
     attack: 1.2,
     deffence: 1.2
 }, {
-    trpe: "Normal",
+    type: "Well used",
     attack: 1,
     deffence: 1
 }];
@@ -200,6 +200,14 @@ var player = {
             fluff: fluffArray[5],
             color: colorArray[1]
         }
+    },
+    printEquiped: function () {
+        var chestString = "Chest armor: " + player.equiped.chest.quality.type + " " + player.equiped.chest.fluff.type + " " + player.equiped.chest.color.type + " " + player.equiped.chest.type.type,
+            helmString = "Head armor: " + player.equiped.head.quality.type + " " + player.equiped.head.fluff.type + " " + player.equiped.head.color.type + " " + player.equiped.head.type.type,
+            crotchString = "Crotch armor: " + player.equiped.crotch.quality.type + " " + player.equiped.crotch.fluff.type + " " + player.equiped.crotch.color.type + " " + player.equiped.crotch.type.type,
+            weaponString = "Weapon: " + player.equiped.weapon.quality.type + " " + player.equiped.weapon.fluff.type + " " + player.equiped.weapon.color.type + " " + player.equiped.weapon.type.type,
+            printingString = "Equiped \n" + chestString + "\n" + helmString + "\n" + crotchString + "\n" + weaponString;
+        console.log(printingString);
     }
 };
 console.log("Welcome to AGOA(Awsome Game of Awsomeness)");
