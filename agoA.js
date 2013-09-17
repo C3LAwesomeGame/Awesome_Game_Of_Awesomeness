@@ -265,8 +265,8 @@ var fluffRandom = function () {
 };
 var weponRandom = function () {
     "use strict";
-    randomizer = [Math.floor(Math.random() * weponArray.length)];
-    console.log(weponArray[randomizer]);
+    randomizer = [Math.floor(Math.random() * weaponArray.length)];
+    console.log(weaponArray[randomizer]);
 };
 var armorRandom = function () {
     "use strict";
