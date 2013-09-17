@@ -59,8 +59,8 @@ var colorArray = [{
     deffence: 0.6
 }, {
     type: "Black",
-    attack: 0,
-    deffence: 0
+    attack: 1,
+    deffence: 1
 }, {
     type: "White",
     attack: 0.8,
@@ -168,9 +168,11 @@ var qualityArray = [{
 }];
 var player = {
     name: "",
+    level: 1,
     attack: 1,
     deffence: 1,
-    inventory: {
+    health: 100,
+    inventory: { // inventory should be empty at start (?) this is just for debugging
         armor: [{
             type: armorArray[0],
             quality: qualityArray[3],
