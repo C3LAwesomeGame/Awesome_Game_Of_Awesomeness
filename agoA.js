@@ -331,8 +331,71 @@ var qualityRandom = function () {
     randomizer = [Math.floor(Math.random() * resourceTabel.qualityArray.length)];
     console.log(resourceTabel.qualityArray[randomizer]);
 };
+
+function randomFromArray(arr) {
+    'use strict';
+    randomizer = Math.floor(Math.random() * arr.length);
+    return randomizer;
+}
+
+function generateGenericItemDescription() {
+    "use strict";
+    var item = {
+        qualityValue: randomFromArray(resourceTabel.qualityArray),
+        fluffValue: randomFromArray(resourceTabel.fluffArray),
+        colorValue: randomFromArray(resourceTabel.colorArray)
+    };
+    return item;
+}
+
+function generateRandomWeapon() {
+    "use strict";
+    var weapon = (generateGenericItemDescription());
+    weapon.typeValue = (randomFromArray(resourceTabel.weaponArray));
+    weapon.sourceArray = "weaponArray";
+    return weapon;
+}
+
+function generateRandomArmor() {
+    "use strict";
+    var armor = (generateGenericItemDescription());
+    armor.typeValue = (randomFromArray(resourceTabel.armorArray));
+    armor.sourceArray = "armorArray";
+    return armor;
+}
+
+function generateRandomMonster() {
+    "use strict";
+    var monster = (generateGenericItemDescription());
+    monster.typeValue = (randomFromArray(resourceTabel.monsterArray));
+    monster.sourceArray = "monsterArray";
+    return monster;
+}
 console.log("Welcome to AGOA(Awsome Game of Awsomeness)");
 console.log("This is a world full of fluffy monsters, awsome roundhouse kicking ponny's, rabid rabbits and everything else that's not normal to sane human being");
 var name = prompt("Name please!");
 player.name = name;
 console.log("Welcome! " + name);
+//
+var testRandomMonster = (generateRandomMonster());
+print.item(testRandomMonster);
+//
+var testRandomWeapon = (generateRandomWeapon());
+print.item(testRandomWeapon);
+//
+var testRandomArmor = (generateRandomArmor());
+print.item(testRandomArmor);
+/*
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ */
