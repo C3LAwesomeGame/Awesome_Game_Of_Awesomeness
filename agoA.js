@@ -171,8 +171,23 @@ var player = {
     attack: 1,
     deffence: 1,
     inventory: {
-        armor: [],
-        weapons: [],
+        armor: [{
+            type: armorArray[0],
+            quality: qualityArray[3],
+            fluff: fluffArray[5],
+            color: colorArray[1]
+        }, {
+            type: armorArray[1],
+            quality: qualityArray[3],
+            fluff: fluffArray[5],
+            color: colorArray[1]
+        }],
+        weapons: [{
+            type: weponArray[0],
+            quality: qualityArray[3],
+            fluff: fluffArray[5],
+            color: colorArray[1]
+        }],
         potions: []
     },
     equiped: {
@@ -202,12 +217,23 @@ var player = {
         }
     },
     printEquiped: function () {
+        'use strict';
         var chestString = "Chest armor: " + player.equiped.chest.quality.type + " " + player.equiped.chest.fluff.type + " " + player.equiped.chest.color.type + " " + player.equiped.chest.type.type,
             helmString = "Head armor: " + player.equiped.head.quality.type + " " + player.equiped.head.fluff.type + " " + player.equiped.head.color.type + " " + player.equiped.head.type.type,
             crotchString = "Crotch armor: " + player.equiped.crotch.quality.type + " " + player.equiped.crotch.fluff.type + " " + player.equiped.crotch.color.type + " " + player.equiped.crotch.type.type,
             weaponString = "Weapon: " + player.equiped.weapon.quality.type + " " + player.equiped.weapon.fluff.type + " " + player.equiped.weapon.color.type + " " + player.equiped.weapon.type.type,
             printingString = "Equiped \n" + chestString + "\n" + helmString + "\n" + crotchString + "\n" + weaponString;
         console.log(printingString);
+    },
+    printInventory: function () {
+        'use strict';
+        var key;
+        for (key in player.inventory) {
+            console.log(key + ": ");
+            player.inventory[key].forEach(function (element) {
+                console.log(element.quality.type + " " + element.fluff.type + " " + element.color.type + " " + element.type.type);
+            });
+        }
     }
 };
 console.log("Welcome to AGOA(Awsome Game of Awsomeness)");
