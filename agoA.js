@@ -103,7 +103,7 @@ var fluffArray = [{
     attack: 1,
     deffence: 1
 }];
-var weponArray = [{
+var weaponArray = [{
     type: "Dagger",
     attack: 1.2,
     deffence: 0
@@ -166,6 +166,7 @@ var qualityArray = [{
     attack: 1.2,
     deffence: 1
 }];
+var potionArray = [];
 var player = {
     name: "",
     level: 1,
@@ -174,66 +175,74 @@ var player = {
     health: 100,
     inventory: { // inventory should be empty at start (?) this is just for debugging
         armor: [{
-            type: armorArray[0],
-            quality: qualityArray[3],
-            fluff: fluffArray[5],
-            color: colorArray[1]
+            type: 0,
+            quality: 3,
+            fluff: 5,
+            color: 1
         }, {
-            type: armorArray[1],
-            quality: qualityArray[3],
-            fluff: fluffArray[5],
-            color: colorArray[1]
+            type: 1,
+            quality: 3,
+            fluff: 5,
+            color: 1
         }],
-        weapons: [{
-            type: weponArray[0],
-            quality: qualityArray[3],
-            fluff: fluffArray[5],
-            color: colorArray[1]
+        weapon: [{
+            type: 0,
+            quality: 3,
+            fluff: 5,
+            color: 1
         }],
-        potions: []
+        potion: []
     },
     equiped: {
         chest: {
-            type: armorArray[0],
-            quality: qualityArray[3],
-            fluff: fluffArray[5],
-            color: colorArray[1]
+            type: 0,
+            quality: 3,
+            fluff: 5,
+            color: 1
         },
         head: {
-            type: armorArray[1],
-            quality: qualityArray[3],
-            fluff: fluffArray[5],
-            color: colorArray[1]
+            type: 1,
+            quality: 3,
+            fluff: 5,
+            color: 1
         },
         crotch: {
-            type: armorArray[2],
-            quality: qualityArray[3],
-            fluff: fluffArray[5],
-            color: colorArray[1]
+            type: 2,
+            quality: 3,
+            fluff: 5,
+            color: 1
         },
         weapon: {
-            type: weponArray[0],
-            quality: qualityArray[3],
-            fluff: fluffArray[5],
-            color: colorArray[1]
+            type: 0,
+            quality: 3,
+            fluff: 5,
+            color: 1
         }
     },
     printEquiped: function () {
         'use strict';
-        var chestString = "Chest armor: " + player.equiped.chest.quality.type + " " + player.equiped.chest.fluff.type + " " + player.equiped.chest.color.type + " " + player.equiped.chest.type.type,
-            helmString = "Head armor: " + player.equiped.head.quality.type + " " + player.equiped.head.fluff.type + " " + player.equiped.head.color.type + " " + player.equiped.head.type.type,
-            crotchString = "Crotch armor: " + player.equiped.crotch.quality.type + " " + player.equiped.crotch.fluff.type + " " + player.equiped.crotch.color.type + " " + player.equiped.crotch.type.type,
-            weaponString = "Weapon: " + player.equiped.weapon.quality.type + " " + player.equiped.weapon.fluff.type + " " + player.equiped.weapon.color.type + " " + player.equiped.weapon.type.type,
+        var chestString = "Chest armor: " + qualityArray[player.equiped.chest.quality].type + " " + fluffArray[player.equiped.chest.fluff].type + " " + colorArray[player.equiped.chest.color].type + " " + armorArray[player.equiped.chest.type].type,
+            helmString = "Head armor: " + qualityArray[player.equiped.head.quality].type + " " + fluffArray[player.equiped.head.fluff].type + " " + colorArray[player.equiped.head.color].type + " " + armorArray[player.equiped.head.type].type,
+            crotchString = "Crotch armor: " + qualityArray[player.equiped.crotch.quality].type + " " + fluffArray[player.equiped.crotch.fluff].type + " " + colorArray[player.equiped.crotch.color].type + " " + armorArray[player.equiped.crotch.type].type,
+            weaponString = "Weapon: " + qualityArray[player.equiped.weapon.quality].type + " " + fluffArray[player.equiped.weapon.fluff].type + " " + colorArray[player.equiped.weapon.color].type + " " + weaponArray[player.equiped.weapon.type].type,
             printingString = "Equiped \n" + chestString + "\n" + helmString + "\n" + crotchString + "\n" + weaponString;
         console.log(printingString);
     },
     printInventory: function () {
         'use strict';
-        var key;
+        var key, typeArray;
         for (key in player.inventory) {
+            typeArray = [];
+            if (key === "armor") {
+                typeArray = armorArray;
+            } else if (key === "weapons") {
+                typeArray = weaponArray;
+            } else if (key === "potion") {
+                typeArray = potionArray;
+            }
             console.log(key + ": ");
             player.inventory[key].forEach(function (element) {
-                console.log(element.quality.type + " " + element.fluff.type + " " + element.color.type + " " + element.type.type);
+                console.log(qualityArray[element.quality].type + " " + fluffArray[element.fluff].type + " " + colorArray[element.color].type + " " + typeArray[element.type].type);
             });
         }
     }
