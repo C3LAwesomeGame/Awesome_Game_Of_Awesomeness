@@ -1,5 +1,6 @@
 /*jslint browser:true*/
-/*global alert: false, prompt: false, confirm: false, console: false, Debug: false, opera: false,*/
+/*global alert: false, prompt: false, confirm: false, console: false, Debug: false, opera: false, math: false,*/
+var randomizer = {};
 var monsterArray = [{
     type: "Shark",
     attack: 5,
@@ -79,23 +80,23 @@ var colorArray = [{
     deffence: 1
 }];
 var fluffArray = [{
-    trpe: "Funky",
+    type: "Funky",
     attack: 1,
     deffence: 1
 }, {
-    trpe: "Fluffy",
+    type: "Fluffy",
     attack: 1,
     deffence: 1
 }, {
-    trpe: "Tiny",
+    type: "Tiny",
     attack: 0.8,
     deffence: 0.8
 }, {
-    trpe: "Giant",
+    type: "Giant",
     attack: 1.2,
     deffence: 1.2
 }, {
-    trpe: "Shiny",
+    type: "Shiny",
     attack: 1.2,
     deffence: 1.2
 }, {
@@ -131,7 +132,7 @@ var weaponArray = [{
     type: "Bow",
     attack: 1.5,
     deffence: 0
-}]; // fluff, quality
+}];
 var armorArray = [{
     type: "Chest",
     attack: 0,
@@ -144,7 +145,7 @@ var armorArray = [{
     type: "Crotch-Cup",
     attack: 0,
     deffence: 1.2
-}]; //fluff, quality
+}];
 var qualityArray = [{
     type: "Rusty",
     attack: 0.8,
@@ -246,6 +247,35 @@ var player = {
             });
         }
     }
+};
+var monsterRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * monsterArray.length)];
+    console.log(monsterArray[randomizer]);
+};
+var colorRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * colorArray.length)];
+    console.log(colorArray[randomizer]);
+};
+var fluffRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * fluffArray.length)];
+    console.log(fluffArray[randomizer]);
+};
+var weponRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * weponArray.length)];
+    console.log(weponArray[randomizer]);
+};
+var armorRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * armorArray.length)];
+    console.log(armorArray[randomizer]);
+};
+var qualityRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * qualityArray.length)];
 };
 console.log("Welcome to AGOA(Awsome Game of Awsomeness)");
 console.log("This is a world full of fluffy monsters, awsome roundhouse kicking ponny's, rabid rabbits and everything else that's not normal to sane human being");
