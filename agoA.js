@@ -300,6 +300,37 @@ var print = {
         console.log(qualityStr + " " + fluffStr + " " + colorStr + " " + itemTypeStr);
     }
 };
+var randomizer;
+var monsterRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * resourceTabel.monsterArray.length)];
+    console.log(resourceTabel.monsterArray[randomizer]);
+};
+var colorRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * resourceTabel.colorArray.length)];
+    console.log(resourceTabel.colorArray[randomizer]);
+};
+var fluffRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * resourceTabel.fluffArray.length)];
+    console.log(resourceTabel.fluffArray[randomizer]);
+};
+var weponRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * resourceTabel.weaponArray.length)];
+    console.log(resourceTabel.weaponArray[randomizer]);
+};
+var armorRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * resourceTabel.armorArray.length)];
+    console.log(resourceTabel.armorArray[randomizer]);
+};
+var qualityRandom = function () {
+    "use strict";
+    randomizer = [Math.floor(Math.random() * resourceTabel.qualityArray.length)];
+    console.log(resourceTabel.qualityArray[randomizer]);
+};
 console.log("Welcome to AGOA(Awsome Game of Awsomeness)");
 console.log("This is a world full of fluffy monsters, awsome roundhouse kicking ponny's, rabid rabbits and everything else that's not normal to sane human being");
 var name = prompt("Name please!");
