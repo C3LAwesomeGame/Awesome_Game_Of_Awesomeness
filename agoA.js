@@ -123,11 +123,6 @@ var resourceTabel = {
         attack: 1.2,
         deffence: 1.2,
         sourceArray: "fluffArray"
-    }, {
-        type: "Well used",
-        attack: 1,
-        deffence: 1,
-        sourceArray: "fluffArray"
     }],
     weaponArray: [{
         type: "Dagger",
@@ -219,20 +214,20 @@ var player = {
         armor: [{
             typeValue: 0,
             qualityValue: 3,
-            fluffValue: 5,
+            fluffValue: 2,
             colorValue: 1,
             sourceArray: "armorArray"
         }, {
             typeValue: 1,
             qualityValue: 3,
-            fluffValue: 5,
+            fluffValue: 2,
             colorValue: 1,
             sourceArray: "armorArray"
         }],
         weapon: [{
             typeValue: 0,
             qualityValue: 3,
-            fluffValue: 5,
+            fluffValue: 2,
             colorValue: 1,
             sourceArray: "weaponArray"
         }],
@@ -242,28 +237,28 @@ var player = {
         chest: {
             typeValue: 0,
             qualityValue: 3,
-            fluffValue: 5,
+            fluffValue: 2,
             colorValue: 1,
             sourceArray: "armorArray"
         },
         head: {
             typeValue: 1,
             qualityValue: 3,
-            fluffValue: 5,
+            fluffValue: 2,
             colorValue: 1,
             sourceArray: "armorArray"
         },
         crotch: {
             typeValue: 2,
             qualityValue: 3,
-            fluffValue: 5,
+            fluffValue: 2,
             colorValue: 1,
             sourceArray: "armorArray"
         },
         weapon: {
             typeValue: 0,
             qualityValue: 3,
-            fluffValue: 5,
+            fluffValue: 2,
             colorValue: 1,
             sourceArray: "weaponArray"
         }
@@ -297,7 +292,7 @@ var print = {
             fluffStr = resourceTabel.fluffArray[item.fluffValue].type,
             colorStr = resourceTabel.colorArray[item.colorValue].type,
             itemTypeStr = resourceTabel[item.sourceArray][item.typeValue].type;
-        console.log(qualityStr + " " + fluffStr + " " + colorStr + " " + itemTypeStr);
+        console.log(fluffStr + " " + qualityStr + " " + colorStr + " " + itemTypeStr);
     }
 };
 var randomizer;
@@ -376,13 +371,10 @@ console.log("This is a world full of fluffy monsters, awsome roundhouse kicking 
 var name = prompt("Name please!");
 player.name = name;
 console.log("Welcome! " + name);
-//
 var testRandomMonster = (generateRandomMonster());
 print.item(testRandomMonster);
-//
 var testRandomWeapon = (generateRandomWeapon());
 print.item(testRandomWeapon);
-//
 var testRandomArmor = (generateRandomArmor());
 print.item(testRandomArmor);
 /*
