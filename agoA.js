@@ -127,59 +127,59 @@ var resourceTabel = {
     weaponArray: [{
         type: "Dagger",
         attack: 1.2,
-        deffence: 0,
+        deffence: 1,
         sourceArray: "weaponArray"
     }, {
         type: "2H-Sword",
         attack: 1.6,
-        deffence: 0,
+        deffence: 1,
         sourceArray: "weaponArray"
     }, {
         type: "Axe-Spray",
         attack: 1.2,
-        deffence: 0,
+        deffence: 1,
         sourceArray: "weaponArray"
     }, {
         type: "Wand",
         attack: 1.4,
-        deffence: 0,
+        deffence: 1,
         sourceArray: "weaponArray"
     }, {
         type: "Knuckles",
         attack: 1.2,
-        deffence: 0,
+        deffence: 1,
         sourceArray: "weaponArray"
     }, {
         type: "Whip",
         attack: 1.2,
-        deffence: 0,
+        deffence: 1,
         sourceArray: "weaponArray"
     }, {
         type: "Bow",
         attack: 1.5,
-        deffence: 0,
+        deffence: 1,
         sourceArray: "weaponArray"
     }], // fluffValue, qualityValue
     armorArray: [{
         type: "Chest",
-        attack: 0,
+        attack: 1,
         deffence: 1.6,
         sourceArray: "armorArray"
     }, {
         type: "Helm",
-        attack: 0,
+        attack: 1,
         deffence: 1.4,
         sourceArray: "armorArray"
     }, {
         type: "Crotch-Cup",
-        attack: 0,
+        attack: 1,
         deffence: 1.2,
         sourceArray: "armorArray"
     }], //fluffValue, qualityValue
     qualityArray: [{
         type: "Rusty",
         attack: 0.8,
-        deffence: 0,
+        deffence: 1,
         sourceArray: "qualityArray"
     }, {
         type: "Mighty",
