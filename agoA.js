@@ -7,7 +7,7 @@ var player = {
     name: "",
     level: 1,
     attack: 1,
-    deffence: 1,
+    defence: 1,
     health: 100,
     inventory: { // inventory should be empty at start (?) this is just for debugging
         armor: [{
@@ -165,6 +165,17 @@ function generateRandomMonster() {
     monster.sourceArray = "monsterArray";
     return monster;
 }
+
+function calculatePowerForItem(item) {
+    'use strict';
+    console.log(item);
+    var attack,
+        defence;
+    attack = resourceTabel.qualityArray[item.qualityValue].attack * resourceTabel.fluffArray[item.fluffValue].attack * resourceTabel.colorArray[item.colorValue].attack * resourceTabel[item.sourceArray][item.typeValue].attack;
+    defence = resourceTabel.qualityArray[item.qualityValue].defence * resourceTabel.fluffArray[item.fluffValue].defence * resourceTabel.colorArray[item.colorValue].defence * resourceTabel[item.sourceArray][item.typeValue].defence;
+    item.attack = attack;
+    item.defence = defence;
+}
 console.log("Welcome to AGOA(Awsome Game of Awsomeness)");
 console.log("This is a world full of fluffy monsters, awsome roundhouse kicking ponny's, rabid rabbits and everything else that's not normal to sane human being");
 var name = prompt("Name please!");
@@ -173,6 +184,7 @@ console.log("Welcome! " + name);
 //
 //
 var testRandomMonster = (generateRandomMonster());
+calculatePowerForItem(testRandomMonster);
 print.item(testRandomMonster);
 var testRandomWeapon = (generateRandomWeapon());
 print.item(testRandomWeapon);
