@@ -1,8 +1,8 @@
 /*jslint browser:true */
 /*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
 /*global getResources */
+/*global getActionsFromString */
 var resourceTabel = (getResources());
-var potionArray = [];
 var player = {
     name: "",
     level: 1,
@@ -132,6 +132,17 @@ function randomFromArray(arr) {
     return randomizer;
 }
 
+function calculatePowerForItem(item) {
+    'use strict';
+    var attack,
+        defence;
+    attack = resourceTabel.qualityArray[item.qualityValue].attack * resourceTabel.fluffArray[item.fluffValue].attack * resourceTabel.colorArray[item.colorValue].attack * resourceTabel[item.sourceArray][item.typeValue].attack;
+    defence = resourceTabel.qualityArray[item.qualityValue].defence * resourceTabel.fluffArray[item.fluffValue].defence * resourceTabel.colorArray[item.colorValue].defence * resourceTabel[item.sourceArray][item.typeValue].defence;
+    item.attack = Math.round(attack);
+    item.defence = Math.round(defence);
+    return item;
+}
+
 function generateGenericItemDescription() {
     "use strict";
     var item = {
@@ -147,6 +158,7 @@ function generateRandomWeapon() {
     var weapon = (generateGenericItemDescription());
     weapon.typeValue = (randomFromArray(resourceTabel.weaponArray));
     weapon.sourceArray = "weaponArray";
+    weapon = calculatePowerForItem(weapon);
     return weapon;
 }
 
@@ -155,6 +167,7 @@ function generateRandomArmor() {
     var armor = (generateGenericItemDescription());
     armor.typeValue = (randomFromArray(resourceTabel.armorArray));
     armor.sourceArray = "armorArray";
+    armor = calculatePowerForItem(armor);
     return armor;
 }
 
@@ -163,18 +176,38 @@ function generateRandomMonster() {
     var monster = (generateGenericItemDescription());
     monster.typeValue = (randomFromArray(resourceTabel.monsterArray));
     monster.sourceArray = "monsterArray";
+    monster = calculatePowerForItem(monster);
     return monster;
 }
 
-function calculatePowerForItem(item) {
+function takeAction() {
     'use strict';
-    console.log(item);
-    var attack,
-        defence;
-    attack = resourceTabel.qualityArray[item.qualityValue].attack * resourceTabel.fluffArray[item.fluffValue].attack * resourceTabel.colorArray[item.colorValue].attack * resourceTabel[item.sourceArray][item.typeValue].attack;
-    defence = resourceTabel.qualityArray[item.qualityValue].defence * resourceTabel.fluffArray[item.fluffValue].defence * resourceTabel.colorArray[item.colorValue].defence * resourceTabel[item.sourceArray][item.typeValue].defence;
-    item.attack = attack;
-    item.defence = defence;
+    var actions = getActionsFromString(prompt("You face a terible troll, what do you do?")),
+        i;
+    for (i = 0; i < actions.length; i += 1) {
+        switch (actions[i]) {
+        case "hit":
+            console.log("You hit it!");
+            break;
+        case "move":
+            console.log("You got away!");
+            break;
+        case "drink":
+            console.log("You feel tipsy");
+            break;
+        case "look":
+            console.log("You look around and see a tree");
+            break;
+        case "take":
+            console.log("You pick up a tiny rock");
+            break;
+        case "win":
+            console.log("You have summoned the all-knowing genie known as Pablo de la Win");
+            break;
+        default:
+            console.log("What do you want to do?");
+        }
+    }
 }
 console.log("Welcome to AGOA(Awsome Game of Awsomeness)");
 console.log("This is a world full of fluffy monsters, awsome roundhouse kicking ponny's, rabid rabbits and everything else that's not normal to sane human being");
@@ -182,11 +215,14 @@ var name = prompt("Name please!");
 player.name = name;
 console.log("Welcome! " + name);
 //
+//Test to take action
+takeAction();
+//
 //
 var testRandomMonster = (generateRandomMonster());
-calculatePowerForItem(testRandomMonster);
-print.item(testRandomMonster);
-var testRandomWeapon = (generateRandomWeapon());
-print.item(testRandomWeapon);
-var testRandomArmor = (generateRandomArmor());
-print.item(testRandomArmor);
+// print.item(testRandomMonster);
+// var testRandomWeapon = (generateRandomWeapon());
+// print.item(testRandomWeapon);
+// var testRandomArmor = (generateRandomArmor());
+// print.item(testRandomArmor);
+//
