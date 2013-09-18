@@ -1,5 +1,5 @@
-/*jslint browser:true*/
-/*global alert: false, prompt: false, confirm: false, console: false, Debug: false, opera: false,*/
+/*jslint browser:true */
+/*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
 var resourceTabel = {
     monsterArray: [{
         type: "Shark",
@@ -280,10 +280,10 @@ var print = {
         'use strict';
         var key;
         for (key in player.inventory) {
-            console.log(key + ": ");
-            player.inventory[key].forEach(function (element) {
-                print.item(element);
-            });
+            if (player.inventory.hasOwnProperty(key)) {
+                console.log(key + ": ");
+                player.inventory[key].forEach(print.item);
+            }
         }
     },
     item: function (item) {
@@ -371,23 +371,11 @@ console.log("This is a world full of fluffy monsters, awsome roundhouse kicking 
 var name = prompt("Name please!");
 player.name = name;
 console.log("Welcome! " + name);
+//
+//
 var testRandomMonster = (generateRandomMonster());
 print.item(testRandomMonster);
 var testRandomWeapon = (generateRandomWeapon());
 print.item(testRandomWeapon);
 var testRandomArmor = (generateRandomArmor());
 print.item(testRandomArmor);
-/*
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- */
