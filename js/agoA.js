@@ -1,7 +1,8 @@
 /*jslint browser:true */
 /*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
 var agoa = (function () {
-    resourceTabel = {
+    'use strict';
+    var resourceTabel = {
         monsterArray: [{
             type: "Shark",
             attack: 5,
@@ -213,107 +214,123 @@ var agoa = (function () {
             defence: 1,
             sourceArray: "qualityArray"
         }]
-    };
-    var player = {
-        name: "",
-        level: 1,
-        attack: 1,
-        defence: 1,
-        health: 100,
-        inventory: { // inventory should be empty at start (?) this is just for debugging
-            armor: [{
-                typeValue: 0,
-                qualityValue: 3,
-                fluffValue: 2,
-                colorValue: 1,
-                sourceArray: "armorArray"
-            }, {
-                typeValue: 1,
-                qualityValue: 3,
-                fluffValue: 2,
-                colorValue: 1,
-                sourceArray: "armorArray"
-            }],
-            weapon: [{
-                typeValue: 0,
-                qualityValue: 3,
-                fluffValue: 2,
-                colorValue: 1,
-                sourceArray: "weaponArray"
-            }],
-            potion: []
-        },
-        equiped: {
-            chest: {
-                typeValue: 0,
-                qualityValue: 3,
-                fluffValue: 2,
-                colorValue: 1,
-                sourceArray: "armorArray"
+    },
+        player = {
+            name: "",
+            level: 1,
+            attack: 1,
+            defence: 1,
+            health: 100,
+            inventory: { // inventory should be empty at start (?) this is just for debugging
+                armor: [{
+                    typeValue: 0,
+                    qualityValue: 3,
+                    fluffValue: 2,
+                    colorValue: 1,
+                    sourceArray: "armorArray"
+                }, {
+                    typeValue: 1,
+                    qualityValue: 3,
+                    fluffValue: 2,
+                    colorValue: 1,
+                    sourceArray: "armorArray"
+                }],
+                weapon: [{
+                    typeValue: 0,
+                    qualityValue: 3,
+                    fluffValue: 2,
+                    colorValue: 1,
+                    sourceArray: "weaponArray"
+                }],
+                potion: []
             },
-            head: {
-                typeValue: 1,
-                qualityValue: 3,
-                fluffValue: 2,
-                colorValue: 1,
-                sourceArray: "armorArray"
-            },
-            crotch: {
-                typeValue: 2,
-                qualityValue: 3,
-                fluffValue: 2,
-                colorValue: 1,
-                sourceArray: "armorArray"
-            },
-            weapon: {
-                typeValue: 0,
-                qualityValue: 3,
-                fluffValue: 2,
-                colorValue: 1,
-                sourceArray: "weaponArray"
-            }
-        }
-    };
-    var printToLog = {
-        equiped: function () {
-            'use strict';
-            console.log("Chest armor: ");
-            printToLog.item(player.equiped.chest);
-            console.log("Head armor: ");
-            printToLog.item(player.equiped.head);
-            console.log("Croch armor: ");
-            printToLog.item(player.equiped.crotch);
-            console.log("Weapon: ");
-            printToLog.item(player.equiped.weapon);
-        },
-        inventory: function () {
-            'use strict';
-            var key;
-            for (key in player.inventory) {
-                if (player.inventory.hasOwnProperty(key)) {
-                    console.log(key + ": ");
-                    player.inventory[key].forEach(printToLog.item);
+            equiped: {
+                chest: {
+                    typeValue: 0,
+                    qualityValue: 3,
+                    fluffValue: 2,
+                    colorValue: 1,
+                    sourceArray: "armorArray"
+                },
+                head: {
+                    typeValue: 1,
+                    qualityValue: 3,
+                    fluffValue: 2,
+                    colorValue: 1,
+                    sourceArray: "armorArray"
+                },
+                crotch: {
+                    typeValue: 2,
+                    qualityValue: 3,
+                    fluffValue: 2,
+                    colorValue: 1,
+                    sourceArray: "armorArray"
+                },
+                weapon: {
+                    typeValue: 0,
+                    qualityValue: 3,
+                    fluffValue: 2,
+                    colorValue: 1,
+                    sourceArray: "weaponArray"
                 }
             }
         },
-        item: function (item) {
-            'use strict';
-            var qualityStr = resourceTabel.qualityArray[item.qualityValue].type,
-                fluffStr = resourceTabel.fluffArray[item.fluffValue].type,
-                colorStr = resourceTabel.colorArray[item.colorValue].type,
-                itemTypeStr = resourceTabel[item.sourceArray][item.typeValue].type;
-            console.log(fluffStr + " " + qualityStr + " " + colorStr + " " + itemTypeStr);
-        }
-    };
+        prettyString = {
+            item: function (item) {
+                var qualityStr = resourceTabel.qualityArray[item.qualityValue].type,
+                    fluffStr = resourceTabel.fluffArray[item.fluffValue].type,
+                    colorStr = resourceTabel.colorArray[item.colorValue].type,
+                    itemTypeStr = resourceTabel[item.sourceArray][item.typeValue].type;
+                return fluffStr + " " + qualityStr + " " + colorStr + " " + itemTypeStr;
+            }
+        },
+        printToLog = {
+            equiped: function () {
+                console.log("Chest armor: ");
+                printToLog.item(player.equiped.chest);
+                console.log("Head armor: ");
+                printToLog.item(player.equiped.head);
+                console.log("Croch armor: ");
+                printToLog.item(player.equiped.crotch);
+                console.log("Weapon: ");
+                printToLog.item(player.equiped.weapon);
+            },
+            inventory: function () {
+                var key;
+                for (key in player.inventory) {
+                    if (player.inventory.hasOwnProperty(key)) {
+                        console.log(key + ": ");
+                        player.inventory[key].forEach(printToLog.item);
+                    }
+                }
+            },
+            item: function (item) {
+                console.log(prettyString.item(item));
+            }
+        },
+        words = {
+            actions: {
+                hit: ["kill", "poke", "attack", "hit"],
+                move: ["run", "walk", "strut", "skip", "move"],
+                drink: ["drink", "chug"],
+                look: ["look", "search"],
+                take: ["take", "loot", "pick", "fetch"],
+                win: ["pablo", "win"]
+            },
+            directions: {
+                north: ["north", "n"],
+                south: ["south", "s"],
+                west: ["west", "w"],
+                east: ["east", "e"]
+            }
+        };
 
     function randomFromArray(arr) {
-        'use strict';
         var randomizer = Math.floor(Math.random() * arr.length);
         return randomizer;
     }
 
     function calculatePowerForItem(item) {
-        'use strict';
         var attack,
             defence;
         attack = resourceTabel.qualityArray[item.qualityValue].attack * resourceTabel.fluffArray[item.fluffValue].attack * resourceTabel.colorArray[item.colorValue].attack * resourceTabel[item.sourceArray][item.typeValue].attack;
@@ -324,7 +341,6 @@ var agoa = (function () {
     }
 
     function generateGenericItemDescription() {
-        "use strict";
         var item = {
             qualityValue: randomFromArray(resourceTabel.qualityArray),
             fluffValue: randomFromArray(resourceTabel.fluffArray),
@@ -334,7 +350,6 @@ var agoa = (function () {
     }
 
     function generateRandomWeapon() {
-        "use strict";
         var weapon = (generateGenericItemDescription());
         weapon.typeValue = (randomFromArray(resourceTabel.weaponArray));
         weapon.sourceArray = "weaponArray";
@@ -343,7 +358,6 @@ var agoa = (function () {
     }
 
     function generateRandomArmor() {
-        "use strict";
         var armor = (generateGenericItemDescription());
         armor.typeValue = (randomFromArray(resourceTabel.armorArray));
         armor.sourceArray = "armorArray";
@@ -352,7 +366,6 @@ var agoa = (function () {
     }
 
     function generateRandomMonster() {
-        "use strict";
         var monster = (generateGenericItemDescription());
         monster.typeValue = (randomFromArray(resourceTabel.monsterArray));
         monster.sourceArray = "monsterArray";
@@ -360,9 +373,41 @@ var agoa = (function () {
         return monster;
     }
 
-    function takeAction() {
-        'use strict';
-        var actions = getActionsFromString(prompt("You face a terible troll, what do you do?")),
+    function getKeysFromStringInWordsObject(text, category) {
+        var input = text.toLowerCase(),
+            inputArray = input.split(" "),
+            i,
+            j,
+            key,
+            action = [];
+        for (i = 0; i < inputArray.length; i += 1) {
+            for (key in category) {
+                if (category.hasOwnProperty(key)) {
+                    for (j = 0; j < category[key].length; j += 1) {
+                        if (category[key][j] === inputArray[i]) {
+                            if (action.indexOf(key) === -1) {
+                                action.push(key);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        console.log("action: " + action);
+        return action;
+    }
+
+    function getActionsFromString(text) {
+        return getKeysFromStringInWordsObject(text, words.actions);
+    }
+
+    function getDirectionFromString(text) {
+        return getKeysFromStringInWordsObject(text, words.directions);
+    }
+
+    function takeActionOnString(text) {
+        console.log(text);
+        var actions = getActionsFromString(prompt(text)),
             i;
         for (i = 0; i < actions.length; i += 1) {
             switch (actions[i]) {
@@ -389,63 +434,9 @@ var agoa = (function () {
             }
         }
     }
-
-    var actions = {
-        words: {
-            hit: ["kill", "poke", "attack", "hit"],
-            move: ["run", "walk", "strut", "skip", "move"],
-            drink: ["drink", "chug"],
-            look: ["look", "search"],
-            take: ["take", "loot", "pick", "fetch"],
-            win: ["pablo win"]
-        },
-        direction: {
-            north: ["north", "n"],
-            south: ["south", "s"],
-            west: ["west", "w"],
-            east: ["east", "e"]
-        }
-    };
-
-
-    function getKeysFromStringInWordsObject(text, category) {
-        'use strict';
-        var input = text.toLowerCase(),
-            inputArray = input.split(" "),
-            i,
-            j,
-            key,
-            action = [];
-        for (i = 0; i < inputArray.length; i += 1) {
-            for (key in category) {
-                if (category.hasOwnProperty(key)) {
-                    for (j = 0; j < category[key].length; j += 1) {
-                        if (category[key][j] === inputArray[i]) {
-                            if (action.indexOf(key) === -1) {
-                                action.push(key);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        console.log("action: " + action);
-        return action;
-    }
-
-    function getActionsFromString(text) {
-        'use strict';
-        return getKeysFromStringInWordsObject(text, actions.words);
-    }
-
-    function getDirectionFromString(text) {
-        'use strict';
-        return getKeysFromStringInWordsObject(text, actions.direction);
-
-    }
-
     return {
         player: player,
+        prettyString: prettyString,
         printToLog: printToLog,
         calculatePowerForItem: calculatePowerForItem,
         generate: {
@@ -453,8 +444,8 @@ var agoa = (function () {
             randomArmor: generateRandomArmor,
             randomWeapon: generateRandomWeapon
         },
-        takeAction: takeAction,
+        takeActionOnString: takeActionOnString,
         getActionsFromString: getActionsFromString,
         getDirectionFromString: getDirectionFromString
     };
-})();
+}());
