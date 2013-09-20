@@ -13,7 +13,6 @@ console.log("Welcome! " + agoa.player.name);
 //Test to take action
 var testRandomMonster = (agoa.generate.randomMonster());
 agoa.takeActionOnString("You face a " + agoa.prettyString.item(testRandomMonster));
-// console.log(agoa.getDirectionFromString(prompt("You face a terible troll, what do you do?")));
 
 
 // agoa.printToLog.item(testRandomMonster);
@@ -21,3 +20,5 @@ agoa.takeActionOnString("You face a " + agoa.prettyString.item(testRandomMonster
 // agoa.printToLog.item(testRandomWeapon);
 // var testRandomArmor = (agoa.generate.randomArmor());
 // agoa.printToLog.item(testRandomArmor);
+
+//console.log(agoa.prettyString.item(agoa.generate.randomWeapon()));

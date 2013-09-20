@@ -1,8 +1,16 @@
 /*jslint browser:true */
 /*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
+/*global renderer */
+//
+// This file is suposed to serve as an API with all the methods of the game
 var agoa = (function () {
     'use strict';
-    var resourceTabel = {
+    // Resources for item and monster generating
+    var resourceTabel,
+        player,
+        prettyString,
+        words;
+    resourceTabel = {
         monsterArray: [{
             type: "Shark",
             attack: 5,
@@ -121,19 +129,34 @@ var agoa = (function () {
             defence: 1,
             sourceArray: "fluffArray"
         }, {
-            type: "Tiny",
-            attack: 0.8,
-            defence: 0.8,
-            sourceArray: "fluffArray"
-        }, {
-            type: "Giant",
-            attack: 1.2,
-            defence: 1.2,
-            sourceArray: "fluffArray"
-        }, {
             type: "Shiny",
             attack: 1.2,
             defence: 1.2,
+            sourceArray: "fluffArray"
+        }, {
+            type: "Rusty",
+            attack: 0.8,
+            defence: 1,
+            sourceArray: "fluffArray"
+        }, {
+            type: "Mighty",
+            attack: 1.4,
+            defence: 1.4,
+            sourceArray: "fluffArray"
+        }, {
+            type: "Enchanted",
+            attack: 1.6,
+            defence: 1.6,
+            sourceArray: "fluffArray"
+        }, {
+            type: "Common",
+            attack: 1,
+            defence: 1,
+            sourceArray: "fluffArray"
+        }, {
+            type: "Beautiful",
+            attack: 1.2,
+            defence: 1,
             sourceArray: "fluffArray"
         }],
         weaponArray: [{
@@ -171,7 +194,7 @@ var agoa = (function () {
             attack: 1.5,
             defence: 1,
             sourceArray: "weaponArray"
-        }], // fluffValue, qualityValue
+        }], // fluffValue, sizeValue
         armorArray: [{
             type: "Chest",
             attack: 1,
@@ -187,193 +210,186 @@ var agoa = (function () {
             attack: 1,
             defence: 1.2,
             sourceArray: "armorArray"
-        }], //fluffValue, qualityValue
-        qualityArray: [{
-            type: "Rusty",
+        }], //fluffValue, sizeValue
+        sizeArray: [{
+            type: "Tiny",
             attack: 0.8,
+            defence: 0.8,
+            sourceArray: "sizeArray"
+        }, {
+            type: "Average sized",
+            attack: 1,
             defence: 1,
-            sourceArray: "qualityArray"
+            sourceArray: "sizeArray"
+        }, {
+            type: "Giant",
+            attack: 1.2,
+            defence: 1.2,
+            sourceArray: "sizeArray"
         }, {
             type: "Mighty",
-            attack: 1.4,
-            defence: 1.4,
-            sourceArray: "qualityArray"
-        }, {
-            type: "Enchanted",
-            attack: 1.6,
-            defence: 1.6,
-            sourceArray: "qualityArray"
-        }, {
-            type: "Common",
-            attack: 1,
-            defence: 1,
-            sourceArray: "qualityArray"
-        }, {
-            type: "Beautiful",
-            attack: 1.2,
-            defence: 1,
-            sourceArray: "qualityArray"
+            attack: 1.3,
+            defence: 1.1,
+            sourceArray: "sizeArray"
         }]
-    },
-        player = {
-            name: "",
-            level: 1,
-            attack: 1,
-            defence: 1,
-            health: 100,
-            inventory: { // inventory should be empty at start (?) this is just for debugging
-                armor: [{
-                    typeValue: 0,
-                    qualityValue: 3,
-                    fluffValue: 2,
-                    colorValue: 1,
-                    sourceArray: "armorArray"
-                }, {
-                    typeValue: 1,
-                    qualityValue: 3,
-                    fluffValue: 2,
-                    colorValue: 1,
-                    sourceArray: "armorArray"
-                }],
-                weapon: [{
-                    typeValue: 0,
-                    qualityValue: 3,
-                    fluffValue: 2,
-                    colorValue: 1,
-                    sourceArray: "weaponArray"
-                }],
-                potion: []
+    };
+    player = {
+        name: "",
+        level: 1,
+        baseAttack: 1,
+        baseDefence: 1,
+        health: 30,
+        maxHealth: 30,
+        potionsRemaining: 3,
+        inventory: { // inventory should be empty at start (?) this is just for debugging
+            armor: [{
+                typeValue: 0,
+                sizeValue: 3,
+                fluffValue: 2,
+                colorValue: 1,
+                sourceArray: "armorArray"
+            }, {
+                typeValue: 1,
+                sizeValue: 3,
+                fluffValue: 2,
+                colorValue: 1,
+                sourceArray: "armorArray"
+            }],
+            weapon: [{
+                typeValue: 0,
+                sizeValue: 3,
+                fluffValue: 2,
+                colorValue: 1,
+                sourceArray: "weaponArray"
+            }],
+            potion: []
+        },
+        equiped: {
+            chest: {
+                typeValue: 0,
+                sizeValue: 3,
+                fluffValue: 2,
+                colorValue: 1,
+                sourceArray: "armorArray"
             },
-            equiped: {
-                chest: {
-                    typeValue: 0,
-                    qualityValue: 3,
-                    fluffValue: 2,
-                    colorValue: 1,
-                    sourceArray: "armorArray"
-                },
-                head: {
-                    typeValue: 1,
-                    qualityValue: 3,
-                    fluffValue: 2,
-                    colorValue: 1,
-                    sourceArray: "armorArray"
-                },
-                crotch: {
-                    typeValue: 2,
-                    qualityValue: 3,
-                    fluffValue: 2,
-                    colorValue: 1,
-                    sourceArray: "armorArray"
-                },
-                weapon: {
-                    typeValue: 0,
-                    qualityValue: 3,
-                    fluffValue: 2,
-                    colorValue: 1,
-                    sourceArray: "weaponArray"
+            head: {
+                typeValue: 1,
+                sizeValue: 3,
+                fluffValue: 2,
+                colorValue: 1,
+                sourceArray: "armorArray"
+            },
+            crotch: {
+                typeValue: 2,
+                sizeValue: 3,
+                fluffValue: 2,
+                colorValue: 1,
+                sourceArray: "armorArray"
+            },
+            weapon: {
+                typeValue: 0,
+                sizeValue: 3,
+                fluffValue: 2,
+                colorValue: 1,
+                sourceArray: "weaponArray"
+            }
+        },
+        totalAttack: function () {
+            var total;
+            total = player.baseAttack * player.equiped.weapon.attack;
+            return total;
+        },
+        totalDefence: function () {
+            var total;
+            total = player.baseDefence * player.equiped.chest.defence * player.equiped.head.defence;
+            return total;
+        },
+        drinkPotion: function () {
+            if (player.potionsRemaining > 0) {
+                var potionResult = 0;
+                player.potionsRemaining -= 1;
+                potionResult += Math.ceil(5 + 10 * Math.random());
+                player.health += potionResult;
+                if (player.health > player.maxHealth) {
+                    player.health = player.maxHealth;
                 }
+                renderer.printToLog.drankPotion(potionResult);
+            } else {
+                renderer.printToLog.noPotions();
             }
-        },
-        prettyString = {
-            item: function (item) {
-                var qualityStr = resourceTabel.qualityArray[item.qualityValue].type,
-                    fluffStr = resourceTabel.fluffArray[item.fluffValue].type,
-                    colorStr = resourceTabel.colorArray[item.colorValue].type,
-                    itemTypeStr = resourceTabel[item.sourceArray][item.typeValue].type;
-                return fluffStr + " " + qualityStr + " " + colorStr + " " + itemTypeStr;
-            }
-        },
-        printToLog = {
-            equiped: function () {
-                console.log("Chest armor: ");
-                printToLog.item(player.equiped.chest);
-                console.log("Head armor: ");
-                printToLog.item(player.equiped.head);
-                console.log("Croch armor: ");
-                printToLog.item(player.equiped.crotch);
-                console.log("Weapon: ");
-                printToLog.item(player.equiped.weapon);
-            },
-            inventory: function () {
-                var key;
-                for (key in player.inventory) {
-                    if (player.inventory.hasOwnProperty(key)) {
-                        console.log(key + ": ");
-                        player.inventory[key].forEach(printToLog.item);
-                    }
-                }
-            },
-            item: function (item) {
-                console.log(prettyString.item(item));
-            }
-        },
-        words = {
-            actions: {
-                hit: ["kill", "poke", "attack", "hit"],
-                move: ["run", "walk", "strut", "skip", "move"],
-                drink: ["drink", "chug"],
-                look: ["look", "search"],
-                take: ["take", "loot", "pick", "fetch"],
-                win: ["pablo", "win"]
-            },
-            directions: {
-                north: ["north", "n"],
-                south: ["south", "s"],
-                west: ["west", "w"],
-                east: ["east", "e"]
-            }
-        };
+        }
+    };
+    prettyString = { // prettyString is a collection of methods for concatenating strings from the stored values of an item.
+        item: function (item) { // takes an item or monster and turns the values in to a readable string.
+            var sizeStr = resourceTabel.sizeArray[item.sizeValue].type,
+                fluffStr = resourceTabel.fluffArray[item.fluffValue].type,
+                colorStr = resourceTabel.colorArray[item.colorValue].type,
+                itemTypeStr = resourceTabel[item.sourceArray][item.typeValue].type;
+            return sizeStr + " " + colorStr + " " + fluffStr + " " + itemTypeStr;
+        }
+    };
+    words = { // our collection of word for comparsion with the input text
+        actions: { // action words that a player may enter
+            hit: ["kill", "poke", "attack", "hit"],
+            move: ["run", "walk", "strut", "skip", "move"],
+            drink: ["drink", "chug"],
+            look: ["look", "search"],
+            take: ["take", "loot", "pick", "fetch"],
+            win: ["pablo", "win"]
+        }, // direction words 
+        directions: {
+            north: ["north", "n"],
+            south: ["south", "s"],
+            west: ["west", "w"],
+            east: ["east", "e"]
+        }
+    };
 
-    function randomFromArray(arr) {
+    function randomIndexWithinArray(arr) { // get a valid random index from an array
         var randomizer = Math.floor(Math.random() * arr.length);
         return randomizer;
     }
 
-    function calculatePowerForItem(item) {
+    function calculatePowerForItem(item) { // calculate and set the attack and defence of an item or monster
         var attack,
             defence;
-        attack = resourceTabel.qualityArray[item.qualityValue].attack * resourceTabel.fluffArray[item.fluffValue].attack * resourceTabel.colorArray[item.colorValue].attack * resourceTabel[item.sourceArray][item.typeValue].attack;
-        defence = resourceTabel.qualityArray[item.qualityValue].defence * resourceTabel.fluffArray[item.fluffValue].defence * resourceTabel.colorArray[item.colorValue].defence * resourceTabel[item.sourceArray][item.typeValue].defence;
+        attack = resourceTabel.sizeArray[item.sizeValue].attack * resourceTabel.fluffArray[item.fluffValue].attack * resourceTabel.colorArray[item.colorValue].attack * resourceTabel[item.sourceArray][item.typeValue].attack;
+        defence = resourceTabel.sizeArray[item.sizeValue].defence * resourceTabel.fluffArray[item.fluffValue].defence * resourceTabel.colorArray[item.colorValue].defence * resourceTabel[item.sourceArray][item.typeValue].defence;
         item.attack = Math.round(attack);
         item.defence = Math.round(defence);
         return item;
     }
 
-    function generateGenericItemDescription() {
+    function generateGenericItemDescription() { // creates an item containing only quality, fluff and color
         var item = {
-            qualityValue: randomFromArray(resourceTabel.qualityArray),
-            fluffValue: randomFromArray(resourceTabel.fluffArray),
-            colorValue: randomFromArray(resourceTabel.colorArray)
+            sizeValue: randomIndexWithinArray(resourceTabel.sizeArray),
+            fluffValue: randomIndexWithinArray(resourceTabel.fluffArray),
+            colorValue: randomIndexWithinArray(resourceTabel.colorArray)
         };
         return item;
     }
 
+    function generateRandomFromArray(arrayName) {
+        var item = (generateGenericItemDescription());
+        item.typeValue = (randomIndexWithinArray(resourceTabel[arrayName]));
+        item.sourceArray = arrayName;
+        item = calculatePowerForItem(item);
+        return item;
+    }
+
     function generateRandomWeapon() {
-        var weapon = (generateGenericItemDescription());
-        weapon.typeValue = (randomFromArray(resourceTabel.weaponArray));
-        weapon.sourceArray = "weaponArray";
-        weapon = calculatePowerForItem(weapon);
-        return weapon;
+        return (generateRandomFromArray("weaponArray"));
     }
 
     function generateRandomArmor() {
-        var armor = (generateGenericItemDescription());
-        armor.typeValue = (randomFromArray(resourceTabel.armorArray));
-        armor.sourceArray = "armorArray";
-        armor = calculatePowerForItem(armor);
-        return armor;
+        return (generateRandomFromArray("armorArray"));
     }
 
     function generateRandomMonster() {
-        var monster = (generateGenericItemDescription());
-        monster.typeValue = (randomFromArray(resourceTabel.monsterArray));
-        monster.sourceArray = "monsterArray";
-        monster = calculatePowerForItem(monster);
-        return monster;
+        return (generateRandomFromArray("monsterArray"));
     }
 
-    function getKeysFromStringInWordsObject(text, category) {
+    function getKeysFromStringInWordsObject(text, category) { // The logic behind finding key words in freeform text from input.
         var input = text.toLowerCase(),
             inputArray = input.split(" "),
             i,
@@ -393,7 +409,7 @@ var agoa = (function () {
                 }
             }
         }
-        console.log("action: " + action);
+        renderer.printToLog.addToHistory("action: " + action);
         return action;
     }
 
@@ -406,8 +422,8 @@ var agoa = (function () {
     }
 
     function takeActionOnString(text) {
-        console.log(text);
-        var actions = getActionsFromString(prompt(text)),
+        renderer.printToLog.addToHistory(text);
+        var actions = getActionsFromString(renderer.promptToUser(text)),
             i;
         for (i = 0; i < actions.length; i += 1) {
             switch (actions[i]) {
@@ -418,7 +434,7 @@ var agoa = (function () {
                 console.log("You got away!");
                 break;
             case "drink":
-                console.log("You feel tipsy");
+                player.drinkPotion();
                 break;
             case "look":
                 console.log("You look around and see a tree");
@@ -437,7 +453,6 @@ var agoa = (function () {
     return {
         player: player,
         prettyString: prettyString,
-        printToLog: printToLog,
         calculatePowerForItem: calculatePowerForItem,
         generate: {
             randomMonster: generateRandomMonster,
