@@ -15,61 +15,61 @@ var agoa = (function () {
             type: "Shark",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Troll",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Beholder",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Dragon",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Wizard",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Ponny",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Chihuahua",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Demon",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Borat",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Tom Blackmore",
             attack: 5,
             defence: 5,
-            life: 10,
+            health: 10,
             sourceArray: "monsterArray"
         }],
         colorArray: [{
@@ -189,11 +189,6 @@ var agoa = (function () {
             attack: 1.2,
             defence: 1,
             sourceArray: "weaponArray"
-        }, {
-            type: "Bow",
-            attack: 1.5,
-            defence: 1,
-            sourceArray: "weaponArray"
         }], // fluffValue, sizeValue
         armorArray: [{
             type: "Chest",
@@ -235,6 +230,7 @@ var agoa = (function () {
     };
     player = {
         name: "",
+        fighting: true,
         level: 1,
         baseAttack: 1,
         baseDefence: 1,
@@ -257,8 +253,14 @@ var agoa = (function () {
             }],
             weapon: [{
                 typeValue: 0,
-                sizeValue: 3,
-                fluffValue: 2,
+                sizeValue: 0,
+                fluffValue: 0,
+                colorValue: 0,
+                sourceArray: "weaponArray"
+            }, {
+                typeValue: 0,
+                sizeValue: 0,
+                fluffValue: 0,
                 colorValue: 1,
                 sourceArray: "weaponArray"
             }],
@@ -317,6 +319,23 @@ var agoa = (function () {
             } else {
                 renderer.printToLog.noPotions();
             }
+        },
+        equipItem: function (item) {
+            if (item.sourceArray === "weaponArray") {
+                player.equiped.weapon = item;
+            } else {
+                switch (item.typeValue) {
+                case 0:
+                    player.equiped.chest = item;
+                    break;
+                case 1:
+                    player.equiped.head = item;
+                    break;
+                case 2:
+                    player.equiped.crotch = item;
+                    break;
+                }
+            }
         }
     };
     prettyString = { // prettyString is a collection of methods for concatenating strings from the stored values of an item.
@@ -332,16 +351,62 @@ var agoa = (function () {
         actions: { // action words that a player may enter
             hit: ["kill", "poke", "attack", "hit"],
             move: ["run", "walk", "strut", "skip", "move"],
+            use: ["use", "equip", "prepare"],
             drink: ["drink", "chug"],
             look: ["look", "search"],
             take: ["take", "loot", "pick", "fetch"],
-            win: ["pablo", "win"]
+            win: ["pablo", "win"],
+            quit: ["quit", "q"]
         }, // direction words 
         directions: {
             north: ["north", "n"],
             south: ["south", "s"],
             west: ["west", "w"],
             east: ["east", "e"]
+        },
+        subcategories: {
+            items: {
+                weapons: {
+                    2: ["axe", "spray"],
+                    1: ["sword"],
+                    0: ["dagger"],
+                    3: ["wand"],
+                    4: ["knuckles"],
+                    5: ["whip"]
+                },
+                armor: {
+                    0: ["chest", "breast", "harnesk"],
+                    1: ["head", "helm", "helmet"],
+                    2: ["crotch", "cup"]
+                }
+            },
+            drinks: {
+                ale: ["beer", "ale"],
+                potion: ["potion", "healing"]
+            },
+            targets: {
+                eneamy: ["monster", "enemy", "creature", "borat", "tom", "blackmore", "shark", "troll", "beholder", "dragon", "wizard", "pony", "chihuahua", "demon"]
+            },
+            sizes: {
+                0: ["tiny"],
+                1: ["average"],
+                2: ["giant"],
+                3: ["mighty"]
+            },
+            colors: {
+                0: ["pink"],
+                1: ["green"],
+                2: ["blue"],
+                3: ["red"],
+                4: ["black"],
+                5: ["white"],
+                6: ["yellow"],
+                7: ["orange"],
+                8: ["purple"]
+            },
+            fluff: {
+                0: ["fluffy"]
+            }
         }
     };
 
@@ -386,31 +451,35 @@ var agoa = (function () {
     }
 
     function generateRandomMonster() {
-        return (generateRandomFromArray("monsterArray"));
+        var monster = generateRandomFromArray("monsterArray");
+        monster.health = resourceTabel.monsterArray[monster.typeValue].health;
+
+        return monster;
     }
 
     function getKeysFromStringInWordsObject(text, category) { // The logic behind finding key words in freeform text from input.
-        var input = text.toLowerCase(),
-            inputArray = input.split(" "),
-            i,
-            j,
-            key,
-            action = [];
-        for (i = 0; i < inputArray.length; i += 1) {
-            for (key in category) {
-                if (category.hasOwnProperty(key)) {
-                    for (j = 0; j < category[key].length; j += 1) {
-                        if (category[key][j] === inputArray[i]) {
-                            if (action.indexOf(key) === -1) {
-                                action.push(key);
+        if (text) {
+            var input = text.toLowerCase().replace(/\W|[0-9]/g, " ").trim(),
+                inputArray = input.split(" "),
+                i,
+                j,
+                key,
+                action = [];
+            for (i = 0; i < inputArray.length; i += 1) {
+                for (key in category) {
+                    if (category.hasOwnProperty(key)) {
+                        for (j = 0; j < category[key].length; j += 1) {
+                            if (category[key][j] === inputArray[i]) {
+                                if (action.indexOf(key) === -1) {
+                                    action.push(key);
+                                }
                             }
                         }
                     }
                 }
             }
+            return action;
         }
-        renderer.printToLog.addToHistory("action: " + action);
-        return action;
     }
 
     function getActionsFromString(text) {
@@ -421,33 +490,156 @@ var agoa = (function () {
         return getKeysFromStringInWordsObject(text, words.directions);
     }
 
-    function takeActionOnString(text) {
-        renderer.printToLog.addToHistory(text);
-        var actions = getActionsFromString(renderer.promptToUser(text)),
-            i;
-        for (i = 0; i < actions.length; i += 1) {
-            switch (actions[i]) {
-            case "hit":
-                console.log("You hit it!");
-                break;
-            case "move":
-                console.log("You got away!");
-                break;
-            case "drink":
-                player.drinkPotion();
-                break;
-            case "look":
-                console.log("You look around and see a tree");
-                break;
-            case "take":
-                console.log("You pick up a tiny rock");
-                break;
-            case "win":
-                console.log("You have summoned the all-knowing genie known as Pablo de la Win");
-                break;
-            default:
-                console.log("What do you want to do?");
+    function matchItemInInventory(text) {
+        //check if weapon or armor
+        var items = [],
+            isWeapon = true,
+            colors,
+            fluff,
+            sizes,
+            posibleItems = [],
+            moreLikleyItems = [],
+            i,
+            attributesMatched = {
+                color: false,
+                fluff: false,
+                size: false
+            };
+        items = getKeysFromStringInWordsObject(text, words.subcategories.items.weapons);
+        if (!items.length) {
+            items = getKeysFromStringInWordsObject(text, words.subcategories.items.armor);
+            if (items.length) {
+                isWeapon = false;
+            } else {
+                return undefined;
             }
+        }
+        colors = getKeysFromStringInWordsObject(text, words.subcategories.colors);
+        fluff = getKeysFromStringInWordsObject(text, words.subcategories.fluff);
+        sizes = getKeysFromStringInWordsObject(text, words.subcategories.sizees);
+        if (isWeapon) {
+            for (i = 0; i < player.inventory.weapon.length; i += 1) {
+                if (player.inventory.weapon[i].typeValue === Number(items[0])) {
+                    posibleItems.push(player.inventory.weapon[i]);
+                }
+            }
+        } else {
+            for (i = 0; i < player.inventory.armor.length; i += 1) {
+                if (player.inventory.armor[i].typeValue === Number(items[0])) {
+                    posibleItems.push(player.inventory.armor[i]);
+                }
+            }
+        }
+        if (posibleItems.length) {
+            if (colors.length) {
+                moreLikleyItems = [];
+                for (i = 0; i < posibleItems.length; i += 1) {
+                    if (posibleItems[i].colorValue === Number(colors[0])) {
+                        moreLikleyItems.push(posibleItems[i]);
+                        attributesMatched.color = true;
+                    }
+                }
+            }
+            if (fluff.length) {
+                if (moreLikleyItems.length) {
+                    posibleItems = moreLikleyItems;
+                    moreLikleyItems = [];
+                }
+                for (i = 0; i < posibleItems.length; i += 1) {
+                    if (posibleItems[i].fluffValue === Number(fluff[0])) {
+                        moreLikleyItems.push(posibleItems[i]);
+                        attributesMatched.fluff = true;
+                    }
+                }
+            }
+            if (sizes.length) {
+                if (moreLikleyItems.length) {
+                    posibleItems = moreLikleyItems;
+                    moreLikleyItems = [];
+                }
+                for (i = 0; i < posibleItems.length; i += 1) {
+                    if (posibleItems[i].fluffValue === Number(fluff[0])) {
+                        moreLikleyItems.push(posibleItems[i]);
+                        attributesMatched.size = true;
+                    }
+                }
+            }
+            if (moreLikleyItems.length === 1 || (attributesMatched.color && attributesMatched.fluff && attributesMatched.size)) {
+                return moreLikleyItems[0];
+            }
+            if (moreLikleyItems.length > 1) {
+                return moreLikleyItems;
+            }
+            if (posibleItems.length === 1) {
+                return posibleItems[0];
+            }
+            if (posibleItems.length > 1) {
+                return posibleItems;
+            }
+            return undefined;
+        }
+        return undefined;
+    }
+
+    function takeActionOnString(text, item) {
+        renderer.printToLog.addToHistory(text);
+        var input = renderer.promptToUser(text),
+            actions = getActionsFromString(input),
+            i,
+            j,
+            match;
+        if (actions) {
+            for (i = 0; i < actions.length; i += 1) {
+                switch (actions[i]) {
+                case "hit":
+                    if (player.fighting) {
+                        console.log("You hit the " + prettyString.item(item) + "!");
+                    } else {
+                        renderer.alertToUser("There is nothing relevant to hit...");
+                    }
+                    return true;
+                case "move":
+                    console.log("You got away!");
+                    return false;
+                case "drink":
+                    player.drinkPotion();
+                    return true;
+                case "use":
+                    //find what to use
+                    match = matchItemInInventory(input);
+                    if (match !== undefined && !match.length) {
+                        renderer.alertToUser("You have equiped your " + prettyString.item(match));
+                        player.equipItem(match);
+                    } else if (match.length > 1) {
+                        renderer.printToLog.addToHistory("You have:");
+                        for (j = 0; j < match.length; j += 1) {
+                            renderer.printToLog.addToHistory(prettyString.item(match[j]));
+                        }
+                        renderer.alertToUser("You have more that one item that fits that description,\nyou have to be more specific.");
+                    } else {
+                        renderer.alertToUser("You dont have an item like that");
+                    }
+                    return true;
+                case "look":
+                    console.log("You look around and see a tree");
+                    return true;
+                case "take":
+                    console.log("You pick up a tiny rock");
+                    return true;
+                case "win":
+                    console.log("You have summoned the all-knowing genie known as Pablo de la Win");
+                    return true;
+                case "quit":
+                    console.log("Quitting.");
+                    return false;
+                default:
+                    console.log("What do you want to do?");
+                    renderer.alertToUser("I'm sorry I do not understand what you want to do.");
+                }
+            }
+        } else {
+            renderer.alertToUser("You must make a choise as you stand in front of the " + prettyString.item(item));
+            takeActionOnString(text, item);
         }
     }
     return {
@@ -459,8 +651,10 @@ var agoa = (function () {
             randomArmor: generateRandomArmor,
             randomWeapon: generateRandomWeapon
         },
-        takeActionOnString: takeActionOnString,
-        getActionsFromString: getActionsFromString,
-        getDirectionFromString: getDirectionFromString
+        fromString: {
+            takeAction: takeActionOnString,
+            getActions: getActionsFromString,
+            getDirection: getDirectionFromString
+        }
     };
 }());

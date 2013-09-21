@@ -3,7 +3,7 @@
 /*global agoa */
 var renderer = (function () {
     'use strict';
-    var printToLog, promptToUser;
+    var printToLog, promptToUser, alertToUser;
     printToLog = { // This will serve much like a "viewController" for the terminal. (place in separate file?)
         equiped: function () { // console.log all tht equiped items.
             console.log("Chest armor: ");
@@ -40,8 +40,14 @@ var renderer = (function () {
     promptToUser = function (text) {
         return (prompt(text));
     };
+    alertToUser = function (text) {
+        printToLog.addToHistory(text);
+        alert(text);
+        return;
+    };
     return {
         printToLog: printToLog,
-        promptToUser: promptToUser
+        promptToUser: promptToUser,
+        alertToUser: alertToUser
     };
 }());
