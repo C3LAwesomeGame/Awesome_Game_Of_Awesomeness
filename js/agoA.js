@@ -258,10 +258,16 @@ var agoa = (function () {
                 colorValue: 0,
                 sourceArray: "weaponArray"
             }, {
-                typeValue: 0,
-                sizeValue: 0,
-                fluffValue: 0,
+                typeValue: 1,
+                sizeValue: 2,
+                fluffValue: 1,
                 colorValue: 1,
+                sourceArray: "weaponArray"
+            }, {
+                typeValue: 1,
+                sizeValue: 3,
+                fluffValue: 0,
+                colorValue: 3,
                 sourceArray: "weaponArray"
             }],
             potion: []
@@ -269,28 +275,28 @@ var agoa = (function () {
         equiped: {
             chest: {
                 typeValue: 0,
-                sizeValue: 3,
+                sizeValue: 0,
                 fluffValue: 2,
                 colorValue: 1,
                 sourceArray: "armorArray"
             },
             head: {
                 typeValue: 1,
-                sizeValue: 3,
+                sizeValue: 0,
                 fluffValue: 2,
                 colorValue: 1,
                 sourceArray: "armorArray"
             },
             crotch: {
                 typeValue: 2,
-                sizeValue: 3,
+                sizeValue: 0,
                 fluffValue: 2,
                 colorValue: 1,
                 sourceArray: "armorArray"
             },
             weapon: {
                 typeValue: 0,
-                sizeValue: 3,
+                sizeValue: 0,
                 fluffValue: 2,
                 colorValue: 1,
                 sourceArray: "weaponArray"
@@ -330,7 +336,7 @@ var agoa = (function () {
                 if (player.health > player.maxHealth) {
                     player.health = player.maxHealth;
                 }
-                renderer.printToLog.drankPotion(potionResult);
+                renderer.printToLog.drankPotion(potionResult, player.health);
             } else {
                 renderer.printToLog.noPotions();
             }
@@ -370,6 +376,8 @@ var agoa = (function () {
             drink: ["drink", "chug"],
             look: ["look", "search"],
             take: ["take", "loot", "pick", "fetch"],
+            equiped: ["equiped"],
+            inventory: ["inventory", "bag", "items", "stach"],
             win: ["pablo", "win"],
             quit: ["quit", "q"]
         }, // direction words 
@@ -420,7 +428,8 @@ var agoa = (function () {
                 8: ["purple"]
             },
             fluff: {
-                0: ["fluffy"]
+                0: ["funky"],
+                1: ["fluffy"]
             }
         }
     };
@@ -530,7 +539,7 @@ var agoa = (function () {
         }
         colors = getKeysFromStringInWordsObject(text, words.subcategories.colors);
         fluff = getKeysFromStringInWordsObject(text, words.subcategories.fluff);
-        sizes = getKeysFromStringInWordsObject(text, words.subcategories.sizees);
+        sizes = getKeysFromStringInWordsObject(text, words.subcategories.sizes);
         if (isWeapon) {
             for (i = 0; i < player.inventory.weapon.length; i += 1) {
                 if (player.inventory.weapon[i].typeValue === Number(items[0])) {
@@ -572,7 +581,7 @@ var agoa = (function () {
                     moreLikleyItems = [];
                 }
                 for (i = 0; i < posibleItems.length; i += 1) {
-                    if (posibleItems[i].fluffValue === Number(fluff[0])) {
+                    if (posibleItems[i].sizeValue === Number(sizes[0])) {
                         moreLikleyItems.push(posibleItems[i]);
                         attributesMatched.size = true;
                     }
@@ -626,7 +635,7 @@ var agoa = (function () {
                     if (match !== undefined && !match.length) {
                         renderer.alertToUser("You have equiped your " + prettyString.item(match));
                         player.equipItem(match);
-                    } else if (match.length > 1) {
+                    } else if (match && match.length > 1) {
                         renderer.printToLog.addToHistory("You have:");
                         for (j = 0; j < match.length; j += 1) {
                             renderer.printToLog.addToHistory(prettyString.item(match[j]));
@@ -641,6 +650,12 @@ var agoa = (function () {
                     break;
                 case "take":
                     console.log("You pick up a tiny rock");
+                    break;
+                case "equiped":
+                    renderer.printToLog.equiped(player.equiped);
+                    break;
+                case "inventory":
+                    renderer.printToLog.inventory(player.inventry);
                     break;
                 case "win":
                     console.log("You have summoned the all-knowing genie known as Pablo de la Win");
