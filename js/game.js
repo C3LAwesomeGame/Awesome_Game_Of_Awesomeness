@@ -10,29 +10,9 @@ console.log("Welcome! " + agoa.player.name);
 // var testRandomMonster = (agoa.generate.randomMonster());
 var currentMonster;
 
-function fight(monster) {
-    'use strict';
-    agoa.player.fighting = true;
-    while (agoa.player.fighting && agoa.player.health > 0 && monster.health > 0) {
-        if (!monster || monster.health < 1) {
-            monster = agoa.generate.randomMonster();
-            agoa.player.fighting = agoa.fromString.takeAction("You face a " + agoa.prettyString.item(monster), monster);
-        } else {
-            agoa.player.fighting = agoa.fromString.takeAction("You stand before the " + agoa.prettyString.item(monster), monster);
-        }
-    }
-    if (agoa.player.fighting) {
-        if (agoa.player.health > 0) {
-            renderer.alertToUser("You have died...\n\nGAME OVER");
-        } else if (monster.health > 0) {
-            renderer.alertToUser("You have slain the " + agoa.prettyString.item(monster));
-        }
-    } else {
-        renderer.alertToUser("You cowardly run away!");
-    }
-}
 
-fight(agoa.generate.randomMonster());
+
+agoa.initiateFightWithRandomMonster();
 
 // agoa.printToLog.item(testRandomMonster);
 // var testRandomWeapon = (agoa.generate.randomWeapon());

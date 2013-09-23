@@ -166,27 +166,27 @@ var agoa = (function () {
             sourceArray: "weaponArray"
         }, {
             type: "2H-Sword",
-            attack: 1.6,
+            attack: 1.7,
             defence: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Axe-Spray",
-            attack: 1.2,
+            attack: 1.3,
             defence: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Wand",
-            attack: 1.4,
+            attack: 1.5,
             defence: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Knuckles",
-            attack: 1.2,
+            attack: 1.4,
             defence: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Whip",
-            attack: 1.2,
+            attack: 1.3,
             defence: 1,
             sourceArray: "weaponArray"
         }], // fluffValue, sizeValue
@@ -296,12 +296,27 @@ var agoa = (function () {
                 sourceArray: "weaponArray"
             }
         },
-        totalAttack: function () {
+        getHealth: function () {
+            return player.health;
+        },
+        getMaxHealth: function () {
+            return player.maxHealth;
+        },
+        getPotionsRemaining: function () {
+            return player.potionsRemaining;
+        },
+        getInventory: function () {
+            return player.inventory;
+        },
+        getEquiped: function () {
+            return player.equiped;
+        },
+        getTotalAttack: function () {
             var total;
             total = player.baseAttack * player.equiped.weapon.attack;
             return total;
         },
-        totalDefence: function () {
+        getTotalDefence: function () {
             var total;
             total = player.baseDefence * player.equiped.chest.defence * player.equiped.head.defence;
             return total;
@@ -367,9 +382,9 @@ var agoa = (function () {
         subcategories: {
             items: {
                 weapons: {
-                    2: ["axe", "spray"],
-                    1: ["sword"],
                     0: ["dagger"],
+                    1: ["sword"],
+                    2: ["axe", "spray"],
                     3: ["wand"],
                     4: ["knuckles"],
                     5: ["whip"]
@@ -453,7 +468,6 @@ var agoa = (function () {
     function generateRandomMonster() {
         var monster = generateRandomFromArray("monsterArray");
         monster.health = resourceTabel.monsterArray[monster.typeValue].health;
-
         return monster;
     }
 
@@ -587,7 +601,8 @@ var agoa = (function () {
             actions = getActionsFromString(input),
             i,
             j,
-            match;
+            match,
+            stillInEngagement = true;
         if (actions) {
             for (i = 0; i < actions.length; i += 1) {
                 switch (actions[i]) {
@@ -597,13 +612,14 @@ var agoa = (function () {
                     } else {
                         renderer.alertToUser("There is nothing relevant to hit...");
                     }
-                    return true;
+                    break;
                 case "move":
                     console.log("You got away!");
-                    return false;
+                    stillInEngagement = false;
+                    break;
                 case "drink":
                     player.drinkPotion();
-                    return true;
+                    break;
                 case "use":
                     //find what to use
                     match = matchItemInInventory(input);
@@ -619,31 +635,66 @@ var agoa = (function () {
                     } else {
                         renderer.alertToUser("You dont have an item like that");
                     }
-                    return true;
+                    break;
                 case "look":
                     console.log("You look around and see a tree");
-                    return true;
+                    break;
                 case "take":
                     console.log("You pick up a tiny rock");
-                    return true;
+                    break;
                 case "win":
                     console.log("You have summoned the all-knowing genie known as Pablo de la Win");
-                    return true;
+                    break;
                 case "quit":
                     console.log("Quitting.");
-                    return false;
+                    stillInEngagement = false;
+                    break;
                 default:
                     console.log("What do you want to do?");
                     renderer.alertToUser("I'm sorry I do not understand what you want to do.");
                 }
             }
+            if (stillInEngagement) {
+                return true;
+            }
+            return false;
+        }
+        renderer.alertToUser("You must make a choise as you stand in front of the " + prettyString.item(item));
+        takeActionOnString(text, item);
+    }
+
+    function initiateFightWith(monster) {
+        agoa.player.fighting = true;
+        while (agoa.player.fighting && agoa.player.getHealth() > 0 && monster.health > 0) {
+            agoa.player.fighting = agoa.fromString.takeAction("You stand before the " + agoa.prettyString.item(monster), monster);
+        }
+        if (agoa.player.fighting) {
+            if (agoa.player.health > 0) {
+                renderer.alertToUser("You have died...\n\nGAME OVER");
+            } else if (monster.health > 0) {
+                renderer.alertToUser("You have slain the " + agoa.prettyString.item(monster));
+            }
         } else {
-            renderer.alertToUser("You must make a choise as you stand in front of the " + prettyString.item(item));
-            takeActionOnString(text, item);
+            renderer.alertToUser("You cowardly run away!");
         }
     }
+
+    function initiateFightWithRandomMonster() {
+        initiateFightWith(generateRandomMonster());
+    }
     return {
-        player: player,
+        player: {
+            name: player.name,
+            fighting: player.fighting,
+            getHealth: player.getHealth,
+            getMaxHealth: player.getMaxHealth,
+            getPotionsRemaining: player.getPotionsRemaining,
+            getInventory: player.getInventory,
+            getEquiped: player.getEquiped,
+            getTotalAttack: player.getTotalAttack,
+            getTotalDefence: player.getTotalDefence,
+            drinkPotion: player.drinkPotion
+        },
         prettyString: prettyString,
         calculatePowerForItem: calculatePowerForItem,
         generate: {
@@ -655,6 +706,8 @@ var agoa = (function () {
             takeAction: takeActionOnString,
             getActions: getActionsFromString,
             getDirection: getDirectionFromString
-        }
+        },
+        initiateFightWith: initiateFightWith,
+        initiateFightWithRandomMonster: initiateFightWithRandomMonster
     };
 }());
