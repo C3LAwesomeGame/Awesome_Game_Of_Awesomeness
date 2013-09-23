@@ -3,37 +3,42 @@
 /*global agoa */
 var renderer = (function () {
     'use strict';
-    var printToLog, promptToUser, alertToUser;
+    var printToLog, promptToUser, alertToUser,
+        blueBackgroundColor = 'background-color:blue; color:white',
+        blueColor = 'color:#49db1f',
+        positivColor = 'background-color:green; color:white',
+        colorReset = 'background-color:white; color:black',
+        itemColor = 'color:#ba2bdb';
     printToLog = { // This will serve much like a "viewController" for the terminal. (place in separate file?)
         equiped: function (equiped) { // console.log all tht equiped items.
-            console.log("--------- EQUIPED ---------");
-            console.log("Chest armor: ");
+            console.log("%c--------- EQUIPED ---------", blueBackgroundColor);
+            console.log("%cChest armor: ", itemColor);
             printToLog.item(equiped.chest);
-            console.log("Head armor: ");
+            console.log("%cHead armor: ", itemColor);
             printToLog.item(equiped.head);
-            console.log("Croch armor: ");
+            console.log("%cCroch armor: ", itemColor);
             printToLog.item(equiped.crotch);
-            console.log("Weapon: ");
+            console.log("%cWeapon: ", itemColor);
             printToLog.item(equiped.weapon);
-            console.log("---------------------------");
+            console.log("%c---------------------------", blueBackgroundColor);
         },
         inventory: function (inventory) { // console.log everything in the inventory
             var key;
             inventory = agoa.player.getInventory();
-            console.log("--------- INVENTORY ---------");
+            console.log("%c--------- INVENTORY ---------", blueBackgroundColor);
             for (key in inventory) {
                 if (inventory.hasOwnProperty(key)) {
-                    console.log(key + ": ");
+                    console.log("%c" + key + ": ", itemColor);
                     inventory[key].forEach(printToLog.item);
                 }
             }
-            console.log("---------------------------");
+            console.log("%c---------------------------", blueBackgroundColor);
         },
         item: function (item) { // console.log the prettyString of an item.
             console.log(agoa.prettyString.item(item));
         },
         drankPotion: function (potionResult, playerHealth) {
-            console.log("You drink a potion and restores " + potionResult + " points of health. \nYou are now at " + playerHealth + " lifepoints.");
+            console.log("You drink a potion and restores %c " + potionResult + " %c points of health. \nYou are now at %c " + playerHealth + " %c lifepoints.", positivColor, colorReset, positivColor, colorReset);
         },
         noPotions: function () {
             console.log("You are out of potions");

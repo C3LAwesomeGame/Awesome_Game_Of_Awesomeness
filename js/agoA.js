@@ -370,7 +370,8 @@ var agoa = (function () {
     };
     words = { // our collection of word for comparsion with the input text
         actions: { // action words that a player may enter
-            hit: ["kill", "poke", "attack", "hit"],
+            hit: ["kill", "poke", "attack", "hit", "kick"],
+            pat: ["pat", "stroke"],
             move: ["run", "walk", "strut", "skip", "move"],
             use: ["use", "equip", "prepare"],
             drink: ["drink", "chug"],
@@ -621,6 +622,9 @@ var agoa = (function () {
                     } else {
                         renderer.alertToUser("There is nothing relevant to hit...");
                     }
+                    break;
+                case "pat":
+                    console.log("The " + prettyString.item(item) + " does not like it.");
                     break;
                 case "move":
                     console.log("You got away!");
