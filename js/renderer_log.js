@@ -4,14 +4,14 @@
 var renderer = (function () {
     'use strict';
     var printToLog, promptToUser, alertToUser,
-        blueBackgroundColor = 'background-color:blue; color:white',
-        blueColor = 'color:#49db1f',
-        positivColor = 'background-color:green; color:white',
+        blueBackgroundColor = 'background-color:blue; color:white; font-size:1.2em; text-shadow: 0 2px #000; font-weight:bold;',
+        positivColor = 'background-color:green; color:white; font-size:1.2em; font-weight:bold;',
+        negativeColor = 'background-color:red; color:white; font-size:1.2em; font-weight:bold;',
         colorReset = 'background-color:white; color:black',
-        itemColor = 'color:#ba2bdb';
+        itemColor = 'color:#ba2bdb; text-transform:capitalize; font-weight:bold;';
     printToLog = { // This will serve much like a "viewController" for the terminal. (place in separate file?)
         equiped: function (equiped) { // console.log all tht equiped items.
-            console.log("%c--------- EQUIPED ---------", blueBackgroundColor);
+            console.group("%c---------== EQUIPED ==---------", blueBackgroundColor);
             console.log("%cChest armor: ", itemColor);
             printToLog.item(equiped.chest);
             console.log("%cHead armor: ", itemColor);
@@ -20,18 +20,20 @@ var renderer = (function () {
             printToLog.item(equiped.crotch);
             console.log("%cWeapon: ", itemColor);
             printToLog.item(equiped.weapon);
-            console.log("%c---------------------------", blueBackgroundColor);
+            console.groupEnd();
+            console.log("%c-------------------------------", blueBackgroundColor);
         },
         inventory: function (inventory) { // console.log everything in the inventory
             var key;
             inventory = agoa.player.getInventory();
-            console.log("%c--------- INVENTORY ---------", blueBackgroundColor);
+            console.group("%c--------- INVENTORY ---------", blueBackgroundColor);
             for (key in inventory) {
                 if (inventory.hasOwnProperty(key)) {
                     console.log("%c" + key + ": ", itemColor);
                     inventory[key].forEach(printToLog.item);
                 }
             }
+            console.groupEnd();
             console.log("%c---------------------------", blueBackgroundColor);
         },
         item: function (item) { // console.log the prettyString of an item.
