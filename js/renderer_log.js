@@ -57,7 +57,7 @@ var renderer = (function () {
             printToLog.divider();
         },
         divider: function () {
-            console.log("---------------------------------------------------");
+            console.log("%c---------------------------------------------------", 'background-color:black;');
         }
     };
     promptToUser = function (text) {

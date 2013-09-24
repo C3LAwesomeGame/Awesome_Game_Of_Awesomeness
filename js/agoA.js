@@ -379,7 +379,7 @@ var agoa = (function () {
     };
     words = { // our collection of word for comparsion with the input text
         actions: { // action words that a player may enter
-            hit: ["kill", "poke", "attack", "hit", "kick"],
+            hit: ["kill", "poke", "attack", "hit", "kick", "punch", "stab"],
             pat: ["pat", "stroke"],
             move: ["run", "walk", "strut", "skip", "move"],
             use: ["use", "equip", "prepare"],
@@ -743,12 +743,17 @@ var agoa = (function () {
     function initiateFightWithRandomMonster() {
         return initiateFightWith(generateRandomMonster());
     }
+    //
+    // Extreeeeeemly uggly remember to add real values to items and remove this before hand in.
     (function () {
         player.equiped.chest = calculatePowerForItem(player.equiped.chest);
         player.equiped.head = calculatePowerForItem(player.equiped.head);
         player.equiped.crotch = calculatePowerForItem(player.equiped.crotch);
         player.equiped.weapon = calculatePowerForItem(player.equiped.weapon);
     }());
+    /*
+     *
+     */
     return {
         player: {
             name: player.name,
