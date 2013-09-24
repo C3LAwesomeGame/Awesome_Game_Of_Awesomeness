@@ -7,6 +7,7 @@ var renderer = (function () {
         blueBackgroundColor = 'background-color:blue; color:white; font-size:1.2em; text-shadow: 0 2px #000; font-weight:bold;',
         positivColor = 'background-color:green; color:white; font-size:1.2em; font-weight:bold;',
         negativeColor = 'background-color:red; color:white; font-size:1.2em; font-weight:bold;',
+        damageColor = 'background-color:yellow; font-size:1.2em; font-weight:bold',
         colorReset = 'background-color:white; color:black',
         itemColor = 'color:#ba2bdb; text-transform:capitalize; font-weight:bold;';
     printToLog = { // This will serve much like a "viewController" for the terminal. (place in separate file?)
@@ -47,6 +48,9 @@ var renderer = (function () {
         },
         addToHistory: function (text) {
             console.log(text);
+        },
+        combatResult: function (playerHealth, monster, damageToPlayer, damageToMonster) {
+            console.log("You hit the " + agoa.prettyString.item(monster) + " for %c " + damageToMonster.toString() + " %c.\nThe " + agoa.prettyString.item(monster) + " hits you for %c " + damageToPlayer.toString() + " %c, you now have %c " + playerHealth.toString() + " %c health left.", damageColor, colorReset, negativeColor, colorReset, positivColor, colorReset);
         }
     };
     promptToUser = function (text) {

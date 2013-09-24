@@ -13,83 +13,83 @@ var agoa = (function () {
     resourceTabel = {
         monsterArray: [{
             type: "Shark",
-            attack: 5,
-            defence: 5,
+            attack: 2,
+            defence: 1,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Troll",
-            attack: 5,
-            defence: 5,
+            attack: 2,
+            defence: 1,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Beholder",
-            attack: 5,
-            defence: 5,
+            attack: 2,
+            defence: 1,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Dragon",
-            attack: 5,
-            defence: 5,
+            attack: 4,
+            defence: 2,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Wizard",
-            attack: 5,
-            defence: 5,
+            attack: 3,
+            defence: 1,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Ponny",
-            attack: 5,
-            defence: 5,
+            attack: 1,
+            defence: 1,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Chihuahua",
-            attack: 5,
-            defence: 5,
+            attack: 1,
+            defence: 2,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Demon",
             attack: 5,
-            defence: 5,
+            defence: 2,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Borat",
-            attack: 5,
-            defence: 5,
+            attack: 2,
+            defence: 1,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Tom Blackmore",
             attack: 5,
-            defence: 5,
+            defence: 3,
             health: 10,
             sourceArray: "monsterArray"
         }],
         colorArray: [{
             type: "Pink",
-            attack: 1,
+            attack: 1.3,
             defence: 0.8,
             sourceArray: "colorArray"
         }, {
             type: "Green",
-            attack: 1,
+            attack: 1.4,
             defence: 1,
             sourceArray: "colorArray"
         }, {
             type: "Blue",
-            attack: 1,
-            defence: 1.2,
+            attack: 1.3,
+            defence: 1.8,
             sourceArray: "colorArray"
         }, {
             type: "Red",
-            attack: 1.4,
+            attack: 1.8,
             defence: 0.6,
             sourceArray: "colorArray"
         }, {
@@ -99,8 +99,8 @@ var agoa = (function () {
             sourceArray: "colorArray"
         }, {
             type: "White",
-            attack: 0.8,
-            defence: 1.4,
+            attack: 0.5,
+            defence: 1.9,
             sourceArray: "colorArray"
         }, {
             type: "Yellow",
@@ -109,12 +109,12 @@ var agoa = (function () {
             sourceArray: "colorArray"
         }, {
             type: "Orange",
-            attack: 1.4,
+            attack: 1.8,
             defence: 1,
             sourceArray: "colorArray"
         }, {
             type: "Purple",
-            attack: 1.2,
+            attack: 2,
             defence: 1,
             sourceArray: "colorArray"
         }],
@@ -130,23 +130,23 @@ var agoa = (function () {
             sourceArray: "fluffArray"
         }, {
             type: "Shiny",
-            attack: 1.2,
-            defence: 1.2,
+            attack: 1.5,
+            defence: 1.4,
             sourceArray: "fluffArray"
         }, {
             type: "Rusty",
-            attack: 0.8,
+            attack: 0.5,
             defence: 1,
             sourceArray: "fluffArray"
         }, {
             type: "Mighty",
-            attack: 1.4,
-            defence: 1.4,
+            attack: 1.9,
+            defence: 1.9,
             sourceArray: "fluffArray"
         }, {
             type: "Enchanted",
-            attack: 1.6,
-            defence: 1.6,
+            attack: 2,
+            defence: 2,
             sourceArray: "fluffArray"
         }, {
             type: "Common",
@@ -166,17 +166,17 @@ var agoa = (function () {
             sourceArray: "weaponArray"
         }, {
             type: "2H-Sword",
-            attack: 1.7,
+            attack: 2,
             defence: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Axe-Spray",
-            attack: 1.3,
+            attack: 1.7,
             defence: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Wand",
-            attack: 1.5,
+            attack: 1.9,
             defence: 1,
             sourceArray: "weaponArray"
         }, {
@@ -232,7 +232,7 @@ var agoa = (function () {
         name: "",
         fighting: true,
         level: 1,
-        baseAttack: 1,
+        baseAttack: 2,
         baseDefence: 1,
         health: 30,
         maxHealth: 30,
@@ -340,6 +340,15 @@ var agoa = (function () {
             } else {
                 renderer.printToLog.noPotions();
             }
+            return;
+        },
+        addToInventory: function (item) {
+            if (item.sourceArray === "weaponArray") {
+                player.inventory.weapon.push(item);
+            } else if (item.sourceArray === "armorArray") {
+                player.inventory.armor.push(item);
+            }
+            renderer.printToLog.addToHistory(prettyString.item(item) + " added to your inventory.");
         },
         equipItem: function (item) {
             if (item.sourceArray === "weaponArray") {
@@ -380,6 +389,7 @@ var agoa = (function () {
             equiped: ["equiped"],
             inventory: ["inventory", "bag", "items", "stach"],
             win: ["pablo", "win"],
+            clear: ["clear"],
             quit: ["quit", "q"]
         }, // direction words 
         directions: {
@@ -605,6 +615,28 @@ var agoa = (function () {
         return undefined;
     }
 
+    function resolveCombat(monster) {
+        console.log(monster);
+        console.log(player);
+        var damageToPlayer = Math.ceil((monster.attack * Math.random() * 2) - player.getTotalDefence()),
+            damageToMonster = Math.ceil((player.getTotalAttack() * Math.random() * 2) - monster.defence);
+        damageToPlayer = damageToPlayer > 0 ? damageToPlayer : 1;
+        damageToMonster = damageToMonster > 0 ? damageToMonster : 1;
+        player.health = player.health - damageToPlayer;
+        monster.health = monster.health - damageToMonster;
+        renderer.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
+        return monster;
+    }
+
+    function getPotentialLoot() {
+        var item;
+        if (Math.random() > 0) {
+            item = Math.random() > 0.3 ? generateRandomWeapon() : generateRandomArmor();
+        }
+        console.log(item);
+        return item;
+    }
+
     function takeActionOnString(text, item) {
         renderer.printToLog.addToHistory(text);
         var input = renderer.promptToUser(text),
@@ -618,7 +650,7 @@ var agoa = (function () {
                 switch (actions[i]) {
                 case "hit":
                     if (player.fighting) {
-                        console.log("You hit the " + prettyString.item(item) + "!");
+                        item = resolveCombat(item);
                     } else {
                         renderer.alertToUser("There is nothing relevant to hit...");
                     }
@@ -664,8 +696,11 @@ var agoa = (function () {
                 case "win":
                     console.log("You have summoned the all-knowing genie known as Pablo de la Win");
                     break;
+                case "clear":
+                    console.clear();
+                    break;
                 case "quit":
-                    console.log("Quitting.");
+                    console.log("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
                     stillInEngagement = false;
                     break;
                 default:
@@ -683,15 +718,22 @@ var agoa = (function () {
     }
 
     function initiateFightWith(monster) {
-        agoa.player.fighting = true;
-        while (agoa.player.fighting && agoa.player.getHealth() > 0 && monster.health > 0) {
-            agoa.player.fighting = agoa.fromString.takeAction("You stand before the " + agoa.prettyString.item(monster), monster);
+        var loot;
+        player.fighting = true;
+        while (player.fighting && player.getHealth() > 0 && monster.health > 0) {
+            player.fighting = takeActionOnString("You stand before the " + prettyString.item(monster), monster);
         }
-        if (agoa.player.fighting) {
-            if (agoa.player.health > 0) {
+        if (player.fighting) {
+            if (player.health <= 0) {
                 renderer.alertToUser("You have died...\n\nGAME OVER");
-            } else if (monster.health > 0) {
-                renderer.alertToUser("You have slain the " + agoa.prettyString.item(monster));
+            } else if (monster.health <= 0) {
+                renderer.alertToUser("You have slain the " + prettyString.item(monster));
+                loot = getPotentialLoot();
+                if (undefined !== loot) {
+                    renderer.alertToUser("You found a " + prettyString.item(loot));
+                    player.addToInventory(loot);
+                }
+
             }
         } else {
             renderer.alertToUser("You cowardly run away!");
@@ -701,6 +743,12 @@ var agoa = (function () {
     function initiateFightWithRandomMonster() {
         initiateFightWith(generateRandomMonster());
     }
+    (function () {
+        player.equiped.chest = calculatePowerForItem(player.equiped.chest);
+        player.equiped.head = calculatePowerForItem(player.equiped.head);
+        player.equiped.crotch = calculatePowerForItem(player.equiped.crotch);
+        player.equiped.weapon = calculatePowerForItem(player.equiped.weapon);
+    }());
     return {
         player: {
             name: player.name,
