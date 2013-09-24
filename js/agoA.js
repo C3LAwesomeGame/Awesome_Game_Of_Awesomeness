@@ -616,8 +616,6 @@ var agoa = (function () {
     }
 
     function resolveCombat(monster) {
-        console.log(monster);
-        console.log(player);
         var damageToPlayer = Math.ceil((monster.attack * Math.random() * 2) - player.getTotalDefence()),
             damageToMonster = Math.ceil((player.getTotalAttack() * Math.random() * 2) - monster.defence);
         damageToPlayer = damageToPlayer > 0 ? damageToPlayer : 1;
@@ -631,9 +629,8 @@ var agoa = (function () {
     function getPotentialLoot() {
         var item;
         if (Math.random() > 0) {
-            item = Math.random() > 0.3 ? generateRandomWeapon() : generateRandomArmor();
+            item = Math.random() > 0.6 ? generateRandomWeapon() : generateRandomArmor();
         }
-        console.log(item);
         return item;
     }
 
@@ -726,22 +723,25 @@ var agoa = (function () {
         if (player.fighting) {
             if (player.health <= 0) {
                 renderer.alertToUser("You have died...\n\nGAME OVER");
-            } else if (monster.health <= 0) {
+                return false;
+            }
+            if (monster.health <= 0) {
                 renderer.alertToUser("You have slain the " + prettyString.item(monster));
                 loot = getPotentialLoot();
                 if (undefined !== loot) {
                     renderer.alertToUser("You found a " + prettyString.item(loot));
                     player.addToInventory(loot);
                 }
-
+                return true;
             }
         } else {
             renderer.alertToUser("You cowardly run away!");
+            return false;
         }
     }
 
     function initiateFightWithRandomMonster() {
-        initiateFightWith(generateRandomMonster());
+        return initiateFightWith(generateRandomMonster());
     }
     (function () {
         player.equiped.chest = calculatePowerForItem(player.equiped.chest);

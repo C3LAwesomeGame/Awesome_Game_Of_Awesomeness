@@ -42,15 +42,22 @@ var renderer = (function () {
         },
         drankPotion: function (potionResult, playerHealth) {
             console.log("You drink a potion and restores %c " + potionResult + " %c points of health. \nYou are now at %c " + playerHealth + " %c lifepoints.", positivColor, colorReset, positivColor, colorReset);
+            printToLog.divider();
         },
         noPotions: function () {
             console.log("You are out of potions");
+            printToLog.divider();
         },
         addToHistory: function (text) {
             console.log(text);
+            printToLog.divider();
         },
         combatResult: function (playerHealth, monster, damageToPlayer, damageToMonster) {
             console.log("You hit the " + agoa.prettyString.item(monster) + " for %c " + damageToMonster.toString() + " %c.\nThe " + agoa.prettyString.item(monster) + " hits you for %c " + damageToPlayer.toString() + " %c, you now have %c " + playerHealth.toString() + " %c health left.", damageColor, colorReset, negativeColor, colorReset, positivColor, colorReset);
+            printToLog.divider();
+        },
+        divider: function () {
+            console.log("---------------------------------------------------");
         }
     };
     promptToUser = function (text) {
