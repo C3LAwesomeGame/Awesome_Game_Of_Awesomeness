@@ -440,7 +440,14 @@ var agoa = (function () {
             },
             fluff: {
                 0: ["funky"],
-                1: ["fluffy"]
+                1: ["fluffy"],
+                2: ["mighty"],
+                3: ["enchanted"],
+                4: ["rusty"],
+                5: ["common"],
+                6: ["Beautiful"],
+                7: ["Disco"],
+                8: ["shiny"]
             }
         }
     };
