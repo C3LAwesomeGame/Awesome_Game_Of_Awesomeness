@@ -139,11 +139,6 @@ var agoa = (function () {
             defence: 1,
             sourceArray: "fluffArray"
         }, {
-            type: "Mighty",
-            attack: 1.9,
-            defence: 1.9,
-            sourceArray: "fluffArray"
-        }, {
             type: "Enchanted",
             attack: 2,
             defence: 2,
@@ -157,6 +152,11 @@ var agoa = (function () {
             type: "Beautiful",
             attack: 1.2,
             defence: 1,
+            sourceArray: "fluffArray"
+        }, {
+            type: "Disco",
+            attack: 1.3,
+            defence: 1.4,
             sourceArray: "fluffArray"
         }],
         weaponArray: [{
@@ -383,7 +383,7 @@ var agoa = (function () {
             pat: ["pat", "stroke"],
             move: ["run", "walk", "strut", "skip", "move"],
             use: ["use", "equip", "prepare"],
-            drink: ["drink", "chug"],
+            drink: ["drink", "chug", "potion", "pot"],
             look: ["look", "search"],
             take: ["take", "loot", "pick", "fetch"],
             equiped: ["equiped"],
@@ -441,13 +441,12 @@ var agoa = (function () {
             fluff: {
                 0: ["funky"],
                 1: ["fluffy"],
-                2: ["mighty"],
-                3: ["enchanted"],
-                4: ["rusty"],
+                2: ["shiny"],
+                3: ["rusty"],
+                4: ["enchanted"],
                 5: ["common"],
-                6: ["Beautiful"],
-                7: ["Disco"],
-                8: ["shiny"]
+                6: ["beautiful"],
+                7: ["disco"]
             }
         }
     };
