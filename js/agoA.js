@@ -15,61 +15,61 @@ var agoa = (function () {
             type: "Shark",
             attack: 3,
             defence: 1,
-            health: 18,
+            health: 25,
             sourceArray: "monsterArray"
         }, {
             type: "Troll",
             attack: 3,
             defence: 1,
-            health: 20,
+            health: 30,
             sourceArray: "monsterArray"
         }, {
             type: "Beholder",
             attack: 3,
             defence: 1,
-            health: 20,
+            health: 40,
             sourceArray: "monsterArray"
         }, {
             type: "Dragon",
             attack: 5,
             defence: 2,
-            health: 28,
+            health: 60,
             sourceArray: "monsterArray"
         }, {
             type: "Wizard",
             attack: 7,
             defence: 1,
-            health: 10,
+            health: 15,
             sourceArray: "monsterArray"
         }, {
             type: "Ponny",
             attack: 2,
             defence: 1,
-            health: 10,
+            health: 20,
             sourceArray: "monsterArray"
         }, {
             type: "Chihuahua",
             attack: 2,
             defence: 2,
-            health: 10,
+            health: 15,
             sourceArray: "monsterArray"
         }, {
             type: "Demon",
             attack: 6,
             defence: 2,
-            health: 25,
+            health: 50,
             sourceArray: "monsterArray"
         }, {
             type: "Borat",
             attack: 3,
             defence: 1,
-            health: 15,
+            health: 30,
             sourceArray: "monsterArray"
         }, {
             type: "Tom Blackmore",
             attack: 6,
             defence: 3,
-            health: 20,
+            health: 40,
             sourceArray: "monsterArray"
         }],
         colorArray: [{
@@ -243,7 +243,7 @@ var agoa = (function () {
         fighting: true,
         level: 1,
         baseAttack: 3,
-        baseDefence: 1,
+        baseDefence: 2,
         health: 50,
         maxHealth: 50,
         potionsRemaining: 5,
@@ -374,6 +374,7 @@ var agoa = (function () {
             renderer.printToLog.addToHistory(prettyString.item(item) + " added to your inventory.");
         },
         equipItem: function (item) {
+            item = calculatePowerForItem(item);
             if (item.sourceArray === "weaponArray") {
                 player.equiped.weapon = item;
             } else {
