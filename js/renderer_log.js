@@ -24,7 +24,7 @@ var renderer = (function () {
             console.groupEnd();
             console.log("%c-------------------------------", blueBackgroundColor);
         },
-        inventory: function (inventory) { // console.log everything in the inventory
+        inventory: function (inventory, potions) { // console.log everything in the inventory
             var key;
             inventory = agoa.player.getInventory();
             console.group("%c--------- INVENTORY ---------", blueBackgroundColor);
@@ -34,6 +34,8 @@ var renderer = (function () {
                     inventory[key].forEach(printToLog.item);
                 }
             }
+            console.log("%cPotions:", itemColor);
+            console.log(potions + " Health Potions");
             console.groupEnd();
             console.log("%c---------------------------", blueBackgroundColor);
         },

@@ -13,63 +13,63 @@ var agoa = (function () {
     resourceTabel = {
         monsterArray: [{
             type: "Shark",
-            attack: 2,
+            attack: 3,
             defence: 1,
-            health: 10,
+            health: 18,
             sourceArray: "monsterArray"
         }, {
             type: "Troll",
-            attack: 2,
+            attack: 3,
             defence: 1,
-            health: 10,
+            health: 20,
             sourceArray: "monsterArray"
         }, {
             type: "Beholder",
-            attack: 2,
+            attack: 3,
             defence: 1,
-            health: 10,
+            health: 20,
             sourceArray: "monsterArray"
         }, {
             type: "Dragon",
-            attack: 4,
+            attack: 5,
             defence: 2,
-            health: 10,
+            health: 28,
             sourceArray: "monsterArray"
         }, {
             type: "Wizard",
-            attack: 3,
+            attack: 7,
             defence: 1,
             health: 10,
             sourceArray: "monsterArray"
         }, {
             type: "Ponny",
-            attack: 1,
-            defence: 1,
-            health: 10,
-            sourceArray: "monsterArray"
-        }, {
-            type: "Chihuahua",
-            attack: 1,
-            defence: 2,
-            health: 10,
-            sourceArray: "monsterArray"
-        }, {
-            type: "Demon",
-            attack: 5,
-            defence: 2,
-            health: 10,
-            sourceArray: "monsterArray"
-        }, {
-            type: "Borat",
             attack: 2,
             defence: 1,
             health: 10,
             sourceArray: "monsterArray"
         }, {
-            type: "Tom Blackmore",
-            attack: 5,
-            defence: 3,
+            type: "Chihuahua",
+            attack: 2,
+            defence: 2,
             health: 10,
+            sourceArray: "monsterArray"
+        }, {
+            type: "Demon",
+            attack: 6,
+            defence: 2,
+            health: 25,
+            sourceArray: "monsterArray"
+        }, {
+            type: "Borat",
+            attack: 3,
+            defence: 1,
+            health: 15,
+            sourceArray: "monsterArray"
+        }, {
+            type: "Tom Blackmore",
+            attack: 6,
+            defence: 3,
+            health: 20,
             sourceArray: "monsterArray"
         }],
         colorArray: [{
@@ -110,7 +110,7 @@ var agoa = (function () {
         }, {
             type: "Orange",
             attack: 1.8,
-            defence: 1,
+            defence: 1.5,
             sourceArray: "colorArray"
         }, {
             type: "Purple",
@@ -139,11 +139,6 @@ var agoa = (function () {
             defence: 1,
             sourceArray: "fluffArray"
         }, {
-            type: "Mighty",
-            attack: 1.9,
-            defence: 1.9,
-            sourceArray: "fluffArray"
-        }, {
             type: "Enchanted",
             attack: 2,
             defence: 2,
@@ -157,6 +152,11 @@ var agoa = (function () {
             type: "Beautiful",
             attack: 1.2,
             defence: 1,
+            sourceArray: "fluffArray"
+        }, {
+            type: "Disco",
+            attack: 1.3,
+            defence: 1.4,
             sourceArray: "fluffArray"
         }],
         weaponArray: [{
@@ -212,18 +212,28 @@ var agoa = (function () {
             defence: 0.8,
             sourceArray: "sizeArray"
         }, {
-            type: "Average sized",
+            type: "Small",
+            attack: 0.9,
+            defence: 0.8,
+            sourceArray: "sizeArray"
+        }, {
+            type: "Average",
             attack: 1,
             defence: 1,
             sourceArray: "sizeArray"
         }, {
-            type: "Giant",
+            type: "Big",
             attack: 1.2,
             defence: 1.2,
             sourceArray: "sizeArray"
         }, {
+            type: "Giant",
+            attack: 1.4,
+            defence: 1.2,
+            sourceArray: "sizeArray"
+        }, {
             type: "Mighty",
-            attack: 1.3,
+            attack: 1.6,
             defence: 1.1,
             sourceArray: "sizeArray"
         }]
@@ -232,72 +242,77 @@ var agoa = (function () {
         name: "",
         fighting: true,
         level: 1,
-        baseAttack: 2,
+        baseAttack: 3,
         baseDefence: 1,
-        health: 30,
-        maxHealth: 30,
-        potionsRemaining: 3,
+        health: 50,
+        maxHealth: 50,
+        potionsRemaining: 5,
         inventory: { // inventory should be empty at start (?) this is just for debugging
             armor: [{
                 typeValue: 0,
-                sizeValue: 3,
-                fluffValue: 2,
-                colorValue: 1,
+                sizeValue: 0,
+                fluffValue: 5,
+                colorValue: 3,
                 sourceArray: "armorArray"
             }, {
                 typeValue: 1,
-                sizeValue: 3,
-                fluffValue: 2,
+                sizeValue: 0,
+                fluffValue: 5,
                 colorValue: 1,
+                sourceArray: "armorArray"
+            }, {
+                typeValue: 2,
+                sizeValue: 0,
+                fluffValue: 5,
+                colorValue: 0,
                 sourceArray: "armorArray"
             }],
             weapon: [{
                 typeValue: 0,
                 sizeValue: 0,
-                fluffValue: 0,
-                colorValue: 0,
+                fluffValue: 5,
+                colorValue: 1,
                 sourceArray: "weaponArray"
             }, {
-                typeValue: 1,
+                typeValue: 4,
                 sizeValue: 2,
                 fluffValue: 1,
                 colorValue: 1,
                 sourceArray: "weaponArray"
             }, {
-                typeValue: 1,
-                sizeValue: 3,
+                typeValue: 4,
+                sizeValue: 5,
                 fluffValue: 0,
                 colorValue: 3,
                 sourceArray: "weaponArray"
-            }],
-            potion: []
+            }]
         },
         equiped: {
             chest: {
                 typeValue: 0,
                 sizeValue: 0,
-                fluffValue: 2,
+                fluffValue: 5,
                 colorValue: 1,
                 sourceArray: "armorArray"
             },
             head: {
                 typeValue: 1,
                 sizeValue: 0,
-                fluffValue: 2,
+                fluffValue: 5,
                 colorValue: 1,
                 sourceArray: "armorArray"
             },
             crotch: {
                 typeValue: 2,
                 sizeValue: 0,
-                fluffValue: 2,
+                fluffValue: 5,
                 colorValue: 1,
                 sourceArray: "armorArray"
             },
             weapon: {
                 typeValue: 0,
                 sizeValue: 0,
-                fluffValue: 2,
+                fluffValue: 5,
                 colorValue: 1,
                 sourceArray: "weaponArray"
             }
@@ -383,14 +398,14 @@ var agoa = (function () {
             pat: ["pat", "stroke"],
             move: ["run", "walk", "strut", "skip", "move"],
             use: ["use", "equip", "prepare"],
-            drink: ["drink", "chug"],
+            drink: ["drink", "chug", "potion", "pot"],
             look: ["look", "search"],
             take: ["take", "loot", "pick", "fetch"],
             equiped: ["equiped"],
             inventory: ["inventory", "bag", "items", "stach"],
             win: ["pablo", "win"],
             clear: ["clear"],
-            quit: ["quit", "q"]
+            quit: ["quit", "q", "exit"]
         }, // direction words 
         directions: {
             north: ["north", "n"],
@@ -423,9 +438,11 @@ var agoa = (function () {
             },
             sizes: {
                 0: ["tiny"],
-                1: ["average"],
-                2: ["giant"],
-                3: ["mighty"]
+                1: ["small"],
+                2: ["average"],
+                3: ["big"],
+                4: ["giant"],
+                5: ["mighty"]
             },
             colors: {
                 0: ["pink"],
@@ -441,13 +458,12 @@ var agoa = (function () {
             fluff: {
                 0: ["funky"],
                 1: ["fluffy"],
-                2: ["mighty"],
-                3: ["enchanted"],
-                4: ["rusty"],
+                2: ["shiny"],
+                3: ["rusty"],
+                4: ["enchanted"],
                 5: ["common"],
-                6: ["Beautiful"],
-                7: ["Disco"],
-                8: ["shiny"]
+                6: ["beautiful"],
+                7: ["disco"]
             }
         }
     };
@@ -623,8 +639,8 @@ var agoa = (function () {
     }
 
     function resolveCombat(monster) {
-        var damageToPlayer = Math.ceil((monster.attack * Math.random() * 2) - player.getTotalDefence()),
-            damageToMonster = Math.ceil((player.getTotalAttack() * Math.random() * 2) - monster.defence);
+        var damageToPlayer = Math.ceil((monster.attack + Math.random() * 3) - player.getTotalDefence()),
+            damageToMonster = Math.ceil((player.getTotalAttack() + Math.random() * 3) - monster.defence);
         damageToPlayer = damageToPlayer > 0 ? damageToPlayer : 1;
         damageToMonster = damageToMonster > 0 ? damageToMonster : 1;
         player.health = player.health - damageToPlayer;
@@ -635,7 +651,7 @@ var agoa = (function () {
 
     function getPotentialLoot() {
         var item;
-        if (Math.random() > 0) {
+        if (Math.random() > 0.6) {
             item = Math.random() > 0.6 ? generateRandomWeapon() : generateRandomArmor();
         }
         return item;
@@ -686,7 +702,7 @@ var agoa = (function () {
                     }
                     break;
                 case "look":
-                    console.log("You look around and see a tree");
+                    console.log("You look around and see a tree and a " + prettyString.item(item));
                     break;
                 case "take":
                     console.log("You pick up a tiny rock");
@@ -695,7 +711,7 @@ var agoa = (function () {
                     renderer.printToLog.equiped(player.equiped);
                     break;
                 case "inventory":
-                    renderer.printToLog.inventory(player.inventry);
+                    renderer.printToLog.inventory(player.inventry, player.getPotionsRemaining());
                     break;
                 case "win":
                     console.log("You have summoned the all-knowing genie known as Pablo de la Win");
@@ -706,7 +722,7 @@ var agoa = (function () {
                 case "quit":
                     console.log("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
                     stillInEngagement = false;
-                    break;
+                    return undefined;
                 default:
                     console.log("What do you want to do?");
                     renderer.alertToUser("I'm sorry I do not understand what you want to do.");
@@ -722,10 +738,14 @@ var agoa = (function () {
     }
 
     function initiateFightWith(monster) {
-        var loot;
+        var loot, fighting;
         player.fighting = true;
         while (player.fighting && player.getHealth() > 0 && monster.health > 0) {
-            player.fighting = takeActionOnString("You stand before the " + prettyString.item(monster), monster);
+            fighting = takeActionOnString("You stand before the " + prettyString.item(monster), monster);
+            player.fighting = fighting;
+            if (fighting === undefined) {
+                return undefined;
+            }
         }
         if (player.fighting) {
             if (player.health <= 0) {
@@ -738,6 +758,9 @@ var agoa = (function () {
                 if (undefined !== loot) {
                     renderer.alertToUser("You found a " + prettyString.item(loot));
                     player.addToInventory(loot);
+                } else if (Math.random() > 0.7) {
+                    renderer.alertToUser("You found a health potion");
+                    player.potionsRemaining += 1;
                 }
                 return true;
             }
