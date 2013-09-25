@@ -405,7 +405,7 @@ var agoa = (function () {
             inventory: ["inventory", "bag", "items", "stach"],
             win: ["pablo", "win"],
             clear: ["clear"],
-            quit: ["quit", "q"]
+            quit: ["quit", "q", "exit"]
         }, // direction words 
         directions: {
             north: ["north", "n"],
@@ -702,7 +702,7 @@ var agoa = (function () {
                     }
                     break;
                 case "look":
-                    console.log("You look around and see a tree");
+                    console.log("You look around and see a tree and a " + prettyString.item(item));
                     break;
                 case "take":
                     console.log("You pick up a tiny rock");
@@ -722,7 +722,7 @@ var agoa = (function () {
                 case "quit":
                     console.log("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
                     stillInEngagement = false;
-                    break;
+                    return undefined;
                 default:
                     console.log("What do you want to do?");
                     renderer.alertToUser("I'm sorry I do not understand what you want to do.");
@@ -738,10 +738,14 @@ var agoa = (function () {
     }
 
     function initiateFightWith(monster) {
-        var loot;
+        var loot, fighting;
         player.fighting = true;
         while (player.fighting && player.getHealth() > 0 && monster.health > 0) {
-            player.fighting = takeActionOnString("You stand before the " + prettyString.item(monster), monster);
+            fighting = takeActionOnString("You stand before the " + prettyString.item(monster), monster);
+            player.fighting = fighting;
+            if (fighting === undefined) {
+                return undefined;
+            }
         }
         if (player.fighting) {
             if (player.health <= 0) {

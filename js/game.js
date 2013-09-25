@@ -11,4 +11,4 @@ var keepGoing = true;
 
 do {
     keepGoing = agoa.initiateFightWithRandomMonster();
-} while (keepGoing);
+} while (keepGoing !== undefined);
