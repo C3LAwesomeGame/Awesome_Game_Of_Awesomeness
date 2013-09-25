@@ -11,4 +11,7 @@ var keepGoing = true;
 
 do {
     keepGoing = agoa.initiateFightWithRandomMonster();
-} while (keepGoing !== undefined);
+    if (undefined === keepGoing) {
+        break;
+    }
+} while (agoa.player.getHealth() > 0);
