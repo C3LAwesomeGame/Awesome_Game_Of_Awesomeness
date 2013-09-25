@@ -749,17 +749,17 @@ var agoa = (function () {
         }
         if (player.fighting) {
             if (player.health <= 0) {
-                renderer.alertToUser("You have died...\n\nGAME OVER");
+                renderer.gameOver();
                 return false;
             }
             if (monster.health <= 0) {
                 renderer.alertToUser("You have slain the " + prettyString.item(monster));
                 loot = getPotentialLoot();
                 if (undefined !== loot) {
-                    renderer.alertToUser("You found a " + prettyString.item(loot));
+                    renderer.printToLog.foundLoot(loot);
                     player.addToInventory(loot);
                 } else if (Math.random() > 0.7) {
-                    renderer.alertToUser("You found a health potion");
+                    renderer.printToLog.foundPotion();
                     player.potionsRemaining += 1;
                 }
                 return true;
