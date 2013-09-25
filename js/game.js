@@ -15,3 +15,4 @@ do {
         break;
     }
 } while (agoa.player.getHealth() > 0);
+

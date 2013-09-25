@@ -274,13 +274,13 @@ var agoa = (function () {
                 colorValue: 1,
                 sourceArray: "weaponArray"
             }, {
-                typeValue: 4,
+                typeValue: 1,
                 sizeValue: 2,
                 fluffValue: 1,
                 colorValue: 1,
                 sourceArray: "weaponArray"
             }, {
-                typeValue: 4,
+                typeValue: 1,
                 sizeValue: 5,
                 fluffValue: 0,
                 colorValue: 3,
@@ -293,6 +293,8 @@ var agoa = (function () {
                 sizeValue: 0,
                 fluffValue: 5,
                 colorValue: 1,
+                attack: 1,
+                defence: 1,
                 sourceArray: "armorArray"
             },
             head: {
@@ -300,6 +302,8 @@ var agoa = (function () {
                 sizeValue: 0,
                 fluffValue: 5,
                 colorValue: 1,
+                attack: 1,
+                defence: 1,
                 sourceArray: "armorArray"
             },
             crotch: {
@@ -307,6 +311,8 @@ var agoa = (function () {
                 sizeValue: 0,
                 fluffValue: 5,
                 colorValue: 1,
+                attack: 1,
+                defence: 1,
                 sourceArray: "armorArray"
             },
             weapon: {
@@ -314,6 +320,8 @@ var agoa = (function () {
                 sizeValue: 0,
                 fluffValue: 5,
                 colorValue: 1,
+                attack: 1,
+                defence: 1,
                 sourceArray: "weaponArray"
             }
         },
@@ -346,7 +354,7 @@ var agoa = (function () {
             if (player.potionsRemaining > 0) {
                 var potionResult = 0;
                 player.potionsRemaining -= 1;
-                potionResult += Math.ceil(5 + 10 * Math.random());
+                potionResult += Math.ceil(15 + 10 * Math.random());
                 player.health += potionResult;
                 if (player.health > player.maxHealth) {
                     player.health = player.maxHealth;
@@ -666,6 +674,7 @@ var agoa = (function () {
             match,
             stillInEngagement = true;
         if (actions) {
+            stillInEngagement = true;
             for (i = 0; i < actions.length; i += 1) {
                 switch (actions[i]) {
                 case "hit":
@@ -735,6 +744,7 @@ var agoa = (function () {
         }
         renderer.alertToUser("You must make a choise as you stand in front of the " + prettyString.item(item));
         takeActionOnString(text, item);
+        return true;
     }
 
     function initiateFightWith(monster) {
@@ -773,14 +783,6 @@ var agoa = (function () {
     function initiateFightWithRandomMonster() {
         return initiateFightWith(generateRandomMonster());
     }
-    //
-    // Extreeeeeemly uggly remember to add real values to items and remove this before hand in.
-    (function () {
-        player.equiped.chest = calculatePowerForItem(player.equiped.chest);
-        player.equiped.head = calculatePowerForItem(player.equiped.head);
-        player.equiped.crotch = calculatePowerForItem(player.equiped.crotch);
-        player.equiped.weapon = calculatePowerForItem(player.equiped.weapon);
-    }());
     /*
      *
      */
