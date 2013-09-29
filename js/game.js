@@ -11,10 +11,18 @@ console.log("princess, high, stupid and world of warcraft level 200.");
 console.log("So from all that you decided to start your own quest. Find the stone-high stupid princess and get the cheats' so you can level up your bubble-spandex boy to level 200");
 // agoa.player.name = prompt("What is your name, traveler?");
 console.log("Welcome! " + agoa.player.name);
+console.error("DING! Level: " + agoa.player.getLevel());
 var keepGoing = true;
-do {
-    keepGoing = agoa.initiateFightWithRandomMonster();
-    if (undefined === keepGoing) {
-        break;
+
+function play() {
+    'use strict';
+    if (!agoa.farmMonsterTillLevel(2)) {
+        return false;
     }
-} while (agoa.player.getHealth() > 0);
+    console.error("DING! Level: " + agoa.player.getLevel());
+    if (!agoa.farmMonsterTillLevel(3)) {
+        return false;
+    }
+    console.error("DING! Level: " + agoa.player.getLevel());
+}
+play();

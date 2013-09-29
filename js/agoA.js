@@ -5,12 +5,17 @@
 // This file is suposed to serve as an API with all the methods of the game
 var agoa = (function () {
     'use strict';
-    // Resources for item and monster generating
     var resourceTabel,
         player,
         prettyString,
         words;
+    /*
+     * Resources for item and monster generating
+     */
     resourceTabel = {
+        /*
+         * Monster resources
+         */
         monsterArray: [{
             type: "Shark",
             attack: 3,
@@ -72,6 +77,9 @@ var agoa = (function () {
             health: 40,
             sourceArray: "monsterArray"
         }],
+        /*
+         * Color resources
+         */
         colorArray: [{
             type: "Pink",
             attack: 1.3,
@@ -118,6 +126,9 @@ var agoa = (function () {
             defence: 1,
             sourceArray: "colorArray"
         }],
+        /*
+         * Fluff resources
+         */
         fluffArray: [{
             type: "Funky",
             attack: 1,
@@ -159,6 +170,9 @@ var agoa = (function () {
             defence: 1.4,
             sourceArray: "fluffArray"
         }],
+        /*
+         * Weapon resources
+         */
         weaponArray: [{
             type: "Dagger",
             attack: 1.2,
@@ -189,7 +203,10 @@ var agoa = (function () {
             attack: 1.3,
             defence: 1,
             sourceArray: "weaponArray"
-        }], // fluffValue, sizeValue
+        }],
+        /*
+         * Armor resources
+         */
         armorArray: [{
             type: "Chest",
             attack: 1,
@@ -201,11 +218,14 @@ var agoa = (function () {
             defence: 1.4,
             sourceArray: "armorArray"
         }, {
-            type: "Crotch-Cup",
+            type: "Cup",
             attack: 1,
             defence: 1.2,
             sourceArray: "armorArray"
-        }], //fluffValue, sizeValue
+        }],
+        /*
+         * Size resources
+         */
         sizeArray: [{
             type: "Tiny",
             attack: 0.8,
@@ -238,57 +258,79 @@ var agoa = (function () {
             sourceArray: "sizeArray"
         }]
     };
+    /*
+     * This is the player with all moethods and values available in this file, for public values and methods see bottom of file.
+     */
     player = {
         name: "",
         fighting: true,
-        level: 1,
+        xp: 1,
         baseAttack: 3,
         baseDefence: 2,
         health: 50,
         maxHealth: 50,
         potionsRemaining: 5,
-        inventory: { // inventory should be empty at start (?) this is just for debugging
+        inventory: { // Inventory has some items right now for demoing, should be empty when playing. 
             armor: [{
+                // Tiny red common chest
                 typeValue: 0,
                 sizeValue: 0,
                 fluffValue: 5,
                 colorValue: 3,
+                attack: 1,
+                defence: 1,
                 sourceArray: "armorArray"
             }, {
+                // Tiny green common helm
                 typeValue: 1,
                 sizeValue: 0,
                 fluffValue: 5,
                 colorValue: 1,
+                attack: 1,
+                defence: 1,
                 sourceArray: "armorArray"
             }, {
+                // Tiny pink common cup
                 typeValue: 2,
                 sizeValue: 0,
                 fluffValue: 5,
                 colorValue: 0,
+                attack: 1,
+                defence: 1,
                 sourceArray: "armorArray"
             }],
             weapon: [{
+                // Tiny green common dagger
                 typeValue: 0,
                 sizeValue: 0,
                 fluffValue: 5,
                 colorValue: 1,
+                attack: 1,
+                defence: 1,
                 sourceArray: "weaponArray"
             }, {
+                // Average green fluffy 2H-Sword
                 typeValue: 1,
                 sizeValue: 2,
                 fluffValue: 1,
                 colorValue: 1,
+                attack: 3,
+                defence: 1,
                 sourceArray: "weaponArray"
             }, {
+                // Mighty red funky sword
                 typeValue: 1,
                 sizeValue: 5,
                 fluffValue: 0,
                 colorValue: 3,
+                attack: 5,
+                defence: 1,
                 sourceArray: "weaponArray"
             }]
         },
         equiped: {
             chest: {
+                // Tiny green common chest
                 typeValue: 0,
                 sizeValue: 0,
                 fluffValue: 5,
@@ -298,6 +340,7 @@ var agoa = (function () {
                 sourceArray: "armorArray"
             },
             head: {
+                // Tiny green common helm
                 typeValue: 1,
                 sizeValue: 0,
                 fluffValue: 5,
@@ -307,6 +350,7 @@ var agoa = (function () {
                 sourceArray: "armorArray"
             },
             crotch: {
+                // Tiny green common cup
                 typeValue: 2,
                 sizeValue: 0,
                 fluffValue: 5,
@@ -316,6 +360,7 @@ var agoa = (function () {
                 sourceArray: "armorArray"
             },
             weapon: {
+                // Tiny green common dagger
                 typeValue: 0,
                 sizeValue: 0,
                 fluffValue: 5,
@@ -324,6 +369,12 @@ var agoa = (function () {
                 defence: 1,
                 sourceArray: "weaponArray"
             }
+        },
+        getLevel: function () {
+            return Math.ceil(player.xp / 20);
+        },
+        getXp: function () {
+            return player.xp;
         },
         getHealth: function () {
             return player.health;
@@ -374,7 +425,6 @@ var agoa = (function () {
             renderer.printToLog.addToHistory(prettyString.item(item) + " added to your inventory.");
         },
         equipItem: function (item) {
-            item = calculatePowerForItem(item);
             if (item.sourceArray === "weaponArray") {
                 player.equiped.weapon = item;
             } else {
@@ -392,7 +442,7 @@ var agoa = (function () {
             }
         }
     };
-    prettyString = { // prettyString is a collection of methods for concatenating strings from the stored values of an item.
+    prettyString = { // prettyString is a 'collection' of methods for concatenating strings from the stored values of an item.
         item: function (item) { // takes an item or monster and turns the values in to a readable string.
             var sizeStr = resourceTabel.sizeArray[item.sizeValue].type,
                 fluffStr = resourceTabel.fluffArray[item.fluffValue].type,
@@ -492,7 +542,7 @@ var agoa = (function () {
         return item;
     }
 
-    function generateGenericItemDescription() { // creates an item containing only quality, fluff and color
+    function generateGenericItemDescription() { // creates an item containing only size, fluff and color
         var item = {
             sizeValue: randomIndexWithinArray(resourceTabel.sizeArray),
             fluffValue: randomIndexWithinArray(resourceTabel.fluffArray),
@@ -502,6 +552,9 @@ var agoa = (function () {
     }
 
     function generateRandomFromArray(arrayName) {
+        /*
+         * Generate a random item of the type associated with the arrayName.
+         */
         var item = (generateGenericItemDescription());
         item.typeValue = (randomIndexWithinArray(resourceTabel[arrayName]));
         item.sourceArray = arrayName;
@@ -523,7 +576,11 @@ var agoa = (function () {
         return monster;
     }
 
-    function getKeysFromStringInWordsObject(text, category) { // The logic behind finding key words in freeform text from input.
+    function getKeysFromStringInWordsObject(text, category) {
+        /*
+         * The logic behind finding key words in freeform text from input.
+         * Will return an array of all the key words (from an object) that you are looking for in a text string.
+         */
         if (text) {
             var input = text.toLowerCase().replace(/\W|[0-9]/g, " ").trim(),
                 inputArray = input.split(" "),
@@ -557,7 +614,12 @@ var agoa = (function () {
     }
 
     function matchItemInInventory(text) {
-        //check if weapon or armor
+        /*
+         * This will try and find an item in your inventory that matches your description.
+         * will first check for type, if only one of that type exists a match has been found.
+         * If there are more than one item of that kind, check for other attriburtes that
+         * describes the item, color, size or fluff.
+         */
         var items = [],
             isWeapon = true,
             colors,
@@ -648,6 +710,11 @@ var agoa = (function () {
     }
 
     function resolveCombat(monster) {
+        /*
+         * Damage to monsters and players is calculated by:
+         * damagae = attackers damagae + (random 1 to 3) - defenders defence;
+         * tho there is a minimum of 1 damage.
+         */
         var damageToPlayer = Math.ceil((monster.attack + Math.random() * 3) - player.getTotalDefence()),
             damageToMonster = Math.ceil((player.getTotalAttack() + Math.random() * 3) - monster.defence);
         damageToPlayer = damageToPlayer > 0 ? damageToPlayer : 1;
@@ -659,6 +726,9 @@ var agoa = (function () {
     }
 
     function getPotentialLoot() {
+        /*
+         * Check if there is any loot, if there is, generate a random item and return it.
+         */
         var item;
         if (Math.random() > 0.6) {
             item = Math.random() > 0.6 ? generateRandomWeapon() : generateRandomArmor();
@@ -731,7 +801,6 @@ var agoa = (function () {
                     break;
                 case "quit":
                     console.log("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
-                    stillInEngagement = false;
                     return undefined;
                 default:
                     console.log("What do you want to do?");
@@ -749,13 +818,15 @@ var agoa = (function () {
     }
 
     function initiateFightWith(monster) {
+        //if returning true, the player will continue play, if false the player quit / is dead.
         var loot, fighting;
         player.fighting = true;
         while (player.fighting && player.getHealth() > 0 && monster.health > 0) {
             fighting = takeActionOnString("You stand before the " + prettyString.item(monster), monster);
             player.fighting = fighting;
-            if (fighting === undefined) {
-                return undefined;
+            if (undefined === fighting) {
+                // if fighting is undefined the user has selected quit.
+                return false;
             }
         }
         if (player.fighting) {
@@ -765,11 +836,12 @@ var agoa = (function () {
             }
             if (monster.health <= 0) {
                 renderer.alertToUser("You have slain the " + prettyString.item(monster));
+                player.xp += (monster.attack + monster.defence);
                 loot = getPotentialLoot();
                 if (undefined !== loot) {
                     renderer.printToLog.foundLoot(loot);
                     player.addToInventory(loot);
-                } else if (Math.random() > 0.7) {
+                } else if (Math.random() > 0.7) { // if no loot was found, check it healthpotion droped.
                     renderer.printToLog.foundPotion();
                     player.potionsRemaining += 1;
                 }
@@ -777,20 +849,36 @@ var agoa = (function () {
             }
         } else {
             renderer.alertToUser("You cowardly run away!");
-            return false;
+            return true;
         }
     }
 
     function initiateFightWithRandomMonster() {
         return initiateFightWith(generateRandomMonster());
     }
+
+    function farmMonsterTillLevel(level) {
+        /*
+         * Will span new monsters untill you have reached the next level.
+         */
+        var keepGoing;
+        while (agoa.player.getHealth() > 0 && agoa.player.getLevel() < level) {
+            keepGoing = agoa.initiateFightWithRandomMonster();
+            if (!keepGoing) {
+                return false;
+            }
+        }
+        return keepGoing;
+    }
     /*
-     *
+     * All the public mothods and values.
      */
     return {
         player: {
             name: player.name,
             fighting: player.fighting,
+            getLevel: player.getLevel,
+            getXp: player.getXp,
             getHealth: player.getHealth,
             getMaxHealth: player.getMaxHealth,
             getPotionsRemaining: player.getPotionsRemaining,
@@ -813,6 +901,7 @@ var agoa = (function () {
             getDirection: getDirectionFromString
         },
         initiateFightWith: initiateFightWith,
-        initiateFightWithRandomMonster: initiateFightWithRandomMonster
+        initiateFightWithRandomMonster: initiateFightWithRandomMonster,
+        farmMonsterTillLevel: farmMonsterTillLevel
     };
 }());

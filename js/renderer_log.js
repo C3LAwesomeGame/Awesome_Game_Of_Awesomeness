@@ -1,9 +1,21 @@
 /*jslint browser:true */
 /*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
 /*global agoa */
+/*
+ *
+ * This file takes care of displaying everything we want to show to the user.
+ * This will later on be replaced whit the file that instead of logging everything 
+ * displays it as HTML when we are working on a proper interface.
+ *
+ * It also takes care of handeling all the input.
+ * 
+ */
 var renderer = (function () {
     'use strict';
     var printToLog, promptToUser, alertToUser, gameOver,
+        /*
+         * Collection of css styles for the different console outputs.
+         */
         blueBackgroundColor = 'background-color:blue; color:white; font-size:1.2em; text-shadow: 0 2px #000; font-weight:bold;',
         positivColor = 'background-color:green; color:white; font-size:1.2em; font-weight:bold;',
         negativeColor = 'background-color:red; color:white; font-size:1.2em; font-weight:bold;',
