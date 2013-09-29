@@ -454,24 +454,18 @@ var agoa = (function () {
     words = { // our collection of word for comparsion with the input text
         actions: { // action words that a player may enter
             hit: ["kill", "poke", "attack", "hit", "kick", "punch", "stab"],
-            pat: ["pat", "stroke"],
+            pat: ["pat", "stroke", "pet"],
             move: ["run", "walk", "strut", "skip", "move"],
             use: ["use", "equip", "prepare"],
             drink: ["drink", "chug", "potion", "pot"],
             look: ["look", "search"],
             take: ["take", "loot", "pick", "fetch"],
             equiped: ["equiped"],
-            inventory: ["inventory", "bag", "items", "stach"],
+            inventory: ["inventory", "bag", "bags", "items", "stach"],
             win: ["pablo", "win"],
             clear: ["clear"],
             quit: ["quit", "q", "exit"]
         }, // direction words 
-        directions: {
-            north: ["north", "n"],
-            south: ["south", "s"],
-            west: ["west", "w"],
-            east: ["east", "e"]
-        },
         subcategories: {
             items: {
                 weapons: {
@@ -487,13 +481,6 @@ var agoa = (function () {
                     1: ["head", "helm", "helmet"],
                     2: ["crotch", "cup"]
                 }
-            },
-            drinks: {
-                ale: ["beer", "ale"],
-                potion: ["potion", "healing"]
-            },
-            targets: {
-                eneamy: ["monster", "enemy", "creature", "borat", "tom", "blackmore", "shark", "troll", "beholder", "dragon", "wizard", "pony", "chihuahua", "demon"]
             },
             sizes: {
                 0: ["tiny"],
@@ -756,10 +743,10 @@ var agoa = (function () {
                     }
                     break;
                 case "pat":
-                    console.log("The " + prettyString.item(item) + " does not like it.");
+                    renderer.printToLog.addToHistory("The " + prettyString.item(item) + " does not like it.");
                     break;
                 case "move":
-                    console.log("You got away!");
+                    renderer.printToLog.addToHistory("You got away!");
                     stillInEngagement = false;
                     break;
                 case "drink":
@@ -782,10 +769,10 @@ var agoa = (function () {
                     }
                     break;
                 case "look":
-                    console.log("You look around and see a tree and a " + prettyString.item(item));
+                    renderer.printToLog.addToHistory("You look around and see a tree and a " + prettyString.item(item));
                     break;
                 case "take":
-                    console.log("You pick up a tiny rock");
+                    renderer.printToLog.addToHistory("You pick up a tiny rock");
                     break;
                 case "equiped":
                     renderer.printToLog.equiped(player.equiped);
@@ -794,16 +781,16 @@ var agoa = (function () {
                     renderer.printToLog.inventory(player.inventry, player.getPotionsRemaining());
                     break;
                 case "win":
-                    console.log("You have summoned the all-knowing genie known as Pablo de la Win");
+                    renderer.printToLog.addToHistory("You have summoned the all-knowing genie known as Pablo de la Win");
                     break;
                 case "clear":
                     console.clear();
                     break;
                 case "quit":
-                    console.log("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
+                    renderer.printToLog.quit();
                     return undefined;
                 default:
-                    console.log("What do you want to do?");
+                    renderer.printToLog.addToHistory("What do you want to do?");
                     renderer.alertToUser("I'm sorry I do not understand what you want to do.");
                 }
             }
@@ -813,8 +800,7 @@ var agoa = (function () {
             return false;
         }
         renderer.alertToUser("You must make a choise as you stand in front of the " + prettyString.item(item));
-        takeActionOnString(text, item);
-        return true;
+        return takeActionOnString(text, item);
     }
 
     function initiateFightWith(monster) {

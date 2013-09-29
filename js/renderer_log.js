@@ -23,7 +23,8 @@ var renderer = (function () {
         colorReset = 'background-color:white; color:black',
         itemColor = 'color:#ba2bdb; text-transform:capitalize; font-weight:bold;',
         gameOverColor = 'color:white; background-color:red; font-size:40px; font-weight:bold;',
-        dingColor = 'color:white; background-color:purple';
+        dingColor = 'color:white; background-color:purple',
+        storyColor = 'color: purple';
     printToLog = {
         equiped: function (equiped) {
             /*
@@ -94,7 +95,10 @@ var renderer = (function () {
             console.log("%cDing! Level " + level, dingColor);
         },
         story: function (story) {
-            console.log("%c" + story, dingColor);
+            console.log("%c" + story, storyColor);
+        },
+        quit: function () {
+            console.log("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
         }
     };
     promptToUser = function (text) {
