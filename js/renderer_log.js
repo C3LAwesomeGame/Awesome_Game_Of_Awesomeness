@@ -4,11 +4,11 @@
 /*
  *
  * This file takes care of displaying everything we want to show to the user.
- * This will later on be replaced whit the file that instead of logging everything 
+ * This will later on be replaced whit the file that instead of logging everything
  * displays it as HTML when we are working on a proper interface.
  *
  * It also takes care of handeling all the input.
- * 
+ *
  */
 var renderer = (function () {
     'use strict';
@@ -22,9 +22,13 @@ var renderer = (function () {
         damageColor = 'background-color:yellow; font-size:1.2em; font-weight:bold',
         colorReset = 'background-color:white; color:black',
         itemColor = 'color:#ba2bdb; text-transform:capitalize; font-weight:bold;',
-        gameOverColor = 'color:white; background-color:red; font-size:40px; font-weight:bold;';
-    printToLog = { // This will serve much like a "viewController" for the terminal. (place in separate file?)
-        equiped: function (equiped) { // console.log all tht equiped items.
+        gameOverColor = 'color:white; background-color:red; font-size:40px; font-weight:bold;',
+        dingColor = 'color:white; background-color:purple';
+    printToLog = {
+        equiped: function (equiped) {
+            /*
+             * Print all the items that you are currently wearing.
+             */
             console.group("%c---------== EQUIPED ==---------", blueBackgroundColor);
             console.log("%cChest armor: ", itemColor);
             printToLog.item(equiped.chest);
@@ -37,7 +41,11 @@ var renderer = (function () {
             console.groupEnd();
             console.log("%c-------------------------------", blueBackgroundColor);
         },
-        inventory: function (inventory, potions) { // console.log everything in the inventory
+        inventory: function (inventory, potions) {
+            /*
+             * Print all the items that you have in your inventory
+             * and the number of potions.
+             */
             var key;
             inventory = agoa.player.getInventory();
             console.group("%c--------- INVENTORY ---------", blueBackgroundColor);
@@ -75,12 +83,18 @@ var renderer = (function () {
             console.log("%c---------------------------------------------------", 'background-color:black;');
         },
         foundLoot: function (item) {
-            console.log("You have found a %c" +  agoa.prettyString.item(item) + "%c.", itemColor, colorReset);
+            console.log("You have found a %c" + agoa.prettyString.item(item) + "%c.", itemColor, colorReset);
             alert("You have found a " + agoa.prettyString.item(item) + ".");
         },
         foundPotion: function () {
             console.log("You have found a %cHealth Potion%c!", itemColor, colorReset);
             alert("You have found a Health Potion!");
+        },
+        ding: function (level) {
+            console.log("%cDing! Level " + level, dingColor);
+        },
+        story: function (story) {
+            console.log("%c" + story, dingColor);
         }
     };
     promptToUser = function (text) {
