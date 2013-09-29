@@ -778,7 +778,7 @@ var agoa = (function () {
                     renderer.printToLog.equiped(player.equiped);
                     break;
                 case "inventory":
-                    renderer.printToLog.inventory(player.inventry, player.getPotionsRemaining());
+                    renderer.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
                     break;
                 case "win":
                     renderer.printToLog.addToHistory("You have summoned the all-knowing genie known as Pablo de la Win");

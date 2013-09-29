@@ -12,9 +12,7 @@ renderer.printToLog.story("So from all that you decided to start your own quest.
 agoa.player.name = renderer.promptToUser("What is your name, traveler?");
 renderer.printToLog.story("Welcome! " + agoa.player.name);
 renderer.printToLog.ding(agoa.player.getLevel());
-var keepGoing = true,
-    i,
-    story = [
+var story = [
         "You start to reading 'My own adventure For dummies'",
         "Always look on the bright side of life! *whistle whistle*",
         "You hop on you imaginary steed, -Ride on Steve, ride on!!!",
@@ -29,6 +27,7 @@ var keepGoing = true,
 
 function play() {
     'use strict';
+    var i;
     renderer.printToLog.story(story[0]);
     for (i = 1; i <= 10; i += 1) {
         if (!agoa.farmMonsterTillLevel(i + 1)) {
@@ -38,9 +37,6 @@ function play() {
         renderer.printToLog.story(story[i]);
     }
 }
+//
 play();
-//
-//
-//
-//
 //

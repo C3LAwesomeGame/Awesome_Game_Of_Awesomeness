@@ -48,7 +48,6 @@ var renderer = (function () {
              * and the number of potions.
              */
             var key;
-            inventory = agoa.player.getInventory();
             console.group("%c--------- INVENTORY ---------", blueBackgroundColor);
             for (key in inventory) {
                 if (inventory.hasOwnProperty(key)) {
