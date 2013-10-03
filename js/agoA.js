@@ -1,6 +1,7 @@
 /*jslint browser:true */
 /*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
 /*global renderer */
+/*global renderer2 */
 //
 // This file is suposed to serve as an API with all the methods of the game
 var agoa = (function () {
@@ -440,6 +441,7 @@ var agoa = (function () {
                     break;
                 }
             }
+            renderer2.printToLog.equiped(player.equiped);
         }
     };
     prettyString = { // prettyString is a 'collection' of methods for concatenating strings from the stored values of an item.
@@ -827,9 +829,11 @@ var agoa = (function () {
                 if (undefined !== loot) {
                     renderer.printToLog.foundLoot(loot);
                     player.addToInventory(loot);
+                    renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
                 } else if (Math.random() > 0.7) { // if no loot was found, check it healthpotion droped.
                     renderer.printToLog.foundPotion();
                     player.potionsRemaining += 1;
+                    renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
                 }
                 return true;
             }
@@ -859,6 +863,11 @@ var agoa = (function () {
     /*
      * All the public mothods and values.
      */
+
+    function printInventory() {
+        renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
+    }
+
     return {
         player: {
             name: player.name,
@@ -872,7 +881,8 @@ var agoa = (function () {
             getEquiped: player.getEquiped,
             getTotalAttack: player.getTotalAttack,
             getTotalDefence: player.getTotalDefence,
-            drinkPotion: player.drinkPotion
+            drinkPotion: player.drinkPotion,
+            printInventory: printInventory
         },
         prettyString: prettyString,
         calculatePowerForItem: calculatePowerForItem,
