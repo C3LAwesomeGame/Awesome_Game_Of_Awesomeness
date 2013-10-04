@@ -864,10 +864,6 @@ var agoa = (function () {
      * All the public mothods and values.
      */
 
-    function printInventory() {
-        renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
-    }
-
     return {
         player: {
             name: player.name,
@@ -881,8 +877,7 @@ var agoa = (function () {
             getEquiped: player.getEquiped,
             getTotalAttack: player.getTotalAttack,
             getTotalDefence: player.getTotalDefence,
-            drinkPotion: player.drinkPotion,
-            printInventory: printInventory
+            drinkPotion: player.drinkPotion
         },
         prettyString: prettyString,
         calculatePowerForItem: calculatePowerForItem,

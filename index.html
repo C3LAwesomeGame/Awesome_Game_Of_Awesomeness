@@ -1,50 +1,72 @@
 <!doctype html>
 <head>
     <title>AGOA</title>
-    <script type="text/javascript" src="js/movement.js"></script>
+    <link href="css/agoA.css"  rel="StyleSheet" type="text/css" />
+    <link href="css/main.css"  rel="StyleSheet" type="text/css" />
+</head>
+<body>
+    <div class="game">
+        <table class="gridLayoutTable">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="inventory" class="box">
+                            <h2>Inventory</h2>
+                            <h3>Armor</h3>
+                            <ul></ul>
+                            <h3>Weapons</h3>
+                            <ul></ul>
+                            <h3>Potions</h3>
+                            <ul></ul>
+                        </div> <!-- #inventory -->
+                    </td>
+                    <td>
+                        <div id="gameBoard" class="box">
+
+                        </div> <!-- #gameBoard -->
+                    </td>
+                    <td>
+                        <div class="enemy box">
+                            <img src="img/pony.png" id="enemyPortrait" class="enemyPortrait">
+                        </div> <!-- .enemy -->
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="equiped" class="box">
+                            <h2>Equiped</h2>
+                            <h3>Head</h3>
+                            <ul></ul>
+                            <h3>Chest</h3>
+                            <ul></ul>
+                            <h3>Crotch</h3>
+                            <ul></ul>
+                            <h3>Weapons</h3>
+                            <ul></ul>
+                        </div> <!-- #equiped -->
+                    </td>
+                    <td>
+                        <div class="storyContainer box">
+                            <ul></ul>
+                            <input type="text" placeholder="Hello">
+                        </div> <!-- .storyContainer -->
+                    </td>
+                    <td>
+                        <div class="hero box">
+
+                        </div> <!-- .hero --> 
+                    </td>
+                </tr>
+            </tbody>
+        </table> <!-- .gridLayoutTable -->
+    </div> <!-- .game -->
+
+    <!-- // <script type="text/javascript" src="js/movement.js"></script> -->
     <!--<script type="text/javascript" src="js/game_board.js"></script>-->
     <script type="text/javascript" src="js/renderer_log.js"></script>
     <script type="text/javascript" src="js/renderer_html.js"></script>
     <script type="text/javascript" src="js/agoA.js"></script>
     <script type="text/javascript" src="js/game.js"></script>
-    <link href="css/agoA.css"  rel="StyleSheet" type="text/css" />
-</head>
-<body>
-    <div class="inventory" id="inventory">
-        <h2>Inventory</h2>
-        <h3>Armor</h3>
-        <ul>
-            
-        </ul>
-        <h3>Weapons</h3>
-        <ul>
-            
-        </ul>
-        <h3>Potions</h3>
-        <ul>
-            
-        </ul>
-    </div>
-    <div class="equiped" id="equiped">
-        <h2>Equiped</h2>
-        <h3>Head</h3>
-        <ul>
-            
-        </ul>
-        <h3>Chest</h3>
-        <ul>
-            
-        </ul>
-        <h3>Crotch</h3>
-        <ul>
-            
-        </ul>
-        <h3>Weapons</h3>
-        <ul>
-            
-        </ul>
-    </div>
- <!--    <p></p>
-    <img src="img/woff.png" id="player"></img> -->
+    <script type="text/javascript" src="js/controllers.js"></script>
 </body>
 </html>
