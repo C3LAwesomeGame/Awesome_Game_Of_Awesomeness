@@ -1,24 +1,27 @@
 /*jslint browser:true */
 /*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
+/*global agoa */
+/*global movePlayer */
 window.addEventListener("DOMContentLoaded", function () {
     'use strict';
+    var inputField = document.querySelector("#userInputField");
     window.addEventListener("keydown", function (e) {
-        console.log(e.keyCode);
         switch (e.keyCode) {
         case 13:
-            console.log("enter");
+            agoa.fromString.takeAction(inputField.value);
+            inputField.value = "";
             break;
         case 37:
-            console.log("left");
+            movePlayer(3);
             break;
         case 38:
-            console.log("up");
+            movePlayer(0);
             break;
         case 39:
-            console.log("right");
+            movePlayer(1);
             break;
         case 40:
-            console.log("down");
+            movePlayer(2);
             break;
         }
     }, false);

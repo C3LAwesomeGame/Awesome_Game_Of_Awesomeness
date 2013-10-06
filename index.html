@@ -22,19 +22,25 @@
                     </td>
                     <td>
                         <div id="gameBoard" class="box">
-
+                            <table id="gameGrid">
+                                <tbody></tbody>
+                            </table>
                         </div> <!-- #gameBoard -->
                     </td>
                     <td>
                         <div class="enemy box">
-                            <img src="img/pony.png" id="enemyPortrait" class="enemyPortrait">
+                            <div id="enemyPortraitContainer" class="enemyPortraitContainer">
+                                <span class="enemyPortraitColor"></span>
+                                <img src="img/rusty.png" class="enemyPortraitFluff">
+                                <img src="img/pony.png" id="enemyPortrait" class="enemyPortrait">
+                            </div> <!-- #enemyPortraitContainer -->
                         </div> <!-- .enemy -->
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div id="equiped" class="box">
-                            <h2>Equiped</h2>
+                        <div id="equipped" class="box">
+                            <h2>Equipped</h2>
                             <h3>Head</h3>
                             <ul></ul>
                             <h3>Chest</h3>
@@ -43,17 +49,23 @@
                             <ul></ul>
                             <h3>Weapons</h3>
                             <ul></ul>
-                        </div> <!-- #equiped -->
+                        </div> <!-- #equipped -->
                     </td>
                     <td>
                         <div class="storyContainer box">
                             <ul></ul>
-                            <input type="text" placeholder="Hello">
+                            <input id="userInputField" type="text" placeholder="Hello">
                         </div> <!-- .storyContainer -->
                     </td>
                     <td>
                         <div class="hero box">
-
+                            <h2>Hero</h2>
+                            <ul>
+                                <li>Level: <span id="levelSpan">1</span></li>
+                                <li>Health: <span id="healthSpan">50</span></li>
+                                <li>Attack: <span id="attackSpan">1</span></li>
+                                <li>Defense: <span id="defenseSpan">1</span></li>
+                            </ul>
                         </div> <!-- .hero --> 
                     </td>
                 </tr>
@@ -62,7 +74,7 @@
     </div> <!-- .game -->
 
     <!-- // <script type="text/javascript" src="js/movement.js"></script> -->
-    <!--<script type="text/javascript" src="js/game_board.js"></script>-->
+    <script type="text/javascript" src="js/game_board.js"></script>
     <script type="text/javascript" src="js/renderer_log.js"></script>
     <script type="text/javascript" src="js/renderer_html.js"></script>
     <script type="text/javascript" src="js/agoA.js"></script>

@@ -7,23 +7,30 @@
  * This will later on be replaced whit the file that instead of logging everything
  * displays it as HTML when we are working on a proper interface.
  *
- * It also takes care of handeling all the input.
+ * It also takes care of handling all the input.
  *
  */
 var renderer2 = (function () {
     'use strict';
-    var printToLog, promptToUser, alertToUser, gameOver;
+    var printToLog, promptToUser, alertToUser, gameOver,
+        equippedUl = document.querySelectorAll('#equipped ul'),
+        inventoryUl = document.querySelectorAll('#inventory ul'),
+        storyContainer = document.querySelector('.storyContainer'),
+        heroName = document.querySelector('.hero h2'),
+        levelSpan = document.querySelector('#levelSpan'),
+        healthSpan = document.querySelector('#healthSpan'),
+        attackSpan = document.querySelector('#attackSpan'),
+        defenseSpan = document.querySelector('#defenseSpan');
 
     printToLog = {
-        equiped: function (equiped) {
-            var equipedUl = document.querySelectorAll('#equiped ul');
-            equipedUl[0].innerHTML = '<li>' + agoa.prettyString.item(equiped.head) + '</li>';
-            equipedUl[1].innerHTML = '<li>' + agoa.prettyString.item(equiped.chest) + '</li>';
-            equipedUl[2].innerHTML = '<li>' + agoa.prettyString.item(equiped.crotch) + '</li>';
-            equipedUl[3].innerHTML = '<li>' + agoa.prettyString.item(equiped.weapon) + '</li>';
+        equipped: function (equipped) {
+            equippedUl[0].innerHTML = '<li>' + agoa.prettyString.item(equipped.head) + '</li>';
+            equippedUl[1].innerHTML = '<li>' + agoa.prettyString.item(equipped.chest) + '</li>';
+            equippedUl[2].innerHTML = '<li>' + agoa.prettyString.item(equipped.crotch) + '</li>';
+            equippedUl[3].innerHTML = '<li>' + agoa.prettyString.item(equipped.weapon) + '</li>';
         },
         inventory: function (inventory, potions) {
-            var i, len, li, inventoryUl = document.querySelectorAll("#inventory ul");
+            var i, len, li;
             inventoryUl[0].innerHTML = "";
             inventoryUl[1].innerHTML = "";
             inventoryUl[2].innerHTML = "";
@@ -40,19 +47,29 @@ var renderer2 = (function () {
             li = document.createElement('li');
             li.innerHTML = 'Health Potion ' + potions;
             inventoryUl[2].appendChild(li);
+        },
+        hero: function (name, level, health, attack, defense) {
+            heroName.innerText = name;
+            levelSpan.innerText = level;
+            healthSpan.innerText = health;
+            attackSpan.innerText = attack;
+            defenseSpan.innerText = defense;
+        },
+        item: function (item) {
+            printToLog.addToHistory(agoa.prettyString.item(item));
+        },
+        drankPotion: function (potionResult, playerHealth) {
+            printToLog.addToHistory("You drank a potion and are healed for " + potionResult + " points to a " + playerHealth + " points total.  You have " + agoa.player.getPotionsRemaining() + " potions left.");
+        },
+        noPotions: function () {
+            printToLog.addToHistory("You don't have any potions left.");
+        },
+        addToHistory: function (text) {
+            var li = document.createElement('li');
+            li.innerText = text;
+            storyContainer.appendChild(li);
+            storyContainer.scrollTop = storyContainer.scrollHeight;
         } //,
-        //     item: function (item) { // console.log the prettyString of an item.
-
-        //     },
-        //     drankPotion: function (potionResult, playerHealth) {
-
-        //     },
-        //     noPotions: function () {
-
-        //     },
-        //     addToHistory: function (text) {
-
-        //     },
         //     combatResult: function (playerHealth, monster, damageToPlayer, damageToMonster) {
 
         //     },

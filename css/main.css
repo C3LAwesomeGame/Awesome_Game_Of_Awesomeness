@@ -1,6 +1,15 @@
 body {
     text-align: center;
 }
+ul {
+    list-style-type: none;
+    padding:0; 
+    margin: 0;
+}
+h1, h2, h3 {
+    padding: 0;
+    margin: 0;
+}
 .game {
     text-align: left;
     display: inline-block;
@@ -8,32 +17,55 @@ body {
     position:relative;
     margin: auto auto;
 }
+.gridLayoutTable {
+    table-layout:fixed;
+}
 .gridLayoutTable tr:nth-child(1) {
     vertical-align: top;
     height: 400px;
+    max-height: 400px;
 }
 .gridLayoutTable tr:nth-child(2) {
     vertical-align: top;
     height: 270px;
+    max-height: 270px;
 }
 .gridLayoutTable td:nth-child(1) {
     width: 210px;
+    max-width:210px;
+    min-width: 210px;
+    white-space: nowrap;
 }
 .gridLayoutTable td:nth-child(2) {
     width: 540px;
+    max-width: 540px;
+    min-width: 540px;
 }
 .gridLayoutTable td:nth-child(3) {
     width: 225px;
+    max-width: 225px;
+    min-width: 225px;
 }
 td {
     border: 3px solid blue;
     position:relative;
     overflow: hidden;
+    vertical-align:top;
 }
 .box {
     width: 100%;
     height: 100%;
 }
+.storyContainer {
+    margin-bottom: 35px;
+    overflow: scroll;
+    width: 540px;
+    height: 270px;
+}
+.storyContainer::-webkit-scrollbar { 
+    display: none; 
+}
+
 .storyContainer input {
     position: absolute;
     width: 500px;
@@ -43,11 +75,52 @@ td {
     padding: 0 5px 0 5px;
     margin: auto 12px;
 }
-.enemy {
-    text-align: center;
-}
-.enemyPortrait {
+.enemyPortraitContainer{
+    position: relative;
     width: 200px;
     height: 200px;
+    margin: auto auto;
     margin-top: 20px;
+    overflow: hidden;
+}
+.enemyPortraitContainer * {
+    width: 100%;
+    height:100%;
+    position: absolute;
+}
+.enemyPortraitColor {
+    background-color: pink;
+}
+#gameBoard {
+    overflow: hidden;
+    width: 540px;
+    height: 400px;
+    padding: 0;
+    font-size: 10px;
+}
+#gameBoard table {
+    padding: 0;
+    margin: auto auto;
+    border-collapse: collapse;
+    table-layout:fixed;
+    width: 526;
+}
+#gameGrid td {
+    border: 1px solid #cbc4c0;
+    /*background-color: #574030;*/
+    text-align: center;
+    /*color: white;*/
+    vertical-align: middle;
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+#gameGrid td, #gameGrid tr, #gameGrid td div {
+    width: 20px;
+    height: 20px;
+    max-width: 20px;
+    max-height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 0;
 }
