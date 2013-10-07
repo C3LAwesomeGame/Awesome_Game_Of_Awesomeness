@@ -23,26 +23,95 @@ function makeTile() {
     'use strict';
     tile = {
         monster: undefined,
-        blocked: false
+        blocked: true
     };
     return tile;
 }
 
+function shuffle(o) { //v1.0
+    'use strict';
+    var j, x, i;
+    for (i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
 
 function tileForCord(x, y) {
     'use strict';
+    console.log(x + ", " + y);
     return tiles[y * gridXMax + x];
+}
+
+function getRandomDirections() {
+    var randomDirections = [],
+        i;
+    for (i = 0; i < 4; i += 1) {
+        randomDirections.push(i + 1);
+    }
+    return shuffle(randomDirections);
+}
+
+function recursion(x, y) {
+    var directions = getRandomDirections(),
+        i;
+    for (i = 0; i < directions.length; i += 1) {
+        switch (directions[i]) {
+        case 1: //up
+            if (y - 2 <= 0) {
+                continue;
+            }
+            if (tileForCord(x, y - 2).blocked) {
+                tileForCord(x, y - 2).blocked = false;
+                tileForCord(x, y - 1).blocked = false;
+                recursion(x, (y - 2));
+            }
+            break;
+        case 2: //left
+            if (x + 2 >= gridXMax - 1) {
+                continue;
+            }
+            if (tileForCord(x + 2, y).blocked) {
+                tileForCord(x + 2, y).blocked = false;
+                tileForCord(x + 1, y).blocked = false;
+                recursion((x + 2), y);
+            }
+            break;
+        case 3: //down
+            if (y + 2 >= gridYMax) {
+                continue;
+            }
+            if (tileForCord(x, y + 2).blocked) {
+                tileForCord(x, y + 2).blocked = false;
+                tileForCord(x, y + 1).blocked = false;
+                recursion(x, (y + 2));
+            }
+            break;
+        case 4: //right
+            if (x - 2 <= 0) {
+                continue;
+            }
+            if (tileForCord(x - 2, y).blocked) {
+                tileForCord(x - 2, y).blocked = false;
+                tileForCord(x - 1, y).blocked = false;
+                recursion((x - 2), y);
+            }
+            break;
+        }
+    }
 }
 
 function createBoard() {
     'use strict';
-    var currentTile;
+    var currentTile, startX, startY;
     tiles = [];
     for (i = 0; i < gridYMax * gridXMax; i += 1) {
         currentTile = makeTile();
         currentTile.number = i;
         tiles.push(currentTile);
     }
+    startX = 3;
+    startY = 5;
+    tileForCord(startX, startY).blocked = false;
+    recursion(startX, startY);
 }
 
 function createTd(x, y) {
@@ -51,11 +120,14 @@ function createTd(x, y) {
         div = document.createElement('div');
     // td.innerText = tileForCord(x, y).number;
     td.appendChild(div);
-    td.onclick = function () {
-        tiles[y * gridXMax + x].blocked = true;
+    // td.onclick = function () {
+    //     tiles[y * gridXMax + x].blocked = true;
+    //     td.className = "blocked";
+    //     console.log(x + ", " + y);
+    // };
+    if (tileForCord(x, y).blocked) {
         td.className = "blocked";
-        console.log(x + ", " + y);
-    };
+    }
     return td;
 }
 
@@ -115,3 +187,4 @@ createBoard();
 renderGridBackground();
 gameBoardSquares = document.querySelectorAll('#gameGrid td div');
 renderGrid();
+

@@ -37,16 +37,16 @@ renderer2.printToLog.inventory(agoa.player.getInventory());
 renderer2.printToLog.hero(agoa.player.name, agoa.player.getLevel(), agoa.player.getHealth(), agoa.player.getTotalAttack(), agoa.player.getTotalDefense());
 document.addEventListener("DOMContentLoaded", function () {
     'use strict';
-    renderer.printToLog.story("Welcome to AGOA(Awesome Game of Awesomeness)");
-    renderer.printToLog.story("This is a world full of fluffy monsters, awesome roundhouse kicking ponies, rabid rabbits and everything else that's not normal to sane human beings");
-    renderer.printToLog.story("Your' the mighty, fierce, awesome adventurer from the far, far, very far away world");
-    renderer.printToLog.story("One day, when your' strolling in the forest, you'll meet a weird squirrel.");
-    renderer.printToLog.story("He's smoking on his tobacco pipe and muttering, only thing you could hear and understand from his muttering");
-    renderer.printToLog.story("princess, high, stupid and world of warcraft level 200.");
-    renderer.printToLog.story("So from all that you decided to start your own quest. Find the stone-high stupid princess and get the cheats' so you can level up your bubble-spandex boy to level 200");
+    // renderer.printToLog.story("Welcome to AGOA(Awesome Game of Awesomeness)");
+    // renderer.printToLog.story("This is a world full of fluffy monsters, awesome roundhouse kicking ponies, rabid rabbits and everything else that's not normal to sane human beings");
+    // renderer.printToLog.story("Your' the mighty, fierce, awesome adventurer from the far, far, very far away world");
+    // renderer.printToLog.story("One day, when your' strolling in the forest, you'll meet a weird squirrel.");
+    // renderer.printToLog.story("He's smoking on his tobacco pipe and muttering, only thing you could hear and understand from his muttering");
+    // renderer.printToLog.story("princess, high, stupid and world of warcraft level 200.");
+    // renderer.printToLog.story("So from all that you decided to start your own quest. Find the stone-high stupid princess and get the cheats' so you can level up your bubble-spandex boy to level 200");
     // agoa.player.name = renderer.promptToUser("What is your name, traveler?");
-    renderer.printToLog.story("Welcome! " + agoa.player.name);
-    renderer.printToLog.ding(agoa.player.getLevel());
+    // renderer.printToLog.story("Welcome! " + agoa.player.name);
+    // renderer.printToLog.ding(agoa.player.getLevel());
 
     // play();
 });
