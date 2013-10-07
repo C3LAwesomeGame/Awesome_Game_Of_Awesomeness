@@ -752,7 +752,7 @@ var agoa = (function () {
                 player.addToInventory(loot);
                 renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
             } else if (Math.random() > 0.7) { // if no loot was found, check if health potion dropped.
-                renderer.printToLog.foundPotion();
+                renderer2.printToLog.foundPotion();
                 player.potionsRemaining += 1;
                 renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
             }
@@ -825,7 +825,7 @@ var agoa = (function () {
                     console.clear();
                     break;
                 case "quit":
-                    renderer.printToLog.quit();
+                    renderer2.printToLog.quit();
                     return undefined;
                 default:
                     renderer2.printToLog.addToHistory("What do you want to do?");
@@ -840,13 +840,10 @@ var agoa = (function () {
         }
         renderer.alertToUser("You must make a choice as you stand in front of the " + prettyString.item(item));
     }
-
     /*
      * All the public methods and values.
      */
-
     currentMonster = generateRandomMonster();
-
     return {
         player: {
             name: player.name,

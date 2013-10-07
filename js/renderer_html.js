@@ -21,7 +21,6 @@ var renderer2 = (function () {
         healthSpan = document.querySelector('#healthSpan'),
         attackSpan = document.querySelector('#attackSpan'),
         defenseSpan = document.querySelector('#defenseSpan');
-
     printToLog = {
         equipped: function (equipped) {
             equippedUl[0].innerHTML = '<li>' + agoa.prettyString.item(equipped.head) + '</li>';
@@ -69,37 +68,34 @@ var renderer2 = (function () {
             li.innerText = text;
             storyContainer.appendChild(li);
             storyContainer.scrollTop = storyContainer.scrollHeight;
+        },
+        ////////////////////////////////////////////////////////////////////////////////////
+        story: function (story) {
+            printToLog.storyContainer(story);
+        },
+        combatResult: function (playerHealth, monster, damageToPlayer, damageToMonster) {
+            printToLog.storyContainer("You hit the " + agoa.prettyString.item(monster) + " for " + damageToMonster.toString() + " \nThe " + agoa.prettyString.item(monster) + " hits you for %c " + damageToPlayer.toString() + " , you now have " + playerHealth.toString() + " health left.");
+        },
+        foundLoot: function (item) {
+            printToLog.storyContainer("You have found a " + agoa.prettyString.item(item) + ".");
+        },
+        foundPotion: function () {
+            printToLog.storyContainer("You have found a Health Potion!");
+        },
+        ding: function (level) {
+            printToLog.storyContainer("Ding! Level " + level);
+        },
+        quit: function () {
+            printToLog.storyContainer("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
         } //,
-        //     combatResult: function (playerHealth, monster, damageToPlayer, damageToMonster) {
-
-        //     },
         //     divider: function () {
-
-        //     },
-        //     foundLoot: function (item) {
-
-        //     },
-        //     foundPotion: function () {
-
-        //     },
-        //     ding: function (level) {
-
-        //     },
-        //     story: function (story) {
-
-        //     },
-        //     quit: function () {
-
         //     }
     };
     // promptToUser = function (text) {
-
     // };
     // alertToUser = function (text) {
-
     // };
     // gameOver = function () {
-
     // };
     return {
         printToLog: printToLog //,
