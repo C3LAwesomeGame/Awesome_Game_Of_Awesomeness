@@ -23,12 +23,7 @@ function makeTile() {
     'use strict';
     tile = {
         monster: undefined,
-        blocked: false,
-        north: false,
-        east: false,
-        south: false,
-        west: false,
-        number: 0
+        blocked: false
     };
     return tile;
 }
@@ -57,6 +52,8 @@ function createTd(x, y) {
     // td.innerText = tileForCord(x, y).number;
     td.appendChild(div);
     td.onclick = function () {
+        tiles[y * gridXMax + x].blocked = true;
+        td.className = "blocked";
         console.log(x + ", " + y);
     };
     return td;
@@ -80,27 +77,32 @@ function renderGrid() {
     return;
 }
 
+function isTileBlocked(x, y) {
+    'use strict';
+    return tiles[y * gridXMax + x].blocked;
+}
+
 function movePlayer(direction) {
     'use strict';
     gameBoardSquares[player.cord.y * gridXMax + player.cord.x].innerText = '';
     switch (direction) {
     case 0:
-        if (player.cord.y > 0) {
+        if (player.cord.y > 0 && !isTileBlocked(player.cord.x, player.cord.y - 1)) {
             player.cord.y -= 1;
         }
         break;
     case 1:
-        if (player.cord.x < gridXMax - 1) {
+        if (player.cord.x < gridXMax - 1 && !isTileBlocked(player.cord.x + 1, player.cord.y)) {
             player.cord.x += 1;
         }
         break;
     case 2:
-        if (player.cord.y < gridYMax - 1) {
+        if (player.cord.y < gridYMax - 1 && !isTileBlocked(player.cord.x, player.cord.y + 1)) {
             player.cord.y += 1;
         }
         break;
     case 3:
-        if (player.cord.x > 0) {
+        if (player.cord.x > 0 && !isTileBlocked(player.cord.x - 1, player.cord.y)) {
             player.cord.x -= 1;
         }
         break;

@@ -1,5 +1,7 @@
 body {
     text-align: center;
+    font-family: helvetica;
+    font-size: 15px;
 }
 ul {
     list-style-type: none;
@@ -114,6 +116,9 @@ td {
     font-size: 20px;
     white-space: nowrap;
     overflow: hidden;
+}
+.blocked {
+    background-color: #574030;
 }
 #gameGrid td, #gameGrid tr, #gameGrid td div {
     width: 20px;
