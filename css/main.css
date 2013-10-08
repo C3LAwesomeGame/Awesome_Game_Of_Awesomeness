@@ -90,8 +90,19 @@ td {
     height:100%;
     position: absolute;
 }
+/*
+    pink: #d67cda;
+    green: #4d9f3e;
+    blue: #3e589f;
+    red: #9f3a40;
+    black: #343231;
+    white: #fcfdec;
+    yellow: #cdc455;
+    orange: #e49d59;
+    purple: #9a72d4;
+ */
 .enemyPortraitColor {
-    background-color: #d67cda;
+    background-color: #9a72d4;
 }
 #gameBoard {
     overflow: hidden;
