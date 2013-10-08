@@ -108,8 +108,8 @@ td {
     width: 526;
 }
 #gameGrid td {
-    border: 1px solid #cbc4c0;
-    /*background-color: #574030;*/
+    border: 1px solid #7d7575;
+    background-color: #dfdcc2;
     text-align: center;
     /*color: white;*/
     vertical-align: middle;
@@ -117,8 +117,11 @@ td {
     white-space: nowrap;
     overflow: hidden;
 }
-.blocked {
-    background-color: #574030;
+#gameGrid .blocked {
+    background-color: #443225;
+}
+#gameGrid .notVisible {
+    background-color: #000000;
 }
 #gameGrid td, #gameGrid tr, #gameGrid td div {
     width: 20px;

@@ -71,22 +71,22 @@ var renderer2 = (function () {
         },
         ////////////////////////////////////////////////////////////////////////////////////
         story: function (story) {
-            printToLog.storyContainer(story);
+            printToLog.addToHistory(story);
         },
         combatResult: function (playerHealth, monster, damageToPlayer, damageToMonster) {
-            printToLog.storyContainer("You hit the " + agoa.prettyString.item(monster) + " for " + damageToMonster.toString() + " \nThe " + agoa.prettyString.item(monster) + " hits you for %c " + damageToPlayer.toString() + " , you now have " + playerHealth.toString() + " health left.");
+            printToLog.addToHistory("You hit the " + agoa.prettyString.item(monster) + " for " + damageToMonster.toString() + " \nThe " + agoa.prettyString.item(monster) + " hits you for %c " + damageToPlayer.toString() + " , you now have " + playerHealth.toString() + " health left.");
         },
         foundLoot: function (item) {
-            printToLog.storyContainer("You have found a " + agoa.prettyString.item(item) + ".");
+            printToLog.addToHistory("You have found a " + agoa.prettyString.item(item) + ".");
         },
         foundPotion: function () {
-            printToLog.storyContainer("You have found a Health Potion!");
+            printToLog.addToHistory("You have found a Health Potion!");
         },
         ding: function (level) {
-            printToLog.storyContainer("Ding! Level " + level);
+            printToLog.addToHistory("Ding! Level " + level);
         },
         quit: function () {
-            printToLog.storyContainer("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
+            printToLog.addToHistory("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
         } //,
         //     divider: function () {
         //     }
