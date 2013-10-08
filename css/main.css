@@ -91,7 +91,7 @@ td {
     position: absolute;
 }
 .enemyPortraitColor {
-    background-color: pink;
+    background-color: #d67cda;
 }
 #gameBoard {
     overflow: hidden;
