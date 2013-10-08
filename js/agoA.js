@@ -117,7 +117,8 @@ var agoa = (function () {
             attack: 0.5,
             defense: 1.9,
             sourceArray: "colorArray",
-            hex: '#e2dcd7'
+            hex: '#fafaf2'
+            // #fcfdec
         }, {
             type: "Yellow",
             attack: 0.8,
