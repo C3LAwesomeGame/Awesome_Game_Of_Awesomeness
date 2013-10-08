@@ -23,7 +23,8 @@ function makeTile() {
     'use strict';
     tile = {
         monster: undefined,
-        blocked: true
+        blocked: true,
+        visible: false
     };
     return tile;
 }
@@ -125,8 +126,13 @@ function createTd(x, y) {
     //     td.className = "blocked";
     //     console.log(x + ", " + y);
     // };
+    // td.className = "notVisible";
     if (tileForCord(x, y).blocked) {
-        td.className = "blocked";
+        td.className += " blocked";
+    } else {
+        if (Math.random() > 0.9) {
+            div.innerText = '#';
+        }
     }
     return td;
 }
@@ -145,6 +151,7 @@ function renderGridBackground() {
 
 function renderGrid() {
     'use strict';
+    gameBoardSquares[gridYMax * gridXMax - (2 + gridXMax)].innerText = "$";
     gameBoardSquares[player.cord.y * gridXMax + player.cord.x].innerText = '@';
     return;
 }

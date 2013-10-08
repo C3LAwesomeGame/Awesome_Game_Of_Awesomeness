@@ -736,7 +736,7 @@ var agoa = (function () {
         damageToMonster = damageToMonster > 0 ? damageToMonster : 1;
         player.health = player.health - damageToPlayer;
         monster.health = monster.health - damageToMonster;
-        renderer.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
+        renderer2.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
         if (player.getHealth() < 1) {
             renderer.gameOver();
             player.fighting = false;
@@ -748,7 +748,7 @@ var agoa = (function () {
             player.xp += (monster.attack + monster.defense);
             loot = getPotentialLoot();
             if (undefined !== loot) {
-                renderer.printToLog.foundLoot(loot);
+                renderer2.printToLog.foundLoot(loot);
                 player.addToInventory(loot);
                 renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
             } else if (Math.random() > 0.7) { // if no loot was found, check if health potion dropped.
