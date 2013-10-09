@@ -277,9 +277,38 @@ var agoa = (function () {
     /*
      * This is the player with all methods and values available in this file, for public values and methods see bottom of file.
      */
+
+    function checkIfMonsterNearby() {
+        var tof = false,
+            monsterLeft = tiles[player.cord.y * gridXMax + player.cord.x - 1].monster,
+            monsterRight = tiles[player.cord.y * gridXMax + player.cord.x + 1].monster,
+            monsterUp = tiles[(player.cord.y - 1) * gridXMax + player.cord.x].monster,
+            monsterDown = tiles[(player.cord.y + 1) * gridXMax + player.cord.x].monster;
+
+        if (undefined !== monsterRight) {
+            tof = true;
+            currentMonster = monsterRight;
+        } else if (undefined !== monsterUp) {
+            tof = true;
+            currentMonster = monsterUp;
+        } else if (undefined !== monsterLeft) {
+            tof = true;
+            currentMonster = monsterLeft;
+        } else if (undefined !== monsterDown) {
+            tof = true;
+            currentMonster = monsterDown;
+        }
+
+        if (tof && currentMonster.alive()) {
+            player.fighting = true;
+        }
+
+        return tof;
+    }
+
     player = {
         name: "",
-        fighting: true,
+        fighting: false,
         xp: 1,
         baseAttack: 3,
         baseDefense: 2,
@@ -468,29 +497,32 @@ var agoa = (function () {
                 x: player.cord.x,
                 y: player.cord.y
             };
-            switch (direction) {
-            case 0:
-                if (player.cord.y > 0 && !tiles[(player.cord.y - 1) * gridXMax + player.cord.x].blocked) {
-                    player.cord.y -= 1;
+            if (!player.fighting) {
+                switch (direction) {
+                case 0:
+                    if (player.cord.y > 0 && !tiles[(player.cord.y - 1) * gridXMax + player.cord.x].blocked) {
+                        player.cord.y -= 1;
+                    }
+                    break;
+                case 1:
+                    if (player.cord.x < gridXMax - 1 && !tiles[player.cord.y * gridXMax + player.cord.x + 1].blocked) {
+                        player.cord.x += 1;
+                    }
+                    break;
+                case 2:
+                    if (player.cord.y < gridYMax - 1 && !tiles[(player.cord.y + 1) * gridXMax + player.cord.x].blocked) {
+                        player.cord.y += 1;
+                    }
+                    break;
+                case 3:
+                    if (player.cord.x > 0 && !tiles[player.cord.y * gridXMax + player.cord.x - 1].blocked) {
+                        player.cord.x -= 1;
+                    }
+                    break;
                 }
-                break;
-            case 1:
-                if (player.cord.x < gridXMax - 1 && !tiles[player.cord.y * gridXMax + player.cord.x + 1].blocked) {
-                    player.cord.x += 1;
-                }
-                break;
-            case 2:
-                if (player.cord.y < gridYMax - 1 && !tiles[(player.cord.y + 1) * gridXMax + player.cord.x].blocked) {
-                    player.cord.y += 1;
-                }
-                break;
-            case 3:
-                if (player.cord.x > 0 && !tiles[player.cord.y * gridXMax + player.cord.x - 1].blocked) {
-                    player.cord.x -= 1;
-                }
-                break;
+                renderer2.map.grid(player.cord, oldCord);
+                checkIfMonsterNearby();
             }
-            renderer2.map.grid(player.cord, oldCord);
             return;
         }
     };
@@ -612,6 +644,9 @@ var agoa = (function () {
     function generateRandomMonster() {
         var monster = generateRandomFromArray("monsterArray");
         monster.health = resourceTabel.monsterArray[monster.typeValue].health;
+        monster.alive = function () {
+            return monster.health > 0;
+        };
         return monster;
     }
 
@@ -970,16 +1005,24 @@ var agoa = (function () {
                 tiles = [];
             for (i = 0; i < gridYMax * gridXMax; i += 1) {
                 currentTile = makeTile();
-                currentTile.number = i;
                 tiles.push(currentTile);
             }
             tiles[startY * gridXMax + startX].blocked = false;
             return tiles;
         }
 
+        function addMonstersToTiles() {
+            for (i = 0; i < tiles.length; i += 1) {
+                if (!tiles[i].blocked && Math.random() > 0.9) {
+                    tiles[i].monster = generateRandomMonster();
+                }
+            }
+        }
+
         function createBoard() {
             tiles = createTilesArray();
             recursion(startX, startY);
+            addMonstersToTiles();
             renderer2.map.gridBackground(tiles);
             renderer2.map.grid(player.cord, player.cord);
         }

@@ -109,7 +109,7 @@ var renderer2 = (function () {
             if (tile.blocked) {
                 td.className += " blocked";
             } else {
-                if (Math.random() > 0.9) {
+                if (undefined !== tile.monster) {
                     div.innerText = '#';
                 }
             }
