@@ -33,10 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // renderer.printToLog.story("He's smoking on his tobacco pipe and muttering, only thing you could hear and understand from his muttering");
     // renderer.printToLog.story("princess, high, stupid and world of warcraft level 200.");
     // renderer.printToLog.story("So from all that you decided to start your own quest. Find the stone-high stupid princess and get the cheats' so you can level up your bubble-spandex boy to level 200");
-    // agoa.player.name = renderer.promptToUser("What is your name, traveler?");
     // renderer.printToLog.story("Welcome! " + agoa.player.name);
     // renderer.printToLog.ding(agoa.player.getLevel());
     // play();
     agoa.board.create();
-
+    agoa.player.name = renderer.promptToUser("What is your name, traveler?");
 });

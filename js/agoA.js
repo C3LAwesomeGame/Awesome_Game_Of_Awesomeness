@@ -2,6 +2,7 @@
 /*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
 /*global renderer */
 /*global renderer2 */
+/*global sound */
 //
 // This file is supposed to serve as an API with all the methods of the game
 var agoa = (function () {
@@ -301,6 +302,9 @@ var agoa = (function () {
 
         if (tof && currentMonster.alive()) {
             player.fighting = true;
+            console.log(currentMonster);
+            renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health, currentMonster.attack, currentMonster.defense, resourceTabel.colorArray[currentMonster.colorValue].hex);
+            sound.monster();
         }
 
         return tof;
@@ -808,6 +812,7 @@ var agoa = (function () {
         player.health = player.health - damageToPlayer;
         monster.health = monster.health - damageToMonster;
         renderer2.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
+        sound.hit();
         if (player.getHealth() < 1) {
             renderer.gameOver();
             player.fighting = false;
@@ -815,6 +820,7 @@ var agoa = (function () {
         }
         if (monster.health < 1) {
             player.fighting = false;
+            renderer2.printToLog.killedMonster();
             currentMonster = undefined;
             player.xp += (monster.attack + monster.defense);
             loot = getPotentialLoot();
@@ -1013,7 +1019,7 @@ var agoa = (function () {
 
         function addMonstersToTiles() {
             for (i = 0; i < tiles.length; i += 1) {
-                if (!tiles[i].blocked && Math.random() > 0.9) {
+                if (!tiles[i].blocked && i % 2 === 0 && Math.random() > 0.9) {
                     tiles[i].monster = generateRandomMonster();
                 }
             }

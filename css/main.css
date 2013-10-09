@@ -102,7 +102,7 @@ td {
     purple: #9a72d4;
  */
 .enemyPortraitColor {
-    background-color: #9a72d4;
+    background: #9a72d4;
 }
 #gameBoard {
     overflow: hidden;

@@ -21,6 +21,9 @@ var renderer2 = (function () {
         healthSpan = document.querySelector('#healthSpan'),
         attackSpan = document.querySelector('#attackSpan'),
         defenseSpan = document.querySelector('#defenseSpan'),
+        enemyPortraitColor = document.querySelector(".enemyPortraitColor"),
+        enemyPortrait = document.querySelector("#enemyPortrait"),
+        noSign = document.querySelector("#noSign"),
         monsterName = document.querySelector('.enemy h2'),
         monsterHealthSpan = document.querySelector('#monsterHealthSpan'),
         monsterAttackSpan = document.querySelector('#monsterAttackSpan'),
@@ -58,11 +61,17 @@ var renderer2 = (function () {
             attackSpan.innerText = attack;
             defenseSpan.innerText = defense;
         },
-        monster: function (type, health, attack, defense) {
+        monster: function (type, health, attack, defense, color) {
+            noSign.style.display = "none";
+            enemyPortrait.src = "img/" + type + ".png";
+            enemyPortraitColor.style.background = color;
             monsterName.innerText = type;
             monsterHealthSpan.innerText = health;
             monsterAttackSpan.innerText = attack;
             monsterDefenseSpan.innerText = defense;
+        },
+        killedMonster: function () {
+            noSign.style.display = "inline";
         },
         item: function (item) {
             printToLog.addToHistory(agoa.prettyString.item(item));
