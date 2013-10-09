@@ -102,8 +102,8 @@ var renderer2 = (function () {
             td;
 
         function createTd(tile) {
-            var td = document.createElement('td'),
-                div = document.createElement('div');
+            td = document.createElement('td');
+            var div = document.createElement('div');
             td.appendChild(div);
             if (tile.blocked) {
                 td.className += " blocked";
