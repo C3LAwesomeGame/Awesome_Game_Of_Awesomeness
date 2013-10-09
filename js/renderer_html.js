@@ -74,7 +74,7 @@ var renderer2 = (function () {
             printToLog.addToHistory(story);
         },
         combatResult: function (playerHealth, monster, damageToPlayer, damageToMonster) {
-            printToLog.addToHistory("You hit the " + agoa.prettyString.item(monster) + " for " + damageToMonster.toString() + " \nThe " + agoa.prettyString.item(monster) + " hits you for %c " + damageToPlayer.toString() + " , you now have " + playerHealth.toString() + " health left.");
+            printToLog.addToHistory("You hit the " + agoa.prettyString.item(monster) + " for " + damageToMonster.toString() + " \nThe " + agoa.prettyString.item(monster) + " hits you for " + damageToPlayer.toString() + " , you now have " + playerHealth.toString() + " health left.");
         },
         foundLoot: function (item) {
             printToLog.addToHistory("You have found a " + agoa.prettyString.item(item) + ".");
@@ -86,11 +86,12 @@ var renderer2 = (function () {
             printToLog.addToHistory("Ding! Level " + level);
         },
         quit: function () {
-            printToLog.addToHistory("%cQuitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
+            printToLog.addToHistory("Quitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
         } //,
         //     divider: function () {
         //     }
     };
+
     map = (function () {
         var gameBoardGrid = document.querySelector('#gameGrid tbody'),
             gameBoardSquares,
