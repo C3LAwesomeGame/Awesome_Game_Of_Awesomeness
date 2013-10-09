@@ -311,7 +311,7 @@ var agoa = (function () {
     }
 
     player = {
-        name: "",
+        name: "Hero",
         fighting: false,
         xp: 1,
         baseAttack: 3,
@@ -319,6 +319,10 @@ var agoa = (function () {
         health: 50,
         maxHealth: 50,
         cord: {
+            x: 1,
+            y: 1
+        },
+        oldCord: {
             x: 1,
             y: 1
         },
@@ -423,6 +427,13 @@ var agoa = (function () {
                 sourceArray: "weaponArray"
             }
         },
+        setName: function (name) {
+            player.name = name;
+            renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
+        },
+        getName: function () {
+            return player.name;
+        },
         getLevel: function () {
             return Math.ceil(player.xp / 20);
         },
@@ -464,6 +475,7 @@ var agoa = (function () {
                     player.health = player.maxHealth;
                 }
                 renderer2.printToLog.drankPotion(potionResult, player.health);
+                renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
             } else {
                 renderer2.printToLog.noPotions();
             }
@@ -493,38 +505,43 @@ var agoa = (function () {
                     break;
                 }
             }
+            renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
             renderer2.printToLog.equipped(player.equipped);
         },
         movePlayer: function (direction) {
             // gameBoardSquares[player.cord.y * gridXMax + player.cord.x].innerText = '';
-            var oldCord = {
-                x: player.cord.x,
-                y: player.cord.y
-            };
-            if (!player.fighting) {
+            if (!player.fighting && player.health > 0) {
                 switch (direction) {
                 case 0:
                     if (player.cord.y > 0 && !tiles[(player.cord.y - 1) * gridXMax + player.cord.x].blocked) {
+                        player.oldCord.x = player.cord.x;
+                        player.oldCord.y = player.cord.y;
                         player.cord.y -= 1;
                     }
                     break;
                 case 1:
                     if (player.cord.x < gridXMax - 1 && !tiles[player.cord.y * gridXMax + player.cord.x + 1].blocked) {
+                        player.oldCord.x = player.cord.x;
+                        player.oldCord.y = player.cord.y;
                         player.cord.x += 1;
                     }
                     break;
                 case 2:
                     if (player.cord.y < gridYMax - 1 && !tiles[(player.cord.y + 1) * gridXMax + player.cord.x].blocked) {
+                        player.oldCord.x = player.cord.x;
+                        player.oldCord.y = player.cord.y;
                         player.cord.y += 1;
                     }
                     break;
                 case 3:
                     if (player.cord.x > 0 && !tiles[player.cord.y * gridXMax + player.cord.x - 1].blocked) {
+                        player.oldCord.x = player.cord.x;
+                        player.oldCord.y = player.cord.y;
                         player.cord.x -= 1;
                     }
                     break;
                 }
-                renderer2.map.grid(player.cord, oldCord);
+                renderer2.map.grid(player.cord, player.oldCord);
                 checkIfMonsterNearby();
             }
             return;
@@ -811,8 +828,10 @@ var agoa = (function () {
         damageToMonster = damageToMonster > 0 ? damageToMonster : 1;
         player.health = player.health - damageToPlayer;
         monster.health = monster.health - damageToMonster;
-        renderer2.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
         sound.hit();
+        renderer2.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
+        renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
+        renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health, currentMonster.attack, currentMonster.defense, resourceTabel.colorArray[currentMonster.colorValue].hex);
         if (player.getHealth() < 1) {
             renderer.gameOver();
             player.fighting = false;
@@ -861,8 +880,23 @@ var agoa = (function () {
                     renderer2.printToLog.addToHistory("The " + prettyString.item(item) + " does not like it.");
                     break;
                 case "move":
-                    renderer2.printToLog.addToHistory("You got away!");
-                    stillInEngagement = false;
+                    if (player.fighting) {
+                        player.fighting = false;
+                        if (player.cord.x - player.oldCord.x > 0) {
+                            player.movePlayer(3);
+                        } else if (player.cord.x - player.oldCord.x < 0) {
+                            player.movePlayer(1);
+                        } else {
+                            if (player.cord.y - player.oldCord.y > 0) {
+                                player.movePlayer(0);
+                            } else {
+                                player.movePlayer(2);
+                            }
+                        }
+
+                        renderer2.printToLog.addToHistory("You got away!");
+                        stillInEngagement = false;
+                    }
                     break;
                 case "drink":
                     player.drinkPotion();
@@ -1018,8 +1052,8 @@ var agoa = (function () {
         }
 
         function addMonstersToTiles() {
-            for (i = 0; i < tiles.length; i += 1) {
-                if (!tiles[i].blocked && i % 2 === 0 && Math.random() > 0.9) {
+            for (i = gridXMax + 2; i < tiles.length; i += 1) {
+                if (!tiles[i].blocked && i % 2 === 0 && Math.random() > 0.8) {
                     tiles[i].monster = generateRandomMonster();
                 }
             }
@@ -1043,7 +1077,8 @@ var agoa = (function () {
     currentMonster = generateRandomMonster();
     return {
         player: {
-            name: player.name,
+            setName: player.setName,
+            getName: player.getName,
             fighting: player.fighting,
             getLevel: player.getLevel,
             getXp: player.getXp,

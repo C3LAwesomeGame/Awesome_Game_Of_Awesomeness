@@ -1,7 +1,10 @@
 body {
     text-align: center;
-    font-family: helvetica;
+    /*font-family: helvetica;*/
     font-size: 15px;
+    font-family: "Open Sans", sans-serif;
+    color: #737373;
+
 }
 ul {
     list-style-type: none;
@@ -9,13 +12,22 @@ ul {
     margin: 0;
 }
 h1, h2, h3 {
-    padding: 0;
     margin: 0;
+    font-weight: normal;
+}
+h2 {
+    padding: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    background: #f5f5f5;
+}
+h3 {
+    margin-top: 5px;
 }
 .game {
     text-align: left;
     display: inline-block;
-    border: 5px solid black;
+    /*border: 5px solid black;*/
     position:relative;
     margin: auto auto;
 }
@@ -49,7 +61,7 @@ h1, h2, h3 {
     min-width: 225px;
 }
 td {
-    border: 3px solid blue;
+    /*border: 3px solid blue;*/
     position:relative;
     overflow: hidden;
     vertical-align:top;
@@ -63,26 +75,40 @@ td {
     overflow: scroll;
     width: 540px;
     height: 270px;
+    background: #f5f5f5;
 }
 .storyContainer::-webkit-scrollbar { 
     display: none; 
 }
-
+.storyContainer li {
+    list-style-type: none;
+    border-bottom: 3px solid #ffffff;
+}
 .storyContainer input {
     position: absolute;
-    width: 500px;
+    width: 525px;
     height: 25px;  
-    border: 3px solid green;
+    /*border: 3px solid green;*/
     bottom:0;
-    padding: 0 5px 0 5px;
-    margin: auto 12px;
+    padding: 5px 10px 5px 10px;
+    margin: 0;
+    outline: none;
+    border: 0 solid;
+    font-size: 20px;
+    font-family: "Open Sans", sans-serif;
+    color: #f2f2f2;
+    background: #4d4d4d;
+}
+.storyContainer input:focus {
+    outline: 0;
 }
 .enemyPortraitContainer{
+    display: none;
     position: relative;
     width: 200px;
     height: 200px;
     margin: auto auto;
-    margin-top: 20px;
+    margin-top: 50px;
     overflow: hidden;
 }
 .enemyPortraitContainer * {
@@ -119,17 +145,18 @@ td {
     width: 526;
 }
 #gameGrid td {
-    border: 1px solid #7d7575;
-    background-color: #dfdcc2;
+    border: 1px solid #f2f2f2;
+    background-color: #ffffff;
     text-align: center;
     /*color: white;*/
     vertical-align: middle;
     font-size: 20px;
     white-space: nowrap;
     overflow: hidden;
+    line-height: 20px;
 }
 #gameGrid .blocked {
-    background-color: #443225;
+    background-color: #e6e6e6;
 }
 #gameGrid .notVisible {
     background-color: #000000;

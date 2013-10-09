@@ -23,6 +23,7 @@ var renderer2 = (function () {
         defenseSpan = document.querySelector('#defenseSpan'),
         enemyPortraitColor = document.querySelector(".enemyPortraitColor"),
         enemyPortrait = document.querySelector("#enemyPortrait"),
+        enemyPortraitContainer = document.querySelector("#enemyPortraitContainer"),
         noSign = document.querySelector("#noSign"),
         monsterName = document.querySelector('.enemy h2'),
         monsterHealthSpan = document.querySelector('#monsterHealthSpan'),
@@ -62,6 +63,7 @@ var renderer2 = (function () {
             defenseSpan.innerText = defense;
         },
         monster: function (type, health, attack, defense, color) {
+            enemyPortraitContainer.style.display = "block";
             noSign.style.display = "none";
             enemyPortrait.src = "img/" + type + ".png";
             enemyPortraitColor.style.background = color;

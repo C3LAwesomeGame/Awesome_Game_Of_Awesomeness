@@ -2,6 +2,7 @@
 <head>
     <title>AGOA</title>
     <!-- <link href="css/agoA.css"  rel="StyleSheet" type="text/css" /> -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
     <link href="css/main.css"  rel="StyleSheet" type="text/css" />
 </head>
 <body>
@@ -30,6 +31,14 @@
                     </td>
                     <td>
                         <div class="enemy box">
+
+
+                            <h2>Monster</h2>
+                            <ul>
+                                <li>Health: <span id="monsterHealthSpan"></span></li>
+                                <li>Attack: <span id="monsterAttackSpan"></span></li>
+                                <li>Defense: <span id="monsterDefenseSpan"></span></li>
+                            </ul>
                             <div id="enemyPortraitContainer" class="enemyPortraitContainer">
                                 <span class="enemyPortraitColor"></span>
                                 <!-- <img src="img/rusty.png" class="enemyPortraitFluff"> -->
@@ -37,13 +46,6 @@
                                 <img src="img/noSign.png" id="noSign">
                             </div> <!-- #enemyPortraitContainer -->
 
-                            <h2>Monster</h2>
-                            <ul>
-                                <li>Health: <span id="monsterHealthSpan">50</span></li>
-                                <li>Attack: <span id="monsterAttackSpan">1</span></li>
-                                <li>Defense: <span id="monsterDefenseSpan">1</span></li>
-                            </ul>
-                        
                         </div> <!-- .enemy -->
                     </td>
                 </tr>
@@ -64,7 +66,7 @@
                     <td>
                         <div class="storyContainer">
                             <ul></ul>
-                            <input id="userInputField" type="text" placeholder="Hello">
+                            <input id="userInputField" type="text" placeholder="What do you want to do...?" autofocus>
                         </div> <!-- .storyContainer -->
                     </td>
                     <td>

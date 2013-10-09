@@ -22,8 +22,8 @@ function play() {
     }
 }
 renderer2.printToLog.equipped(agoa.player.getEquipped());
-renderer2.printToLog.inventory(agoa.player.getInventory());
-renderer2.printToLog.hero(agoa.player.name, agoa.player.getLevel(), agoa.player.getHealth(), agoa.player.getTotalAttack(), agoa.player.getTotalDefense());
+renderer2.printToLog.inventory(agoa.player.getInventory(), agoa.player.getPotionsRemaining());
+renderer2.printToLog.hero("Hero", agoa.player.getLevel(), agoa.player.getHealth(), agoa.player.getTotalAttack(), agoa.player.getTotalDefense());
 document.addEventListener("DOMContentLoaded", function () {
     'use strict';
     // renderer.printToLog.story("Welcome to AGOA(Awesome Game of Awesomeness)");
@@ -37,5 +37,5 @@ document.addEventListener("DOMContentLoaded", function () {
     // renderer.printToLog.ding(agoa.player.getLevel());
     // play();
     agoa.board.create();
-    agoa.player.name = renderer.promptToUser("What is your name, traveler?");
+    // agoa.player.setName(renderer.promptToUser("What is your name, traveler?"));
 });
