@@ -10,7 +10,11 @@ var agoa = (function () {
         player,
         prettyString,
         words,
-        currentMonster;
+        currentMonster,
+        board,
+        tiles,
+        gridXMax = 25,
+        gridYMax = 19;
     /*
      * Resources for item and monster generating
      */
@@ -281,9 +285,9 @@ var agoa = (function () {
         baseDefense: 2,
         health: 50,
         maxHealth: 50,
-        cords: {
-            x: 0,
-            y: 0
+        cord: {
+            x: 1,
+            y: 1
         },
         potionsRemaining: 5,
         inventory: { // Inventory has some items right now for demoing, should be empty when playing. 
@@ -457,6 +461,37 @@ var agoa = (function () {
                 }
             }
             renderer2.printToLog.equipped(player.equipped);
+        },
+        movePlayer: function (direction) {
+            // gameBoardSquares[player.cord.y * gridXMax + player.cord.x].innerText = '';
+            var oldCord = {
+                x: player.cord.x,
+                y: player.cord.y
+            };
+            switch (direction) {
+            case 0:
+                if (player.cord.y > 0 && !tiles[(player.cord.y - 1) * gridXMax + player.cord.x].blocked) {
+                    player.cord.y -= 1;
+                }
+                break;
+            case 1:
+                if (player.cord.x < gridXMax - 1 && !tiles[player.cord.y * gridXMax + player.cord.x + 1].blocked) {
+                    player.cord.x += 1;
+                }
+                break;
+            case 2:
+                if (player.cord.y < gridYMax - 1 && !tiles[(player.cord.y + 1) * gridXMax + player.cord.x].blocked) {
+                    player.cord.y += 1;
+                }
+                break;
+            case 3:
+                if (player.cord.x > 0 && !tiles[player.cord.y * gridXMax + player.cord.x - 1].blocked) {
+                    player.cord.x -= 1;
+                }
+                break;
+            }
+            renderer2.map.grid(player.cord, oldCord);
+            return;
         }
     };
     prettyString = { // prettyString is a 'collection' of methods for concatenating strings from the stored values of an item.
@@ -841,6 +876,118 @@ var agoa = (function () {
         }
         renderer.alertToUser("You must make a choice as you stand in front of the " + prettyString.item(item));
     }
+    board = (function () {
+        var gameBoardSquares,
+            startX = 3,
+            startY = 5,
+            i,
+            j,
+            tr,
+            td,
+            tile;
+
+        function makeTile() {
+            tile = {
+                monster: undefined,
+                blocked: true,
+                visible: true
+            };
+            return tile;
+        }
+
+        function shuffle(o) { //v1.0
+            var j, x, i;
+            for (i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
+        };
+
+        function tileForCord(x, y) {
+            'use strict';
+            return tiles[y * gridXMax + x];
+        }
+
+        function getRandomDirections() {
+            var randomDirections = [],
+                i;
+            for (i = 0; i < 4; i += 1) {
+                randomDirections.push(i + 1);
+            }
+            return shuffle(randomDirections);
+        }
+
+        function recursion(x, y) {
+            var directions = getRandomDirections(),
+                i;
+            for (i = 0; i < directions.length; i += 1) {
+                switch (directions[i]) {
+                case 1: //up
+                    if (y - 2 <= 0) {
+                        continue;
+                    }
+                    if (tileForCord(x, y - 2).blocked) {
+                        tileForCord(x, y - 2).blocked = false;
+                        tileForCord(x, y - 1).blocked = false;
+                        recursion(x, (y - 2));
+                    }
+                    break;
+                case 2: //left
+                    if (x + 2 >= gridXMax - 1) {
+                        continue;
+                    }
+                    if (tileForCord(x + 2, y).blocked) {
+                        tileForCord(x + 2, y).blocked = false;
+                        tileForCord(x + 1, y).blocked = false;
+                        recursion((x + 2), y);
+                    }
+                    break;
+                case 3: //down
+                    if (y + 2 >= gridYMax) {
+                        continue;
+                    }
+                    if (tileForCord(x, y + 2).blocked) {
+                        tileForCord(x, y + 2).blocked = false;
+                        tileForCord(x, y + 1).blocked = false;
+                        recursion(x, (y + 2));
+                    }
+                    break;
+                case 4: //right
+                    if (x - 2 <= 0) {
+                        continue;
+                    }
+                    if (tileForCord(x - 2, y).blocked) {
+                        tileForCord(x - 2, y).blocked = false;
+                        tileForCord(x - 1, y).blocked = false;
+                        recursion((x - 2), y);
+                    }
+                    break;
+                }
+            }
+        }
+
+        function createTilesArray() {
+            'use strict';
+            var currentTile,
+                tiles = [];
+            for (i = 0; i < gridYMax * gridXMax; i += 1) {
+                currentTile = makeTile();
+                currentTile.number = i;
+                tiles.push(currentTile);
+            }
+            tiles[startY * gridXMax + startX].blocked = false;
+            return tiles;
+        }
+
+        function createBoard() {
+            tiles = createTilesArray();
+            recursion(startX, startY);
+            renderer2.map.gridBackground(tiles);
+            renderer2.map.grid(player.cord, player.cord);
+        }
+        return {
+            create: createBoard
+        }
+
+    }());
     /*
      * All the public methods and values.
      */
@@ -858,7 +1005,8 @@ var agoa = (function () {
             getEquipped: player.getEquipped,
             getTotalAttack: player.getTotalAttack,
             getTotalDefense: player.getTotalDefense,
-            drinkPotion: player.drinkPotion
+            drinkPotion: player.drinkPotion,
+            move: player.movePlayer
         },
         prettyString: prettyString,
         calculatePowerForItem: calculatePowerForItem,
@@ -871,7 +1019,8 @@ var agoa = (function () {
             takeAction: takeActionOnString,
             getActions: getActionsFromString,
             getDirection: getDirectionFromString
-        }
+        },
+        board: board
         // },
         // initiateFightWith: initiateFightWith,
         // initiateFightWithRandomMonster: initiateFightWithRandomMonster,
