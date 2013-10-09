@@ -12,16 +12,16 @@ window.addEventListener("DOMContentLoaded", function () {
             inputField.value = "";
             break;
         case 37:
-            movePlayer(3);
+            agoa.player.move(3);
             break;
         case 38:
-            movePlayer(0);
+            agoa.player.move(0);
             break;
         case 39:
-            movePlayer(1);
+            agoa.player.move(1);
             break;
         case 40:
-            movePlayer(2);
+            agoa.player.move(2);
             break;
         }
     }, false);

@@ -12,7 +12,7 @@
  */
 var renderer2 = (function () {
     'use strict';
-    var printToLog, promptToUser, alertToUser, gameOver,
+    var printToLog, promptToUser, alertToUser, gameOver, map,
         equippedUl = document.querySelectorAll('#equipped ul'),
         inventoryUl = document.querySelectorAll('#inventory ul'),
         storyContainer = document.querySelector('.storyContainer'),
@@ -91,6 +91,59 @@ var renderer2 = (function () {
         //     divider: function () {
         //     }
     };
+    map = (function () {
+        var gameBoardGrid = document.querySelector('#gameGrid tbody'),
+            gameBoardSquares,
+            gridXMax = 25,
+            gridYMax = 19,
+            i,
+            j,
+            tr,
+            td;
+
+        function createTd(tile) {
+            var td = document.createElement('td'),
+                div = document.createElement('div');
+            td.appendChild(div);
+            if (tile.blocked) {
+                td.className += " blocked";
+            } else {
+                if (Math.random() > 0.9) {
+                    div.innerText = '#';
+                }
+            }
+            return td;
+        }
+
+        //public
+
+        function renderGridBackground(tilesArray) {
+            for (i = 0; i < gridYMax; i += 1) {
+                tr = document.createElement('tr');
+                for (j = 0; j < gridXMax; j += 1) {
+                    td = createTd(tilesArray[i * gridXMax + j]);
+                    tr.appendChild(td);
+                }
+                gameBoardGrid.appendChild(tr);
+            }
+            gameBoardSquares = document.querySelectorAll('#gameGrid td div');
+        }
+
+        //public
+
+        function renderGrid(playerCord, oldCord) {
+            gameBoardSquares[oldCord.y * gridXMax + oldCord.x].innerText = '';
+            gameBoardSquares[gridYMax * gridXMax - (2 + gridXMax)].innerText = "$";
+            gameBoardSquares[playerCord.y * gridXMax + playerCord.x].innerText = '@';
+            return;
+        }
+
+        return {
+            grid: renderGrid,
+            gridBackground: renderGridBackground
+        };
+    }());
+
     // promptToUser = function (text) {
     // };
     // alertToUser = function (text) {
@@ -98,7 +151,8 @@ var renderer2 = (function () {
     // gameOver = function () {
     // };
     return {
-        printToLog: printToLog //,
+        printToLog: printToLog,
+        map: map
         // promptToUser: promptToUser,
         // alertToUser: alertToUser,
         // gameOver: gameOver

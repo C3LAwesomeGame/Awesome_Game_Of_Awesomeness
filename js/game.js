@@ -37,4 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // renderer.printToLog.story("Welcome! " + agoa.player.name);
     // renderer.printToLog.ding(agoa.player.getLevel());
     // play();
+    agoa.board.create();
+
 });
