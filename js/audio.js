@@ -3,20 +3,56 @@
 /*
 soundlist
     09-09 hit
-    07-13 monster
+    07-13 monster walk in
     03-14 hit wall
     15-00 rendera ny karta
-    monster slår
     hitta item
     ding
-
-    new audio
 */
-var Audio;
-var soundArray = ["../audio/nes-09-09.wav", "../audio/nes-07-13.wav", "../audio/nes-03-14.wav", "../audio/nes-15-00.wav"];
+var sound = (function () {
+    "use strict";
+    var audio = document.querySelector("#gamesound"),
+        playSound = function () {
 
-var audio = new Audio();
-audio.src = soundArray;
-audio.controls = false;
-audio.preload = true;
-audio.play();
+            audio.load();
+            audio.play();
+        },
+        hitWall = function () {
+
+            audio.src = "audio/nes-03-14.wav";
+            playSound();
+        },
+        hit = function () {
+
+            audio.src = "audio/nes-09-09.wav";
+            playSound();
+        },
+        monster = function () {
+
+            audio.src = "audio/nes-07-13.wav";
+            playSound();
+        },
+        newMap = function () {
+
+            audio.src = "audio/nes-15-00.wav";
+            playSound();
+        };
+    // itemFind = function () {
+    //     "use strict";
+    //     audio.src = "audio/nes-15-00.wav";
+    //     playSound();
+    // },
+    // ding = function () {
+    //     "use strict";
+    //     audio.src = "audio/nes-15-00.wav";
+    //     playSound();
+    // },
+    return {
+        hitWall: hitWall,
+        hit: hit,
+        monster: monster,
+        newMap: newMap
+        //itemFind: itemFind,
+        //ding: ding;
+    };
+}());

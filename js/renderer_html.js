@@ -20,7 +20,11 @@ var renderer2 = (function () {
         levelSpan = document.querySelector('#levelSpan'),
         healthSpan = document.querySelector('#healthSpan'),
         attackSpan = document.querySelector('#attackSpan'),
-        defenseSpan = document.querySelector('#defenseSpan');
+        defenseSpan = document.querySelector('#defenseSpan'),
+        monsterName = document.querySelector('.enemy h2'),
+        monsterHealthSpan = document.querySelector('#monsterHealthSpan'),
+        monsterAttackSpan = document.querySelector('#monsterAttackSpan'),
+        monsterDefenseSpan = document.querySelector('#monsterDefenseSpan');
     printToLog = {
         equipped: function (equipped) {
             equippedUl[0].innerHTML = '<li>' + agoa.prettyString.item(equipped.head) + '</li>';
@@ -53,6 +57,12 @@ var renderer2 = (function () {
             healthSpan.innerText = health;
             attackSpan.innerText = attack;
             defenseSpan.innerText = defense;
+        },
+        monster: function (type, health, attack, defense) {
+            monsterName.innerText = type;
+            monsterHealthSpan.innerText = health;
+            monsterAttackSpan.innerText = attack;
+            monsterDefenseSpan.innerText = defense;
         },
         item: function (item) {
             printToLog.addToHistory(agoa.prettyString.item(item));
