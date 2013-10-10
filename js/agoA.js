@@ -15,7 +15,16 @@ var agoa = (function () {
         board,
         tiles,
         gridXMax = 25,
-        gridYMax = 19;
+        gridYMax = 19,
+        greetings = [
+            "This is a world full of fluffy monsters, awesome roundhouse kicking ponies, rabid rabbits and everything else that's not normal to sane human beings",
+            "You're the mighty, fierce, awesome adventurer from the far, far, very far away world",
+            "One day, when you are strolling through the forest, you meet a weird squirrel.",
+            "He's smoking on his tobacco pipe and mutterin. The only thing you could hear and understand from his muttering is \"Princess, high, stupid and world of warcraft level 200.\"",
+            "So from all that you decided to start your own quest. Find the stone-high stupid princess and get the cheats so you can level up your bubble-spandex boy to level 200"
+        ],
+        currentGreeting = 0;
+
     /*
      * Resources for item and monster generating
      */
@@ -43,13 +52,13 @@ var agoa = (function () {
             sourceArray: "monsterArray"
         }, {
             type: "Dragon",
-            attack: 5,
+            attack: 4,
             defense: 2,
-            health: 60,
+            health: 50,
             sourceArray: "monsterArray"
         }, {
             type: "Wizard",
-            attack: 7,
+            attack: 5,
             defense: 1,
             health: 15,
             sourceArray: "monsterArray"
@@ -67,9 +76,9 @@ var agoa = (function () {
             sourceArray: "monsterArray"
         }, {
             type: "Demon",
-            attack: 6,
+            attack: 4,
             defense: 2,
-            health: 50,
+            health: 45,
             sourceArray: "monsterArray"
         }, {
             type: "Borat",
@@ -79,9 +88,9 @@ var agoa = (function () {
             sourceArray: "monsterArray"
         }, {
             type: "Tom Blackmore",
-            attack: 6,
+            attack: 4,
             defense: 3,
-            health: 40,
+            health: 30,
             sourceArray: "monsterArray"
         }],
         /*
@@ -197,17 +206,17 @@ var agoa = (function () {
             sourceArray: "weaponArray"
         }, {
             type: "2H-Sword",
-            attack: 2,
+            attack: 1.8,
             defense: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Axe-Spray",
-            attack: 1.7,
+            attack: 1.5,
             defense: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Wand",
-            attack: 1.9,
+            attack: 1.7,
             defense: 1,
             sourceArray: "weaponArray"
         }, {
@@ -286,21 +295,21 @@ var agoa = (function () {
             monsterUp = tiles[(player.cord.y - 1) * gridXMax + player.cord.x].monster,
             monsterDown = tiles[(player.cord.y + 1) * gridXMax + player.cord.x].monster;
 
-        if (undefined !== monsterRight) {
+        if (undefined !== monsterRight && monsterRight.alive()) {
             tof = true;
             currentMonster = monsterRight;
-        } else if (undefined !== monsterUp) {
+        } else if (undefined !== monsterUp && monsterUp.alive()) {
             tof = true;
             currentMonster = monsterUp;
-        } else if (undefined !== monsterLeft) {
+        } else if (undefined !== monsterLeft && monsterLeft.alive()) {
             tof = true;
             currentMonster = monsterLeft;
-        } else if (undefined !== monsterDown) {
+        } else if (undefined !== monsterDown && monsterDown.alive()) {
             tof = true;
             currentMonster = monsterDown;
         }
 
-        if (tof && currentMonster.alive()) {
+        if (tof) {
             player.fighting = true;
             console.log(currentMonster);
             renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health, currentMonster.attack, currentMonster.defense, resourceTabel.colorArray[currentMonster.colorValue].hex);
@@ -465,6 +474,12 @@ var agoa = (function () {
             total = player.baseDefense * player.equipped.chest.defense * player.equipped.head.defense;
             return total;
         },
+        dinged: function () {
+            player.maxHealth += 5;
+            player.health = player.maxHealth;
+            renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
+            // sound.ding();
+        },
         drinkPotion: function () {
             if (player.potionsRemaining > 0) {
                 var potionResult = 0;
@@ -517,6 +532,8 @@ var agoa = (function () {
                         player.oldCord.x = player.cord.x;
                         player.oldCord.y = player.cord.y;
                         player.cord.y -= 1;
+                    } else {
+                        sound.hitWall();
                     }
                     break;
                 case 1:
@@ -524,6 +541,8 @@ var agoa = (function () {
                         player.oldCord.x = player.cord.x;
                         player.oldCord.y = player.cord.y;
                         player.cord.x += 1;
+                    } else {
+                        sound.hitWall();
                     }
                     break;
                 case 2:
@@ -531,6 +550,8 @@ var agoa = (function () {
                         player.oldCord.x = player.cord.x;
                         player.oldCord.y = player.cord.y;
                         player.cord.y += 1;
+                    } else {
+                        sound.hitWall();
                     }
                     break;
                 case 3:
@@ -538,8 +559,14 @@ var agoa = (function () {
                         player.oldCord.x = player.cord.x;
                         player.oldCord.y = player.cord.y;
                         player.cord.x -= 1;
+                    } else {
+                        sound.hitWall();
                     }
                     break;
+                }
+                if (currentGreeting < greetings.length) {
+                    renderer2.printToLog.addToHistory(greetings[currentGreeting]);
+                    currentGreeting += 1;
                 }
                 renderer2.map.grid(player.cord, player.oldCord);
                 checkIfMonsterNearby();
@@ -815,14 +842,36 @@ var agoa = (function () {
         return item;
     }
 
+    function monsterSlain(monster) {
+        var loot, lvl;
+        player.fighting = false;
+        renderer2.printToLog.killedMonster();
+        currentMonster = undefined;
+        lvl = player.getLevel();
+        player.xp += (monster.attack + monster.defense);
+        if (lvl !== player.getLevel()) {
+            player.dinged();
+        }
+        loot = getPotentialLoot();
+        if (undefined !== loot) {
+            renderer2.printToLog.foundLoot(loot);
+            player.addToInventory(loot);
+            renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
+        } else if (Math.random() > 0.7) { // if no loot was found, check if health potion dropped.
+            renderer2.printToLog.foundPotion();
+            player.potionsRemaining += 1;
+            renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
+        }
+    }
+
     function resolveCombat(monster) {
         /*
          * Damage to monsters and players is calculated by:
          * damage = attackers damage + (random 1 to 3) - defenders defense;
+         * if attacker is the monster damags is multiplied by 1 + (player.getLevel / 5);
          * tho there is a minimum of 1 damage.
          */
-        var loot,
-            damageToPlayer = Math.ceil((monster.attack + Math.random() * 3) - player.getTotalDefense()),
+        var damageToPlayer = Math.ceil((monster.attack + Math.random() * 3) * (1 + player.getLevel() / 5) - player.getTotalDefense()),
             damageToMonster = Math.ceil((player.getTotalAttack() + Math.random() * 3) - monster.defense);
         damageToPlayer = damageToPlayer > 0 ? damageToPlayer : 1;
         damageToMonster = damageToMonster > 0 ? damageToMonster : 1;
@@ -838,20 +887,7 @@ var agoa = (function () {
             return false;
         }
         if (monster.health < 1) {
-            player.fighting = false;
-            renderer2.printToLog.killedMonster();
-            currentMonster = undefined;
-            player.xp += (monster.attack + monster.defense);
-            loot = getPotentialLoot();
-            if (undefined !== loot) {
-                renderer2.printToLog.foundLoot(loot);
-                player.addToInventory(loot);
-                renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
-            } else if (Math.random() > 0.7) { // if no loot was found, check if health potion dropped.
-                renderer2.printToLog.foundPotion();
-                player.potionsRemaining += 1;
-                renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
-            }
+            monsterSlain(monster);
             return true;
         }
         currentMonster = monster;
@@ -1052,9 +1088,19 @@ var agoa = (function () {
         }
 
         function addMonstersToTiles() {
-            for (i = gridXMax + 2; i < tiles.length; i += 1) {
+            var valid = true,
+                x = 8, y = 1, j;
+            for (i = gridXMax + x; i < tiles.length; i += 1) {
+                valid = true;
                 if (!tiles[i].blocked && i % 2 === 0 && Math.random() > 0.8) {
-                    tiles[i].monster = generateRandomMonster();
+                    for (y = 1; y < x; y += 1) {
+                        if (i > gridXMax * y && i < gridXMax * y + x - y) {
+                            valid = false;
+                        }
+                    }
+                    if (valid) {
+                       tiles[i].monster = generateRandomMonster(); 
+                    }
                 }
             }
         }
