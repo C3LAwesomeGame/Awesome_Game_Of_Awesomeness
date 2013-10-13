@@ -14,6 +14,8 @@ var agoa = (function () {
         currentMonster,
         board,
         tiles,
+        maxAttack = 35,
+        maxDefense = 59,
         gridXMax = 25,
         gridYMax = 19,
         greetings = [
@@ -178,7 +180,7 @@ var agoa = (function () {
         }, {
             type: "Enchanted",
             attack: 2,
-            defense: 2,
+            defense: 1.7,
             sourceArray: "fluffArray"
         }, {
             type: "Common",
@@ -236,17 +238,17 @@ var agoa = (function () {
         armorArray: [{
             type: "Chest",
             attack: 1,
-            defense: 1.6,
+            defense: 1.2,
             sourceArray: "armorArray"
         }, {
             type: "Helm",
             attack: 1,
-            defense: 1.4,
+            defense: 1.1,
             sourceArray: "armorArray"
         }, {
             type: "Cup",
             attack: 1,
-            defense: 1.2,
+            defense: 1,
             sourceArray: "armorArray"
         }],
         /*
@@ -270,12 +272,12 @@ var agoa = (function () {
         }, {
             type: "Big",
             attack: 1.2,
-            defense: 1.2,
+            defense: 1.1,
             sourceArray: "sizeArray"
         }, {
             type: "Giant",
             attack: 1.4,
-            defense: 1.2,
+            defense: 1.1,
             sourceArray: "sizeArray"
         }, {
             type: "Mighty",
@@ -312,7 +314,7 @@ var agoa = (function () {
         if (tof) {
             player.fighting = true;
             console.log(currentMonster);
-            renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health, currentMonster.attack, currentMonster.defense, resourceTabel.colorArray[currentMonster.colorValue].hex);
+            renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex);
             sound.monster();
         }
 
@@ -324,7 +326,7 @@ var agoa = (function () {
         fighting: false,
         xp: 1,
         baseAttack: 3,
-        baseDefense: 2,
+        baseDefense: 1,
         health: 50,
         maxHealth: 50,
         cord: {
@@ -336,7 +338,7 @@ var agoa = (function () {
             y: 1
         },
         potionsRemaining: 5,
-        inventory: { // Inventory has some items right now for demoing, should be empty when playing. 
+        inventory: { // Inventory has some items right now for demoing, should be empty when playing.
             armor: [{
                 // Tiny red common chest
                 typeValue: 0,
@@ -438,7 +440,7 @@ var agoa = (function () {
         },
         setName: function (name) {
             player.name = name;
-            renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
+            player.printHero();
         },
         getName: function () {
             return player.name;
@@ -471,13 +473,17 @@ var agoa = (function () {
         },
         getTotalDefense: function () {
             var total;
-            total = player.baseDefense * player.equipped.chest.defense * player.equipped.head.defense;
+            total = player.baseDefense * player.equipped.chest.defense * player.equipped.head.defense * player.equipped.crotch.defense;
             return total;
+        },
+        printHero: function () {
+            var xpPercent = (player.xp % 30) / 30 * 100;
+            renderer2.printToLog.hero(player.name, player.getLevel(), xpPercent, (player.health / player.maxHealth) * 100, (player.getTotalAttack() / maxAttack) * 100, (player.getTotalDefense() / maxDefense) * 100);
         },
         dinged: function () {
             player.maxHealth += 5;
             player.health = player.maxHealth;
-            renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
+            player.printHero();
             // sound.ding();
         },
         drinkPotion: function () {
@@ -490,7 +496,7 @@ var agoa = (function () {
                     player.health = player.maxHealth;
                 }
                 renderer2.printToLog.drankPotion(potionResult, player.health);
-                renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
+                player.printHero();
             } else {
                 renderer2.printToLog.noPotions();
             }
@@ -520,7 +526,7 @@ var agoa = (function () {
                     break;
                 }
             }
-            renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
+            player.printHero();
             renderer2.printToLog.equipped(player.equipped);
         },
         movePlayer: function (direction) {
@@ -597,7 +603,7 @@ var agoa = (function () {
             win: ["pablo", "win"],
             clear: ["clear"],
             quit: ["quit", "q", "exit"]
-        }, // direction words 
+        }, // direction words
         subcategories: {
             items: {
                 weapons: {
@@ -690,8 +696,10 @@ var agoa = (function () {
     }
 
     function generateRandomMonster() {
-        var monster = generateRandomFromArray("monsterArray");
-        monster.health = resourceTabel.monsterArray[monster.typeValue].health;
+        var monster = generateRandomFromArray("monsterArray"),
+            health = resourceTabel.monsterArray[monster.typeValue].health;
+        monster.maxHealth = health;
+        monster.health = health;
         monster.alive = function () {
             return monster.health > 0;
         };
@@ -852,12 +860,13 @@ var agoa = (function () {
         if (lvl !== player.getLevel()) {
             player.dinged();
         }
+        player.printHero();
         loot = getPotentialLoot();
         if (undefined !== loot) {
             renderer2.printToLog.foundLoot(loot);
             player.addToInventory(loot);
             renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
-        } else if (Math.random() > 0.7) { // if no loot was found, check if health potion dropped.
+        } else if (Math.random() > 0.4) { // if no loot was found, check if health potion dropped.
             renderer2.printToLog.foundPotion();
             player.potionsRemaining += 1;
             renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
@@ -879,8 +888,8 @@ var agoa = (function () {
         monster.health = monster.health - damageToMonster;
         sound.hit();
         renderer2.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
-        renderer2.printToLog.hero(player.name, player.getLevel(), player.health, player.getTotalAttack(), player.getTotalDefense());
-        renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health, currentMonster.attack, currentMonster.defense, resourceTabel.colorArray[currentMonster.colorValue].hex);
+        player.printHero();
+        renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex);
         if (player.getHealth() < 1) {
             renderer.gameOver();
             player.fighting = false;
@@ -1089,7 +1098,9 @@ var agoa = (function () {
 
         function addMonstersToTiles() {
             var valid = true,
-                x = 8, y = 1, j;
+                x = 8,
+                y = 1,
+                j;
             for (i = gridXMax + x; i < tiles.length; i += 1) {
                 valid = true;
                 if (!tiles[i].blocked && i % 2 === 0 && Math.random() > 0.8) {
@@ -1099,7 +1110,7 @@ var agoa = (function () {
                         }
                     }
                     if (valid) {
-                       tiles[i].monster = generateRandomMonster(); 
+                        tiles[i].monster = generateRandomMonster();
                     }
                 }
             }

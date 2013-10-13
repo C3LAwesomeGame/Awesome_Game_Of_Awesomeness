@@ -9,7 +9,7 @@ body {
 }
 ul {
     list-style-type: none;
-    padding:0; 
+    padding:0;
     margin: 0;
 }
 h1, h2, h3 {
@@ -85,8 +85,8 @@ td {
     height: 270px;
     background: #f5f5f5;
 }
-.storyContainer::-webkit-scrollbar { 
-    display: none; 
+.storyContainer::-webkit-scrollbar {
+    display: none;
 }
 .storyContainer li {
     list-style-type: none;
@@ -96,7 +96,7 @@ td {
 .storyContainer input {
     position: absolute;
     width: 505px;
-    height: 25px;  
+    height: 25px;
     /*border: 3px solid green;*/
     bottom:0;
     padding: 5px 10px 5px 10px;
@@ -117,7 +117,7 @@ td {
     width: 200px;
     height: 200px;
     margin: auto auto;
-    margin-top: 50px;
+    margin-top: 10px;
     overflow: hidden;
 }
 .enemyPortraitContainer * {
@@ -178,4 +178,43 @@ td {
     min-width: 20px;
     min-height: 20px;
     padding: 0;
+}
+
+progress {
+    background-color: #f3f3f3;
+    border-radius: 9px;
+    /*overflow: hidden;*/
+}
+progress::-webkit-progress-bar {
+    background-color: #f3f3f3;
+    border-radius: 9px;
+}
+progress::-webkit-progress-value {
+    background-color: #737373;
+    border-radius: 9px;
+}
+
+#xpBar::-webkit-progress-value {
+    background-color: #4285f3;
+}
+#healthBar::-webkit-progress-value {
+    background-color: #db4437;
+}
+#attackBar::-webkit-progress-value {
+    background-color: #f4b400;
+}
+#defenseBar::-webkit-progress-value {
+    background-color: #0f9d58;
+}
+#monsterHealthBar::-webkit-progress-value {
+    background-color: #db4437;
+}
+#monsterAttackBar::-webkit-progress-value {
+    background-color: #f4b400;
+}
+#monsterDefenseBar::-webkit-progress-value {
+    background-color: #0f9d58;
+}
+progress::-moz-progress-bar {
+    background-color: #f3f3f3;
 }

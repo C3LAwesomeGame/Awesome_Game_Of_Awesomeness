@@ -35,9 +35,9 @@
 
                             <h2>Monster</h2>
                             <ul>
-                                <li>Health: <span id="monsterHealthSpan"></span></li>
-                                <li>Attack: <span id="monsterAttackSpan"></span></li>
-                                <li>Defense: <span id="monsterDefenseSpan"></span></li>
+                                <li>Health: <br><progress id="monsterHealthBar" value="0" max="100"></progress></li>
+                                <li>Attack: <br><progress id="monsterAttackBar" value="0" max="100"></progress></li>
+                                <li>Defense: <br><progress id="monsterDefenseBar" value="0" max="100"></progress></li>
                             </ul>
                             <div id="enemyPortraitContainer" class="enemyPortraitContainer">
                                 <span class="enemyPortraitColor"></span>
@@ -73,12 +73,12 @@
                         <div class="hero box">
                             <h2>Hero</h2>
                             <ul>
-                                <li>Level: <span id="levelSpan">1</span></li>
-                                <li>Health: <span id="healthSpan">50</span></li>
-                                <li>Attack: <span id="attackSpan">1</span></li>
-                                <li>Defense: <span id="defenseSpan">1</span></li>
+                                <li>Level: <span id="levelSpan">1</span><br><progress id="xpBar" value="3" max="100"></progress></li>
+                                <li>Health: <br><progress id="healthBar" value="100" max="100"></progress></li>
+                                <li>Attack: <br><progress id="attackBar" value="8" max="100"></progress></li>
+                                <li>Defense: <br><progress id="defenseBar" value="1" max="100"></progress></li>
                             </ul>
-                        </div> <!-- .hero --> 
+                        </div> <!-- .hero -->
                     </td>
                 </tr>
             </tbody>

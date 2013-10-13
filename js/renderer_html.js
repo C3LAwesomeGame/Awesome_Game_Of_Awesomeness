@@ -18,17 +18,18 @@ var renderer2 = (function () {
         storyContainer = document.querySelector('.storyContainer'),
         heroName = document.querySelector('.hero h2'),
         levelSpan = document.querySelector('#levelSpan'),
-        healthSpan = document.querySelector('#healthSpan'),
-        attackSpan = document.querySelector('#attackSpan'),
-        defenseSpan = document.querySelector('#defenseSpan'),
+        xpBar = document.querySelector("#xpBar"),
+        healthBar = document.querySelector("#healthBar"),
+        attackBar = document.querySelector("#attackBar"),
+        defenseBar = document.querySelector("#defenseBar"),
         enemyPortraitColor = document.querySelector(".enemyPortraitColor"),
         enemyPortrait = document.querySelector("#enemyPortrait"),
         enemyPortraitContainer = document.querySelector("#enemyPortraitContainer"),
         noSign = document.querySelector("#noSign"),
         monsterName = document.querySelector('.enemy h2'),
-        monsterHealthSpan = document.querySelector('#monsterHealthSpan'),
-        monsterAttackSpan = document.querySelector('#monsterAttackSpan'),
-        monsterDefenseSpan = document.querySelector('#monsterDefenseSpan');
+        monsterHealthBar = document.querySelector("#monsterHealthBar"),
+        monsterAttackBar = document.querySelector("#monsterAttackBar"),
+        monsterDefenseBar = document.querySelector("#monsterDefenseBar");
     printToLog = {
         equipped: function (equipped) {
             equippedUl[0].innerHTML = '<li>' + agoa.prettyString.item(equipped.head) + '</li>';
@@ -55,22 +56,26 @@ var renderer2 = (function () {
             li.innerHTML = 'Health Potion ' + potions;
             inventoryUl[2].appendChild(li);
         },
-        hero: function (name, level, health, attack, defense) {
+        hero: function (name, level, xpPrecent, healthPercent, attackPrecent, defensePercent) {
             heroName.innerText = name;
             levelSpan.innerText = level;
-            healthSpan.innerText = health;
-            attackSpan.innerText = attack;
-            defenseSpan.innerText = defense;
+            xpBar.value = xpPrecent;
+            // healthSpan.innerText = health;
+            healthBar.value = healthPercent;
+            attackBar.value = attackPrecent;
+            defenseBar.value = defensePercent;
+            // attackSpan.innerText = attack;
+            // defenseSpan.innerText = defense;
         },
-        monster: function (type, health, attack, defense, color) {
+        monster: function (type, healthPercent, attackPercent, defensePercent, color) {
             enemyPortraitContainer.style.display = "block";
             noSign.style.display = "none";
             enemyPortrait.src = "img/" + type + ".png";
             enemyPortraitColor.style.background = color;
             monsterName.innerText = type;
-            monsterHealthSpan.innerText = health;
-            monsterAttackSpan.innerText = attack;
-            monsterDefenseSpan.innerText = defense;
+            monsterHealthBar.value = healthPercent;
+            monsterAttackBar.value = attackPercent;
+            monsterDefenseBar.value = defensePercent;
         },
         killedMonster: function () {
             noSign.style.display = "inline";
