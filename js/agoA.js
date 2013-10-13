@@ -568,7 +568,7 @@ var agoa = (function () {
                     renderer2.printToLog.addToHistory(greetings[currentGreeting]);
                     currentGreeting += 1;
                 }
-                renderer2.map.grid(player.cord, player.oldCord);
+                renderer2.map.grid(player.cord, player.oldCord, tiles);
                 checkIfMonsterNearby();
             }
             return;
@@ -1110,7 +1110,7 @@ var agoa = (function () {
             recursion(startX, startY);
             addMonstersToTiles();
             renderer2.map.gridBackground(tiles);
-            renderer2.map.grid(player.cord, player.cord);
+            renderer2.map.grid(player.cord, player.cord, tiles);
         }
         return {
             create: createBoard

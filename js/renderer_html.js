@@ -12,7 +12,7 @@
  */
 var renderer2 = (function () {
     'use strict';
-    var printToLog, promptToUser, alertToUser, gameOver, map,
+    var printToLog, alertToUser, gameOver, map,
         equippedUl = document.querySelectorAll('#equipped ul'),
         inventoryUl = document.querySelectorAll('#inventory ul'),
         storyContainer = document.querySelector('.storyContainer'),
@@ -107,7 +107,7 @@ var renderer2 = (function () {
             printToLog.addToHistory("Ding! Level " + level);
         },
         quit: function () {
-            printToLog.addToHistory("Quitting.", "background-color:red; color:white; font-weight:bold; font-size:30px;");
+            printToLog.addToHistory("Quitting.");
         } //,
         //     divider: function () {
         //     }
@@ -115,6 +115,7 @@ var renderer2 = (function () {
 
     map = (function () {
         var gameBoardGrid = document.querySelector('#gameGrid tbody'),
+            gameBoardTds,
             gameBoardSquares,
             gridXMax = 25,
             gridYMax = 19,
@@ -127,13 +128,7 @@ var renderer2 = (function () {
             td = document.createElement('td');
             var div = document.createElement('div');
             td.appendChild(div);
-            if (tile.blocked) {
-                td.className += " blocked";
-            } else {
-                if (undefined !== tile.monster) {
-                    div.innerText = '#';
-                }
-            }
+
             return td;
         }
 
@@ -148,15 +143,55 @@ var renderer2 = (function () {
                 }
                 gameBoardGrid.appendChild(tr);
             }
+            gameBoardTds = document.querySelectorAll("#gameGrid td");
             gameBoardSquares = document.querySelectorAll('#gameGrid td div');
+            gameBoardSquares[gridYMax * gridXMax - (2 + gridXMax)].innerText = "$";
+            gameBoardSquares[gridXMax + 1].innerText = '@';
         }
+
+        // private
+
+        function renderVisibilityForTile(index, tiles) {
+            if (!((' ' + gameBoardTds[index].className + ' ').indexOf(' blocked ') > -1 || (' ' + gameBoardTds[index].className + ' ').indexOf(' visible ') > -1)) {
+                if (tiles[index].blocked) {
+                    gameBoardTds[index].className += " blocked";
+                } else {
+                    gameBoardTds[index].className += " visible";
+                    if (undefined !== tiles[index].monster) {
+                        gameBoardSquares[index].innerText = '#';
+                    }
+                }
+            }
+        }
+
+        function render3x1(index, tiles, increment) {
+            renderVisibilityForTile(index, tiles);
+            renderVisibilityForTile(index + increment, tiles);
+            renderVisibilityForTile(index - increment, tiles);
+            return !tiles[index].blocked;
+        }
+
+        function renderVisibilityFromCord(index, tiles, increment) {
+            var ind = index;
+            while (render3x1(ind, tiles, increment === 1 ? gridXMax : 1)) {
+                ind += increment;
+            }
+            ind = index;
+            while (render3x1(ind, tiles, increment === 1 ? gridXMax : 1)) {
+                ind -= increment;
+            }
+        }
+
 
         //public
 
-        function renderGrid(playerCord, oldCord) {
+        function renderGrid(playerCord, oldCord, tiles) {
+
             gameBoardSquares[oldCord.y * gridXMax + oldCord.x].innerText = '';
-            gameBoardSquares[gridYMax * gridXMax - (2 + gridXMax)].innerText = "$";
             gameBoardSquares[playerCord.y * gridXMax + playerCord.x].innerText = '@';
+            renderVisibilityFromCord(playerCord.y * gridXMax + playerCord.x, tiles, gridXMax);
+            renderVisibilityFromCord(playerCord.y * gridXMax + playerCord.x, tiles, 1);
+
             return;
         }
 
