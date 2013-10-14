@@ -29,6 +29,14 @@ h3 {
     font-size: 12px;
     padding-left: 10px;
 }
+.inventoryScrollContainer {
+    height: 350px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.inventoryScrollContainer > h3{
+    margin-top:0;
+}
 .game {
     text-align: left;
     display: inline-block;
@@ -125,6 +133,7 @@ td {
     height:100%;
     position: absolute;
 }
+
 /*
     pink: #d67cda;
     green: #4d9f3e;

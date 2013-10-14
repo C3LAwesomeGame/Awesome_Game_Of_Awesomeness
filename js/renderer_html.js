@@ -23,6 +23,7 @@ var renderer2 = (function () {
         attackBar = document.querySelector("#attackBar"),
         defenseBar = document.querySelector("#defenseBar"),
         enemyPortraitColor = document.querySelector(".enemyPortraitColor"),
+        enemyPortraitFluff = document.querySelector("#enemyPortraitFluff"),
         enemyPortrait = document.querySelector("#enemyPortrait"),
         enemyPortraitContainer = document.querySelector("#enemyPortraitContainer"),
         noSign = document.querySelector("#noSign"),
@@ -67,10 +68,11 @@ var renderer2 = (function () {
             // attackSpan.innerText = attack;
             // defenseSpan.innerText = defense;
         },
-        monster: function (type, healthPercent, attackPercent, defensePercent, color) {
+        monster: function (type, healthPercent, attackPercent, defensePercent, color, fluff) {
             enemyPortraitContainer.style.display = "block";
             noSign.style.display = "none";
             enemyPortrait.src = "img/" + type + ".png";
+            enemyPortraitFluff.src = "img/" + fluff + ".png";
             enemyPortraitColor.style.background = color;
             monsterName.innerText = type;
             monsterHealthBar.value = healthPercent;
@@ -129,11 +131,10 @@ var renderer2 = (function () {
             tr,
             td;
 
-        function createTd(tile) {
+        function createTd() {
             td = document.createElement('td');
             var div = document.createElement('div');
             td.appendChild(div);
-
             return td;
         }
 

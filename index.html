@@ -14,12 +14,14 @@
                     <td>
                         <div id="inventory" class="box">
                             <h2>Inventory</h2>
-                            <h3>Armor</h3>
-                            <ul></ul>
-                            <h3>Weapons</h3>
-                            <ul></ul>
-                            <h3>Potions</h3>
-                            <ul></ul>
+                            <div class="inventoryScrollContainer">
+                                <h3>Armor</h3>
+                                <ul></ul>
+                                <h3>Weapons</h3>
+                                <ul></ul>
+                                <h3>Potions</h3>
+                                <ul></ul>
+                            </div>
                         </div> <!-- #inventory -->
                     </td>
                     <td>
@@ -41,7 +43,7 @@
                             </ul>
                             <div id="enemyPortraitContainer" class="enemyPortraitContainer">
                                 <span class="enemyPortraitColor"></span>
-                                <!-- <img src="img/rusty.png" class="enemyPortraitFluff"> -->
+                                <img src="img/Fluffy.png" id="enemyPortraitFluff">
                                 <img src="img/Wizard.png" id="enemyPortrait" class="enemyPortrait">
                                 <img src="img/noSign.png" id="noSign">
                             </div> <!-- #enemyPortraitContainer -->
@@ -84,7 +86,6 @@
             </tbody>
         </table> <!-- .gridLayoutTable -->
     </div> <!-- .game -->
-
     <!-- // <script type="text/javascript" src="js/movement.js"></script> -->
     <!-- // <script type="text/javascript" src="js/game_board.js"></script> -->
     <script type="text/javascript" src="js/renderer_log.js"></script>

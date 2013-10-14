@@ -314,7 +314,7 @@ var agoa = (function () {
         if (tof) {
             player.fighting = true;
             console.log(currentMonster);
-            renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex);
+            renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type);
             sound.monster();
         }
 
@@ -889,7 +889,7 @@ var agoa = (function () {
         sound.hit();
         renderer2.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
         player.printHero();
-        renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex);
+        renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type);
         if (player.getHealth() < 1) {
             renderer.gameOver();
             player.fighting = false;
