@@ -19,17 +19,17 @@ var sound = (function () {
         },
         hitWall = function () {
 
-            audio.src = "audio/nes-03-14.wav";
+            audio.src = "audio/hitWall.wav";
             playSound();
         },
         hit = function () {
 
-            audio.src = "audio/nes-09-09.wav";
+            audio.src = "audio/hit.wav";
             playSound();
         },
         monster = function () {
 
-            audio.src = "audio/nes-07-13.wav";
+            audio.src = "audio/monster.wav";
             playSound();
         },
         // monsterDie = function () {
@@ -39,11 +39,16 @@ var sound = (function () {
         // },
         newMap = function () {
 
-            audio.src = "audio/nes-15-00.wav";
+            audio.src = "audio/newMap.wav";
             playSound();
         },
         gameOver = function () {
             audio.src = "audio/epicSaxGuy.wav";
+            playSound();
+
+        },
+        ding = function () {
+            audio.src = "audio/ding.wav";
             playSound();
         };
     // itemFind = function () {
@@ -51,18 +56,14 @@ var sound = (function () {
     //     audio.src = "audio/nes-15-00.wav";
     //     playSound();
     // },
-    // ding = function () {
-    //     "use strict";
-    //     audio.src = "audio/nes-15-00.wav";
-    //     playSound();
-    // },
+    // 
     return {
         hitWall: hitWall,
         hit: hit,
         monster: monster,
         newMap: newMap,
-        gameOver: gameOver
+        gameOver: gameOver,
         //itemFind: itemFind,
-        //ding: ding;
+        ding: ding
     };
 }());

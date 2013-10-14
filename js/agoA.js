@@ -484,7 +484,7 @@ var agoa = (function () {
             player.maxHealth += 5;
             player.health = player.maxHealth;
             player.printHero();
-            // sound.ding();
+            sound.ding();
         },
         drinkPotion: function () {
             if (player.potionsRemaining > 0) {
