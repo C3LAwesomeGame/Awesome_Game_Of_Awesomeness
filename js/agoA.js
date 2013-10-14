@@ -484,7 +484,7 @@ var agoa = (function () {
             player.maxHealth += 5;
             player.health = player.maxHealth;
             player.printHero();
-            // sound.ding();
+            sound.ding();
         },
         drinkPotion: function () {
             if (player.potionsRemaining > 0) {
@@ -891,7 +891,8 @@ var agoa = (function () {
         player.printHero();
         renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type);
         if (player.getHealth() < 1) {
-            renderer.gameOver();
+            renderer2.gameOver();
+            sound.gameOver();
             player.fighting = false;
             return false;
         }

@@ -34,6 +34,9 @@ h3 {
     overflow-x: hidden;
     overflow-y: scroll;
 }
+.inventoryScrollContainer::-webkit-scrollbar {
+    display: none;
+}
 .inventoryScrollContainer > h3{
     margin-top:0;
 }
@@ -227,3 +230,46 @@ progress::-webkit-progress-value {
 progress::-moz-progress-bar {
     background-color: #f3f3f3;
 }
+
+#gameOver {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    border: 2px solid #b3b3b3;
+    overflow: scroll;
+    width: 600px;
+    height: 450px;
+    background: white;
+    margin-left: -300px;
+    box-shadow: 0px 10px 40px #666;
+}
+#gameOver h2 {
+    color: #db4437;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#gameOver::-webkit-scrollbar {
+    display: none;
+}
+#byebye {
+    padding: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    text-align: center;
+
+}
+
+#titles{
+
+}
+#titles:after{
+
+}
+#titlecontent{
+
+}
+
+

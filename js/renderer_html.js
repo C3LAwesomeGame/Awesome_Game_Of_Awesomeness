@@ -13,6 +13,7 @@
 var renderer2 = (function () {
     'use strict';
     var printToLog, alertToUser, gameOver, map,
+        gameOverDiv = document.querySelector('#gameOver'),
         equippedUl = document.querySelectorAll('#equipped ul'),
         inventoryUl = document.querySelectorAll('#inventory ul'),
         storyContainer = document.querySelector('.storyContainer'),
@@ -119,6 +120,10 @@ var renderer2 = (function () {
         //     divider: function () {
         //     }
     };
+    gameOver = function () {
+        gameOverDiv.style.display = "inline-block";
+
+    };
 
     map = (function () {
         var gameBoardGrid = document.querySelector('#gameGrid tbody'),
@@ -211,13 +216,12 @@ var renderer2 = (function () {
     // };
     // alertToUser = function (text) {
     // };
-    // gameOver = function () {
-    // };
     return {
         printToLog: printToLog,
-        map: map
+        map: map,
+        gameOver: gameOver
         // promptToUser: promptToUser,
         // alertToUser: alertToUser,
-        // gameOver: gameOver
+
     };
 }());
