@@ -891,7 +891,8 @@ var agoa = (function () {
         player.printHero();
         renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex);
         if (player.getHealth() < 1) {
-            renderer.gameOver();
+            renderer2.gameOver();
+            sound.gameOver();
             player.fighting = false;
             return false;
         }

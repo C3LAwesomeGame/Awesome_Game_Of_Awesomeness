@@ -32,9 +32,18 @@ var sound = (function () {
             audio.src = "audio/nes-07-13.wav";
             playSound();
         },
+        // monsterDie = function () {
+
+        //     audio.src = "";
+        //     playSound();
+        // },
         newMap = function () {
 
             audio.src = "audio/nes-15-00.wav";
+            playSound();
+        },
+        gameOver = function () {
+            audio.src = "audio/epicSaxGuy.wav";
             playSound();
         };
     // itemFind = function () {
@@ -51,7 +60,8 @@ var sound = (function () {
         hitWall: hitWall,
         hit: hit,
         monster: monster,
-        newMap: newMap
+        newMap: newMap,
+        gameOver: gameOver
         //itemFind: itemFind,
         //ding: ding;
     };

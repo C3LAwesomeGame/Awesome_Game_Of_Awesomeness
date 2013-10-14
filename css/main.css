@@ -218,3 +218,28 @@ progress::-webkit-progress-value {
 progress::-moz-progress-bar {
     background-color: #f3f3f3;
 }
+
+#gameOver {
+    position: fixed;
+    top: 10%;
+    left: 30%;
+    border: 2px solid gray;
+    overflow: scroll;
+    width: 600px;
+    height: 450px;
+    background: white;
+}
+#gameOver h2 {
+    color: #db4437;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#byebye {
+    padding: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    text-align: center;
+    
+}
