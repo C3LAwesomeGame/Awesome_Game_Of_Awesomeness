@@ -257,9 +257,19 @@ progress::-moz-progress-bar {
     padding: 5px;
     margin-left: 10px;
     margin-right: 10px;
-    margin-top: 20px;
+    margin-top: -10px;
     text-align: center;
 
+}
+#saxImg {
+    position: absolute;
+    left: 180px;
+}
+#discoBall {
+    position:absolute;
+    left: 40px;
+    top: 60px;
+    width: 180px;
 }
 
 #titles{
