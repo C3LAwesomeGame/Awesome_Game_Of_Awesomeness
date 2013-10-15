@@ -31,4 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // agoa.player.setName(renderer.promptToUser("What is your name, traveler?"));
     }
     setup();
+    setTimeout(function () {
+        document.querySelector("#intro").style.top = "-1000px";
+    }, 44000);
 });
