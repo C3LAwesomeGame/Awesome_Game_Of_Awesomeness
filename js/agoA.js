@@ -1099,6 +1099,9 @@ var agoa = (function () {
                 y = 1,
                 j;
             for (i = gridXMax + x; i < tiles.length; i += 1) {
+                if(i === gridYMax * gridXMax - (2 + gridXMax)) {
+                    tiles[i].goal = true;
+                }
                 valid = true;
                 if (!tiles[i].blocked && i % 2 === 0 && Math.random() > 0.8) {
                     for (y = 1; y < x; y += 1) {

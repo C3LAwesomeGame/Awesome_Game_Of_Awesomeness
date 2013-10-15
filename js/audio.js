@@ -12,10 +12,14 @@ soundlist
 var sound = (function () {
     "use strict";
     var audio = document.querySelector("#gamesound"),
+        introAudio = document.querySelector("#introSound"),
         playSound = function () {
-
             audio.load();
             audio.play();
+        },
+        stopIntroSound = function () {
+            introAudio.pause();
+            introAudio.currentTime = 0;
         },
         hitWall = function () {
 
@@ -59,6 +63,7 @@ var sound = (function () {
     // },
     //
     return {
+        stopIntroSound: stopIntroSound,
         hitWall: hitWall,
         hit: hit,
         monster: monster,

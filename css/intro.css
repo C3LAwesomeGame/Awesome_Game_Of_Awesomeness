@@ -192,6 +192,11 @@ h1 sub
     animation: scroll 100s linear 4s infinite;
 }
 
+#skipIntro {
+    position:fixed;
+    right:30px;
+    bottom: 30px;
+}
 /* animation */
 @-webkit-keyframes scroll {
     0% { top: 100%; }

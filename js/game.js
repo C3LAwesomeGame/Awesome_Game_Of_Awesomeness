@@ -3,6 +3,7 @@
 /*global agoa */
 /*global renderer */
 /*global renderer2 */
+/*global sound */
 /*
  *Here you'll find the cool story :P
  */
@@ -21,6 +22,11 @@ var story = [
 
 document.addEventListener("DOMContentLoaded", function () {
     'use strict';
+
+    document.querySelector("#skipIntro").onclick = function () {
+        renderer2.fadeOutIntro();
+        sound.stopIntroSound();
+    };
 
     function setup() {
         renderer2.printToLog.equipped(agoa.player.getEquipped());
