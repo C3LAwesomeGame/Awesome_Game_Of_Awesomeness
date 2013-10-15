@@ -570,10 +570,6 @@ var agoa = (function () {
                     }
                     break;
                 }
-                if (currentGreeting < greetings.length) {
-                    renderer2.printToLog.addToHistory(greetings[currentGreeting]);
-                    currentGreeting += 1;
-                }
                 renderer2.map.grid(player.cord, player.oldCord, tiles);
                 checkIfMonsterNearby();
             }
@@ -1099,7 +1095,7 @@ var agoa = (function () {
 
         function addMonstersToTiles() {
             var valid = true,
-                x = 8,
+                x = 3,
                 y = 1,
                 j;
             for (i = gridXMax + x; i < tiles.length; i += 1) {
