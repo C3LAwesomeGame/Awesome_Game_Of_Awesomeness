@@ -17,6 +17,8 @@
     opacity: 1;
 }
 
+
+
 p#start
 {
     position: relative;
@@ -92,6 +94,15 @@ h1 sub
     font-size: 0.3em;
     letter-spacing: 0;
     line-height: 0.8em;
+}
+
+#intro h1 {
+    position:absolute;
+    width:1100px;
+    font-size: 140px;
+    left:50%;
+    margin-left: -550px;
+
 }
 
 @-webkit-keyframes logo {
