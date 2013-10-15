@@ -43,7 +43,8 @@ var sound = (function () {
             playSound();
         },
         gameOver = function () {
-            audio.src = "audio/epicSaxGuy.wav";
+            audio.src = "audio/epic_sax_guy.mp3";
+            audio.setAttribute("loop");
             playSound();
 
         },
@@ -56,7 +57,7 @@ var sound = (function () {
     //     audio.src = "audio/nes-15-00.wav";
     //     playSound();
     // },
-    // 
+    //
     return {
         hitWall: hitWall,
         hit: hit,
