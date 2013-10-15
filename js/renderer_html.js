@@ -12,7 +12,7 @@
  */
 var renderer2 = (function () {
     'use strict';
-    var printToLog, alertToUser, gameOver, map,
+    var printToLog, alertToUser, gameOver, map, fadeOutIntro,
         gameOverDiv = document.querySelector('#gameOver'),
         equippedUl = document.querySelectorAll('#equipped ul'),
         inventoryUl = document.querySelectorAll('#inventory ul'),
@@ -122,7 +122,11 @@ var renderer2 = (function () {
     };
     gameOver = function () {
         gameOverDiv.style.display = "inline-block";
+    };
 
+    fadeOutIntro = function () {
+        document.querySelector("body").style.backgroundColor = "#f0f0f0";
+        document.querySelector("#intro").style.opacity = "0";
     };
 
     map = (function () {
@@ -219,7 +223,8 @@ var renderer2 = (function () {
     return {
         printToLog: printToLog,
         map: map,
-        gameOver: gameOver
+        gameOver: gameOver,
+        fadeOutIntro: fadeOutIntro
         // promptToUser: promptToUser,
         // alertToUser: alertToUser,
 

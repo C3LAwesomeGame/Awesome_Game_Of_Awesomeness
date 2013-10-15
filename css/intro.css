@@ -10,8 +10,11 @@
     font-weight: 700;
     color: #ff6;
     background-color: #000;
-    -webkit-transition-property: top, bottom;
-    -webkit-transition-duration: 5.0s;
+    /*-webkit-transition: background-color 1000ms linear;*/
+    -webkit-transition: opacity 1000ms linear;
+    /*-webkit-transition-property: top, bottom, background-color;*/
+    /*-webkit-transition-duration: 5.0s;*/
+    opacity: 1;
 }
 
 p#start

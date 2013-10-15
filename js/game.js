@@ -32,6 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     setup();
     setTimeout(function () {
-        document.querySelector("#intro").style.top = "-1000px";
-    }, 44000);
+        renderer2.fadeOutIntro();
+    }, 42500);
 });
