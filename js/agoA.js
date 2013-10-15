@@ -951,16 +951,16 @@ var agoa = (function () {
                     //find what to use
                     match = matchItemInInventory(input);
                     if (match !== undefined && !match.length) {
-                        renderer.alertToUser("You have equipped your " + prettyString.item(match));
+                        renderer2.printToLog.addToHistory("You have equipped your " + prettyString.item(match));
                         player.equipItem(match);
                     } else if (match && match.length > 1) {
                         renderer2.printToLog.addToHistory("You have:");
                         for (j = 0; j < match.length; j += 1) {
                             renderer2.printToLog.addToHistory(prettyString.item(match[j]));
                         }
-                        renderer.alertToUser("You have more that one item that fits that description,\nyou have to be more specific.");
+                        renderer2.printToLog.addToHistory("You have more that one item that fits that description,\nyou have to be more specific.");
                     } else {
-                        renderer.alertToUser("You don't have an item like that");
+                        renderer2.printToLog.addToHistory("You don't have an item like that");
                     }
                     break;
                 case "look":
