@@ -262,14 +262,29 @@ progress::-moz-progress-bar {
 
 }
 
-#titles{
-
+/*#titles{
+/*display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    border: 2px solid #b3b3b3;
+    overflow: scroll;
+    width: 600px;
+    height: 450px;
+    background: white;
+    margin-left: -300px;
+    box-shadow: 0px 10px 40px #666;
 }
-#titles:after{
-
+#titles h2{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 #titlecontent{
-
-}
+text-align: justify;
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+}*/
 
 
