@@ -531,6 +531,7 @@ var agoa = (function () {
             renderer2.printToLog.equipped(player.equipped);
         },
         movePlayer: function (direction) {
+            sound.backgroundMusic(); // Background Music starts to play as soon as you MOVE :)
             // gameBoardSquares[player.cord.y * gridXMax + player.cord.x].innerText = '';
             if (!player.fighting && player.health > 0) {
                 switch (direction) {
@@ -896,6 +897,7 @@ var agoa = (function () {
         if (player.getHealth() < 1) {
             renderer2.gameOver();
             sound.gameOver();
+            sound.backgroundMusicStop(); // Our background Music stops, as soon as we "spawn" our gameOver :)
             player.fighting = false;
             return false;
         }

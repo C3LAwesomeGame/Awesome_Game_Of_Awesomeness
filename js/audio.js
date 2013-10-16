@@ -1,18 +1,11 @@
 /*jslint browser:true */
 /*global renderer2: false, alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
-/*
-soundlist
-    09-09 hit
-    07-13 monster walk in
-    03-14 hit wall
-    15-00 rendera ny karta
-    hitta item
-    ding
-*/
+
 var sound = (function () {
     "use strict";
     var audio = document.querySelector("#gamesound"),
         introAudio = document.querySelector("#introSound"),
+        backM = document.querySelector("#backM"),
         playSound = function () {
             audio.load();
             audio.play();
@@ -24,6 +17,13 @@ var sound = (function () {
         playIntroSound = function () {
             introAudio.currentTime = 21;
             introAudio.play();
+        },
+        backgroundMusic = function () {
+            backM.play();
+
+        },
+        backgroundMusicStop = function () {
+            backM.pause();
         },
         hitWall = function () {
 
@@ -74,6 +74,8 @@ var sound = (function () {
         newMap: newMap,
         gameOver: gameOver,
         playIntroSound: playIntroSound,
+        backgroundMusic: backgroundMusic,
+        backgroundMusicStop: backgroundMusicStop,
         //itemFind: itemFind,
         ding: ding
     };
