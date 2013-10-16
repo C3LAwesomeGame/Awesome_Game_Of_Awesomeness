@@ -498,6 +498,7 @@ var agoa = (function () {
                 }
                 renderer2.printToLog.drankPotion(potionResult, player.health);
                 player.printHero();
+                renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
             } else {
                 renderer2.printToLog.noPotions();
             }
