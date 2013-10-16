@@ -18,6 +18,7 @@ var agoa = (function () {
         maxDefense = 59,
         gridXMax = 25,
         gridYMax = 19,
+        mapNr = 1,
         greetings = [
             "This is a world full of fluffy monsters, awesome roundhouse kicking ponies, rabid rabbits and everything else that's not normal to sane human beings",
             "You're the mighty, fierce, awesome adventurer from the far, far, very far away world",
@@ -570,8 +571,12 @@ var agoa = (function () {
                     }
                     break;
                 }
-                renderer2.map.grid(player.cord, player.oldCord, tiles);
-                checkIfMonsterNearby();
+                if (tiles[player.cord.y * gridXMax + player.cord.x].goal === true) {
+                    board.reset();
+                } else {
+                    renderer2.map.grid(player.cord, player.oldCord, tiles);
+                    checkIfMonsterNearby();
+                }
             }
             return;
         }
@@ -696,6 +701,7 @@ var agoa = (function () {
             health = resourceTabel.monsterArray[monster.typeValue].health;
         monster.maxHealth = health;
         monster.health = health;
+        monster.attack = monster.attack * (1 + (mapNr - 1) / 10);
         monster.alive = function () {
             return monster.health > 0;
         };
@@ -995,8 +1001,8 @@ var agoa = (function () {
     }
     board = (function () {
         var gameBoardSquares,
-            startX = 3,
-            startY = 5,
+            startX = 13,
+            startY = 9,
             i,
             j,
             tr,
@@ -1095,15 +1101,25 @@ var agoa = (function () {
 
         function addMonstersToTiles() {
             var valid = true,
-                x = 3,
+                x = 1,
                 y = 1,
-                j;
+                j,
+                monsterDensity = 0.95 - (0.1 * mapNr),
+                bottomRightCord = gridYMax * gridXMax - (2 + gridXMax),
+                topLeftCord = gridXMax + 1;
+            console.log(monsterDensity);
             for (i = gridXMax + x; i < tiles.length; i += 1) {
-                if(i === gridYMax * gridXMax - (2 + gridXMax)) {
-                    tiles[i].goal = true;
+                if (i !== player.cord.y * gridXMax + player.cord.x) {
+                    if (i === bottomRightCord || i === topLeftCord) {
+                        console.log(i);
+                        console.log(player.cord.x);
+                        console.log(player.cord.y);
+                        tiles[i].goal = true;
+                    }
                 }
+                x = 3;
                 valid = true;
-                if (!tiles[i].blocked && i % 2 === 0 && Math.random() > 0.8) {
+                if (i > gridXMax + x && !tiles[i].blocked && i % 2 === 0 && Math.random() > monsterDensity) {
                     for (y = 1; y < x; y += 1) {
                         if (i > gridXMax * y && i < gridXMax * y + x - y) {
                             valid = false;
@@ -1116,6 +1132,15 @@ var agoa = (function () {
             }
         }
 
+        function resetBoard() {
+            mapNr += 1;
+            renderer2.map.reset();
+            tiles = createTilesArray();
+            recursion(startX, startY);
+            addMonstersToTiles();
+            renderer2.map.grid(player.cord, player.cord, tiles);
+        }
+
         function createBoard() {
             tiles = createTilesArray();
             recursion(startX, startY);
@@ -1124,7 +1149,8 @@ var agoa = (function () {
             renderer2.map.grid(player.cord, player.cord, tiles);
         }
         return {
-            create: createBoard
+            create: createBoard,
+            reset: resetBoard
         }
 
     }());

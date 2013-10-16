@@ -200,6 +200,13 @@ var renderer2 = (function () {
             }
         }
 
+        function resetGrid() {
+            for (i = 0; i < gameBoardTds.length; i += 1) {
+                gameBoardTds[i].className = "";
+                gameBoardSquares[i].innerText = "";
+            }
+        }
+
 
         //public
 
@@ -215,6 +222,7 @@ var renderer2 = (function () {
 
         return {
             grid: renderGrid,
+            reset: resetGrid,
             gridBackground: renderGridBackground
         };
     }());
