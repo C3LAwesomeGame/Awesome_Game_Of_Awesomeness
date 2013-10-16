@@ -70,12 +70,15 @@ var renderer2 = (function () {
             // defenseSpan.innerText = defense;
         },
         monster: function (type, healthPercent, attackPercent, defensePercent, color, fluff) {
+            monsterName.innerText = type;
+            if (type === "Tom Blackmore") {
+                type = "Tom";
+            }
             enemyPortraitContainer.style.display = "block";
             noSign.style.display = "none";
             enemyPortrait.src = "img/" + type + ".png";
             enemyPortraitFluff.src = "img/" + fluff + ".png";
             enemyPortraitColor.style.background = color;
-            monsterName.innerText = type;
             monsterHealthBar.value = healthPercent;
             monsterAttackBar.value = attackPercent;
             monsterDefenseBar.value = defensePercent;
