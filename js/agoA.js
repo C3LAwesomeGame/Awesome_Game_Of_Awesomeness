@@ -703,7 +703,7 @@ var agoa = (function () {
             health = resourceTabel.monsterArray[monster.typeValue].health;
         monster.maxHealth = health;
         monster.health = health;
-        monster.attack = monster.attack * (1 + (mapNr - 1) / 10);
+        monster.attack = monster.attack * (1 + (mapNr - 1) / 20);
         monster.alive = function () {
             return monster.health > 0;
         };
