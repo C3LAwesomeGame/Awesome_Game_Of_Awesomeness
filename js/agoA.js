@@ -573,6 +573,7 @@ var agoa = (function () {
                 }
                 if (tiles[player.cord.y * gridXMax + player.cord.x].goal === true) {
                     board.reset();
+                    sound.newMap();
                 } else {
                     renderer2.map.grid(player.cord, player.oldCord, tiles);
                     checkIfMonsterNearby();
