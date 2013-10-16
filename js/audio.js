@@ -21,6 +21,10 @@ var sound = (function () {
             introAudio.pause();
             introAudio.currentTime = 0;
         },
+        playIntroSound = function () {
+            introAudio.currentTime = 21;
+            introAudio.play();
+        },
         hitWall = function () {
 
             audio.src = "audio/hitWall.wav";
@@ -69,6 +73,7 @@ var sound = (function () {
         monster: monster,
         newMap: newMap,
         gameOver: gameOver,
+        playIntroSound: playIntroSound,
         //itemFind: itemFind,
         ding: ding
     };
