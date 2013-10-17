@@ -15,7 +15,7 @@ var agoa = (function () {
         board,
         tiles,
         maxAttack = 35,
-        maxDefense = 59,
+        maxDefense = 30, // 59
         gridXMax = 25,
         gridYMax = 19,
         mapNr = 1,
@@ -92,7 +92,7 @@ var agoa = (function () {
         }, {
             type: "Tom Blackmore",
             attack: 4,
-            defense: 3,
+            defense: 2,
             health: 30,
             sourceArray: "monsterArray"
         }],
@@ -160,13 +160,13 @@ var agoa = (function () {
          */
         fluffArray: [{
             type: "Funky",
-            attack: 1,
-            defense: 1,
+            attack: 1.3,
+            defense: 1.3,
             sourceArray: "fluffArray"
         }, {
             type: "Fluffy",
-            attack: 1,
-            defense: 1,
+            attack: 1.1,
+            defense: 1.1,
             sourceArray: "fluffArray"
         }, {
             type: "Shiny",
@@ -176,7 +176,7 @@ var agoa = (function () {
         }, {
             type: "Rusty",
             attack: 0.5,
-            defense: 1,
+            defense: 0.8,
             sourceArray: "fluffArray"
         }, {
             type: "Enchanted",
@@ -190,13 +190,13 @@ var agoa = (function () {
             sourceArray: "fluffArray"
         }, {
             type: "Beautiful",
-            attack: 1.2,
-            defense: 1,
+            attack: 1.4,
+            defense: 1.4,
             sourceArray: "fluffArray"
         }, {
             type: "Disco",
-            attack: 1.3,
-            defense: 1.4,
+            attack: 1.2,
+            defense: 1.3,
             sourceArray: "fluffArray"
         }],
         /*
@@ -239,17 +239,17 @@ var agoa = (function () {
         armorArray: [{
             type: "Chest",
             attack: 1,
-            defense: 1.2,
+            defense: 1.9,
             sourceArray: "armorArray"
         }, {
             type: "Helm",
             attack: 1,
-            defense: 1.1,
+            defense: 1.6,
             sourceArray: "armorArray"
         }, {
             type: "Cup",
             attack: 1,
-            defense: 1,
+            defense: 1.4,
             sourceArray: "armorArray"
         }],
         /*
@@ -273,17 +273,17 @@ var agoa = (function () {
         }, {
             type: "Big",
             attack: 1.2,
-            defense: 1.1,
+            defense: 1.2,
             sourceArray: "sizeArray"
         }, {
             type: "Giant",
             attack: 1.4,
-            defense: 1.1,
+            defense: 1.4,
             sourceArray: "sizeArray"
         }, {
             type: "Mighty",
             attack: 1.6,
-            defense: 1.1,
+            defense: 1.6,
             sourceArray: "sizeArray"
         }]
     };
@@ -370,13 +370,13 @@ var agoa = (function () {
             weapon: [{
                 // Tiny green common dagger
                 typeValue: 0,
-                sizeValue: 0,
+                sizeValue: 2,
                 fluffValue: 5,
                 colorValue: 1,
                 attack: 1,
                 defense: 1,
                 sourceArray: "weaponArray"
-            }, {
+            }/*, {
                 // Average green fluffy 2H-Sword
                 typeValue: 1,
                 sizeValue: 2,
@@ -394,7 +394,7 @@ var agoa = (function () {
                 attack: 5,
                 defense: 1,
                 sourceArray: "weaponArray"
-            }]
+            }*/]
         },
         equipped: {
             chest: {
@@ -430,10 +430,10 @@ var agoa = (function () {
             weapon: {
                 // Tiny green common dagger
                 typeValue: 0,
-                sizeValue: 0,
+                sizeValue: 2,
                 fluffValue: 5,
                 colorValue: 1,
-                attack: 1,
+                attack: 2,
                 defense: 1,
                 sourceArray: "weaponArray"
             }
@@ -447,7 +447,7 @@ var agoa = (function () {
             return player.name;
         },
         getLevel: function () {
-            return Math.ceil(player.xp / 20);
+            return Math.ceil(player.xp / 30);
         },
         getXp: function () {
             return player.xp;
@@ -491,7 +491,7 @@ var agoa = (function () {
             if (player.potionsRemaining > 0) {
                 var potionResult = 0;
                 player.potionsRemaining -= 1;
-                potionResult += Math.ceil(15 + 10 * Math.random());
+                potionResult += Math.ceil(15 + mapNr * 10 * Math.random());
                 player.health += potionResult;
                 if (player.health > player.maxHealth) {
                     player.health = player.maxHealth;
@@ -668,7 +668,7 @@ var agoa = (function () {
         attack = resourceTabel.sizeArray[item.sizeValue].attack * resourceTabel.fluffArray[item.fluffValue].attack * resourceTabel.colorArray[item.colorValue].attack * resourceTabel[item.sourceArray][item.typeValue].attack;
         defense = resourceTabel.sizeArray[item.sizeValue].defense * resourceTabel.fluffArray[item.fluffValue].defense * resourceTabel.colorArray[item.colorValue].defense * resourceTabel[item.sourceArray][item.typeValue].defense;
         item.attack = Math.round(attack);
-        item.defense = Math.round(defense);
+        item.defense = Math.ceil(defense);
         return item;
     }
 
@@ -702,10 +702,10 @@ var agoa = (function () {
 
     function generateRandomMonster() {
         var monster = generateRandomFromArray("monsterArray"),
-            health = resourceTabel.monsterArray[monster.typeValue].health;
-        monster.maxHealth = health;
+            health = Math.round(resourceTabel.monsterArray[monster.typeValue].health * (mapNr / 2));
         monster.health = health;
-        monster.attack = monster.attack * (1 + (mapNr - 1) / 20);
+        monster.maxHealth = health;
+        monster.attack = Math.round(monster.attack * (mapNr / 2));
         monster.alive = function () {
             return monster.health > 0;
         };
@@ -767,7 +767,7 @@ var agoa = (function () {
             attributesMatched = {
                 color: false,
                 fluff: false,
-                size: false
+                sizez: false
             };
         items = getKeysFromStringInWordsObject(text, words.subcategories.items.weapons);
         if (!items.length) {
@@ -781,6 +781,7 @@ var agoa = (function () {
         colors = getKeysFromStringInWordsObject(text, words.subcategories.colors);
         fluff = getKeysFromStringInWordsObject(text, words.subcategories.fluff);
         sizes = getKeysFromStringInWordsObject(text, words.subcategories.sizes);
+        console.log(sizes);
         if (isWeapon) {
             for (i = 0; i < player.inventory.weapon.length; i += 1) {
                 if (player.inventory.weapon[i].typeValue === Number(items[0])) {
@@ -824,11 +825,11 @@ var agoa = (function () {
                 for (i = 0; i < posibleItems.length; i += 1) {
                     if (posibleItems[i].sizeValue === Number(sizes[0])) {
                         moreLikleyItems.push(posibleItems[i]);
-                        attributesMatched.size = true;
+                        attributesMatched.sizez = true;
                     }
                 }
             }
-            if (moreLikleyItems.length === 1 || (attributesMatched.color && attributesMatched.fluff && attributesMatched.size)) {
+            if (moreLikleyItems.length === 1 || (attributesMatched.color && attributesMatched.fluff && attributesMatched.sizez)) {
                 return moreLikleyItems[0];
             }
             if (moreLikleyItems.length > 1) {
