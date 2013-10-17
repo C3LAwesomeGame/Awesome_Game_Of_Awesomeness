@@ -12,7 +12,8 @@
  */
 var renderer2 = (function () {
     'use strict';
-    var printToLog, alertToUser, gameOver, map, fadeOutIntro,
+    var printToLog, gameOver, map, fadeOutIntro, updadePlaceholderForInput,
+        inputField = document.querySelector("#userInputField"),
         gameOverDiv = document.querySelector('#gameOver'),
         equippedUl = document.querySelectorAll('#equipped ul'),
         inventoryUl = document.querySelectorAll('#inventory ul'),
@@ -135,6 +136,10 @@ var renderer2 = (function () {
         }, 1100);
     };
 
+    updadePlaceholderForInput = function (text) {
+        inputField.placeholder = text;
+    };
+
     map = (function () {
         var gameBoardGrid = document.querySelector('#gameGrid tbody'),
             gameBoardTds,
@@ -243,7 +248,8 @@ var renderer2 = (function () {
         printToLog: printToLog,
         map: map,
         gameOver: gameOver,
-        fadeOutIntro: fadeOutIntro
+        fadeOutIntro: fadeOutIntro,
+        updadePlaceholderForInput: updadePlaceholderForInput
         // promptToUser: promptToUser,
         // alertToUser: alertToUser,
 

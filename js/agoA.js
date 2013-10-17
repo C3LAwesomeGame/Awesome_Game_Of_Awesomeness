@@ -440,6 +440,7 @@ var agoa = (function () {
         },
         setName: function (name) {
             player.name = name;
+            renderer2.updadePlaceholderForInput("What do you want to do...?");
             player.printHero();
         },
         getName: function () {
@@ -531,9 +532,10 @@ var agoa = (function () {
             renderer2.printToLog.equipped(player.equipped);
         },
         movePlayer: function (direction) {
-            sound.backgroundMusic(); // Background Music starts to play as soon as you MOVE :)
+            // Background Music starts to play as soon as you MOVE :)
             // gameBoardSquares[player.cord.y * gridXMax + player.cord.x].innerText = '';
-            if (!player.fighting && player.health > 0) {
+            if (!player.fighting && player.health > 0 && player.name !== "Hero") {
+                sound.backgroundMusic();
                 switch (direction) {
                 case 0:
                     if (player.cord.y > 0 && !tiles[(player.cord.y - 1) * gridXMax + player.cord.x].blocked) {
@@ -910,97 +912,101 @@ var agoa = (function () {
     }
 
     function takeActionOnString(input) {
-        var actions = getActionsFromString(input),
-            item = currentMonster,
-            i,
-            j,
-            match,
-            stillInEngagement = true;
-        if (actions) {
-            stillInEngagement = true;
-            for (i = 0; i < actions.length; i += 1) {
-                switch (actions[i]) {
-                case "hit":
-                    if (player.fighting) {
-                        stillInEngagement = resolveCombat(item);
-                    } else {
-                        renderer2.printToLog.addToHistory("There is nothing relevant to hit...");
-                    }
-                    break;
-                case "pat":
-                    renderer2.printToLog.addToHistory("The " + prettyString.item(item) + " does not like it.");
-                    break;
-                case "move":
-                    if (player.fighting) {
-                        player.fighting = false;
-                        if (player.cord.x - player.oldCord.x > 0) {
-                            player.movePlayer(3);
-                        } else if (player.cord.x - player.oldCord.x < 0) {
-                            player.movePlayer(1);
+        if (player.name === "Hero") {
+            player.setName(input.trim());
+        } else {
+            var actions = getActionsFromString(input),
+                item = currentMonster,
+                i,
+                j,
+                match,
+                stillInEngagement = true;
+            if (actions) {
+                stillInEngagement = true;
+                for (i = 0; i < actions.length; i += 1) {
+                    switch (actions[i]) {
+                    case "hit":
+                        if (player.fighting) {
+                            stillInEngagement = resolveCombat(item);
                         } else {
-                            if (player.cord.y - player.oldCord.y > 0) {
-                                player.movePlayer(0);
+                            renderer2.printToLog.addToHistory("There is nothing relevant to hit...");
+                        }
+                        break;
+                    case "pat":
+                        renderer2.printToLog.addToHistory("The " + prettyString.item(item) + " does not like it.");
+                        break;
+                    case "move":
+                        if (player.fighting) {
+                            player.fighting = false;
+                            if (player.cord.x - player.oldCord.x > 0) {
+                                player.movePlayer(3);
+                            } else if (player.cord.x - player.oldCord.x < 0) {
+                                player.movePlayer(1);
                             } else {
-                                player.movePlayer(2);
+                                if (player.cord.y - player.oldCord.y > 0) {
+                                    player.movePlayer(0);
+                                } else {
+                                    player.movePlayer(2);
+                                }
                             }
-                        }
 
-                        renderer2.printToLog.addToHistory("You got away!");
-                        stillInEngagement = false;
-                    }
-                    break;
-                case "drink":
-                    player.drinkPotion();
-                    break;
-                case "use":
-                    //find what to use
-                    match = matchItemInInventory(input);
-                    if (match !== undefined && !match.length) {
-                        renderer2.printToLog.addToHistory("You have equipped your " + prettyString.item(match));
-                        player.equipItem(match);
-                    } else if (match && match.length > 1) {
-                        renderer2.printToLog.addToHistory("You have:");
-                        for (j = 0; j < match.length; j += 1) {
-                            renderer2.printToLog.addToHistory(prettyString.item(match[j]));
+                            renderer2.printToLog.addToHistory("You got away!");
+                            stillInEngagement = false;
                         }
-                        renderer2.printToLog.addToHistory("You have more that one item that fits that description,\nyou have to be more specific.");
-                    } else {
-                        renderer2.printToLog.addToHistory("You don't have an item like that");
+                        break;
+                    case "drink":
+                        player.drinkPotion();
+                        break;
+                    case "use":
+                        //find what to use
+                        match = matchItemInInventory(input);
+                        if (match !== undefined && !match.length) {
+                            renderer2.printToLog.addToHistory("You have equipped your " + prettyString.item(match));
+                            player.equipItem(match);
+                        } else if (match && match.length > 1) {
+                            renderer2.printToLog.addToHistory("You have:");
+                            for (j = 0; j < match.length; j += 1) {
+                                renderer2.printToLog.addToHistory(prettyString.item(match[j]));
+                            }
+                            renderer2.printToLog.addToHistory("You have more that one item that fits that description,\nyou have to be more specific.");
+                        } else {
+                            renderer2.printToLog.addToHistory("You don't have an item like that");
+                        }
+                        break;
+                    case "look":
+                        renderer2.printToLog.addToHistory("You look around and see a tree and a " + prettyString.item(item));
+                        break;
+                    case "take":
+                        renderer2.printToLog.addToHistory("You pick up a tiny rock");
+                        break;
+                    case "equipped":
+                        renderer.printToLog.equipped(player.equipped);
+                        break;
+                    case "inventory":
+                        renderer.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
+                        break;
+                    case "win":
+                        renderer2.printToLog.addToHistory("You have summoned the all-knowing genie known as Pablo de la Win");
+                        break;
+                    case "clear":
+                        console.clear();
+                        break;
+                    case "quit":
+                        renderer2.printToLog.quit();
+                        return undefined;
+                    default:
+                        renderer2.printToLog.addToHistory("What do you want to do?");
+                        renderer.alertToUser("I'm sorry I do not understand what you want to do.");
                     }
-                    break;
-                case "look":
-                    renderer2.printToLog.addToHistory("You look around and see a tree and a " + prettyString.item(item));
-                    break;
-                case "take":
-                    renderer2.printToLog.addToHistory("You pick up a tiny rock");
-                    break;
-                case "equipped":
-                    renderer.printToLog.equipped(player.equipped);
-                    break;
-                case "inventory":
-                    renderer.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
-                    break;
-                case "win":
-                    renderer2.printToLog.addToHistory("You have summoned the all-knowing genie known as Pablo de la Win");
-                    break;
-                case "clear":
-                    console.clear();
-                    break;
-                case "quit":
-                    renderer2.printToLog.quit();
-                    return undefined;
-                default:
-                    renderer2.printToLog.addToHistory("What do you want to do?");
-                    renderer.alertToUser("I'm sorry I do not understand what you want to do.");
                 }
+                if (!stillInEngagement) {
+                    player.fighting = false;
+                    currentMonster = undefined;
+                }
+                return;
             }
-            if (!stillInEngagement) {
-                player.fighting = false;
-                currentMonster = undefined;
-            }
-            return;
+            renderer.alertToUser("You must make a choice as you stand in front of the " + prettyString.item(item));
         }
-        renderer.alertToUser("You must make a choice as you stand in front of the " + prettyString.item(item));
     }
     board = (function () {
         var gameBoardSquares,
@@ -1118,7 +1124,7 @@ var agoa = (function () {
                 }
                 valid = true;
                 if (i > gridXMax && !tiles[i].blocked && Math.random() > monsterDensity) {
-                    for (y = 1, x = 4; x > 0 ; y += 1, x -= 1) {
+                    for (y = 1, x = 4; x > 0; y += 1, x -= 1) {
                         if (i > gridXMax * y && i < gridXMax * y + x) {
                             valid = false;
                         } else if (i >= gridXMax * (gridYMax - y) - x && i <= gridXMax * (gridYMax - y)) {
@@ -1173,7 +1179,8 @@ var agoa = (function () {
             getTotalAttack: player.getTotalAttack,
             getTotalDefense: player.getTotalDefense,
             drinkPotion: player.drinkPotion,
-            move: player.movePlayer
+            move: player.movePlayer,
+            printHero: player.printHero
         },
         prettyString: prettyString,
         calculatePowerForItem: calculatePowerForItem,

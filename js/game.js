@@ -31,10 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
     function setup() {
         renderer2.printToLog.equipped(agoa.player.getEquipped());
         renderer2.printToLog.inventory(agoa.player.getInventory(), agoa.player.getPotionsRemaining());
-        // renderer2.printToLog.hero("Hero", agoa.player.getLevel(), 100, agoa.player.getTotalAttack(), agoa.player.getTotalDefense());
+        agoa.player.printHero();
         agoa.board.create();
         renderer2.printToLog.addToHistory("Welcome to the Awesome Game of Awesomeness");
-        // agoa.player.setName(renderer.promptToUser("What is your name, traveler?"));
+        renderer2.printToLog.addToHistory("What is your name traveler?");
     }
     setup();
     sound.playIntroSound();
