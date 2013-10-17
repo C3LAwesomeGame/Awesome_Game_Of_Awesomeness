@@ -170,7 +170,18 @@ td {
 .enemyPortraitColor {
     background: #9a72d4;
 }
+#mapLevel {
+    position:absolute;
+    /*z-index:5;*/
+    font-size: 300px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: #f8f8f8;
+
+}
 #gameBoard {
+    /*z-index: 10;*/
     overflow: hidden;
     width: 526px;
     height: 400px;
@@ -186,7 +197,7 @@ td {
 }
 #gameGrid td {
     border: 1px solid #f2f2f2;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0);
     text-align: center;
     /*color: white;*/
     vertical-align: middle;
@@ -199,7 +210,7 @@ td {
     background-color: #e6e6e6;
 }
 #gameGrid .notVisible {
-    background-color: #000000;
+    background-color: rgba(255, 255, 255, 0);
 }
 #gameGrid td, #gameGrid tr, #gameGrid td div {
     width: 20px;

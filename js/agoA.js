@@ -314,7 +314,6 @@ var agoa = (function () {
 
         if (tof) {
             player.fighting = true;
-            console.log(currentMonster);
             renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type);
             sound.monster();
         }
@@ -925,7 +924,7 @@ var agoa = (function () {
                     if (player.fighting) {
                         stillInEngagement = resolveCombat(item);
                     } else {
-                        renderer.alertToUser("There is nothing relevant to hit...");
+                        renderer2.printToLog.addToHistory("There is nothing relevant to hit...");
                     }
                     break;
                 case "pat":
@@ -1111,13 +1110,9 @@ var agoa = (function () {
                 monsterDensity = 0.95 - (0.1 * mapNr),
                 bottomRightCord = gridYMax * gridXMax - (2 + gridXMax),
                 topLeftCord = gridXMax + 1;
-            console.log(monsterDensity);
             for (i = gridXMax + x; i < tiles.length; i += 1) {
                 if (i !== player.cord.y * gridXMax + player.cord.x) {
                     if (i === bottomRightCord || i === topLeftCord) {
-                        console.log(i);
-                        console.log(player.cord.x);
-                        console.log(player.cord.y);
                         tiles[i].goal = true;
                     }
                 }
@@ -1138,7 +1133,7 @@ var agoa = (function () {
 
         function resetBoard() {
             mapNr += 1;
-            renderer2.map.reset();
+            renderer2.map.reset(mapNr);
             tiles = createTilesArray();
             recursion(startX, startY);
             addMonstersToTiles();

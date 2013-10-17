@@ -130,12 +130,16 @@ var renderer2 = (function () {
     fadeOutIntro = function () {
         document.querySelector("body").style.backgroundColor = "#f0f0f0";
         document.querySelector("#intro").style.opacity = "0";
+        setTimeout(function () {
+            document.querySelector("#intro").style.display = "none";
+        }, 1100);
     };
 
     map = (function () {
         var gameBoardGrid = document.querySelector('#gameGrid tbody'),
             gameBoardTds,
             gameBoardSquares,
+            mapLevel = document.querySelector("#mapLevel"),
             gridXMax = 25,
             gridYMax = 19,
             i,
@@ -203,11 +207,13 @@ var renderer2 = (function () {
             }
         }
 
-        function resetGrid() {
+        function resetGrid(mapNr) {
             for (i = 0; i < gameBoardTds.length; i += 1) {
                 gameBoardTds[i].className = "";
                 gameBoardSquares[i].innerText = "";
             }
+            mapLevel.innerText = mapNr;
+
         }
 
 
