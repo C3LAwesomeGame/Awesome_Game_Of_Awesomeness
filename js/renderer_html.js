@@ -167,7 +167,6 @@ var renderer2 = (function () {
             }
             gameBoardTds = document.querySelectorAll("#gameGrid td");
             gameBoardSquares = document.querySelectorAll('#gameGrid td div');
-            // gameBoardSquares[gridYMax * gridXMax - (2 + gridXMax)].innerText = "$";
             gameBoardSquares[gridXMax + 1].innerText = '@';
         }
 

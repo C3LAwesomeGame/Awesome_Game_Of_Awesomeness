@@ -1104,23 +1104,24 @@ var agoa = (function () {
 
         function addMonstersToTiles() {
             var valid = true,
-                x = 1,
-                y = 1,
+                x,
+                y,
                 j,
                 monsterDensity = 0.95 - (0.1 * mapNr),
                 bottomRightCord = gridYMax * gridXMax - (2 + gridXMax),
                 topLeftCord = gridXMax + 1;
-            for (i = gridXMax + x; i < tiles.length; i += 1) {
+            for (i = 0; i < tiles.length; i += 1) {
                 if (i !== player.cord.y * gridXMax + player.cord.x) {
                     if (i === bottomRightCord || i === topLeftCord) {
                         tiles[i].goal = true;
                     }
                 }
-                x = 3;
                 valid = true;
-                if (i > gridXMax + x && !tiles[i].blocked && i % 2 === 0 && Math.random() > monsterDensity) {
-                    for (y = 1; y < x; y += 1) {
-                        if (i > gridXMax * y && i < gridXMax * y + x - y) {
+                if (i > gridXMax && !tiles[i].blocked && Math.random() > monsterDensity) {
+                    for (y = 1, x = 4; x > 0 ; y += 1, x -= 1) {
+                        if (i > gridXMax * y && i < gridXMax * y + x) {
+                            valid = false;
+                        } else if (i >= gridXMax * (gridYMax - y) - x && i <= gridXMax * (gridYMax - y)) {
                             valid = false;
                         }
                     }
