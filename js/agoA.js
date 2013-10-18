@@ -368,15 +368,16 @@ var agoa = (function () {
                 sourceArray: "armorArray"
             }],
             weapon: [{
-                // Tiny green common dagger
-                typeValue: 0,
-                sizeValue: 2,
-                fluffValue: 5,
-                colorValue: 1,
-                attack: 1,
-                defense: 1,
-                sourceArray: "weaponArray"
-            }/*, {
+                    // Tiny green common dagger
+                    typeValue: 0,
+                    sizeValue: 2,
+                    fluffValue: 5,
+                    colorValue: 1,
+                    attack: 1,
+                    defense: 1,
+                    sourceArray: "weaponArray"
+                }
+                /*, {
                 // Average green fluffy 2H-Sword
                 typeValue: 1,
                 sizeValue: 2,
@@ -394,7 +395,8 @@ var agoa = (function () {
                 attack: 5,
                 defense: 1,
                 sourceArray: "weaponArray"
-            }*/]
+            }*/
+            ]
         },
         equipped: {
             chest: {
@@ -781,7 +783,6 @@ var agoa = (function () {
         colors = getKeysFromStringInWordsObject(text, words.subcategories.colors);
         fluff = getKeysFromStringInWordsObject(text, words.subcategories.fluff);
         sizes = getKeysFromStringInWordsObject(text, words.subcategories.sizes);
-        console.log(sizes);
         if (isWeapon) {
             for (i = 0; i < player.inventory.weapon.length; i += 1) {
                 if (player.inventory.weapon[i].typeValue === Number(items[0])) {
@@ -934,7 +935,10 @@ var agoa = (function () {
                         }
                         break;
                     case "pat":
-                        renderer2.printToLog.addToHistory("The " + prettyString.item(item) + " does not like it.");
+                        if (item) {
+                            renderer2.printToLog.addToHistory("The " + prettyString.item(item) + " does not like it.");
+                        }
+
                         break;
                     case "move":
                         if (player.fighting) {
@@ -975,7 +979,11 @@ var agoa = (function () {
                         }
                         break;
                     case "look":
-                        renderer2.printToLog.addToHistory("You look around and see a tree and a " + prettyString.item(item));
+                        if (item) {
+                            renderer2.printToLog.addToHistory("You look around and see a " + prettyString.item(item));
+                        } else {
+                            renderer2.printToLog.addToHistory("You look around and see some walls");
+                        }
                         break;
                     case "take":
                         renderer2.printToLog.addToHistory("You pick up a tiny rock");
