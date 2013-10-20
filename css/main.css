@@ -1,0 +1,330 @@
+html, body {
+    text-align: center;
+    /*font-family: helvetica;*/
+    font-size: 15px;
+    font-family: "Open Sans", sans-serif;
+    color: #737373;
+    background-color: #000;
+    /*background: #f0f0f0;*/
+    width: 100%;
+    height: 100%;
+     -webkit-transition: background-color 2000ms linear;
+     -moz-transition: background-color 2000ms linear;
+     -o-transition: background-color 2000ms linear;
+     -ms-transition: background-color 2000ms linear;
+     transition: background-color 2000ms linear;
+    overflow:hidden;
+    margin: 0;
+    padding: 0;
+}
+ul {
+    list-style-type: none;
+    padding:0;
+    margin: 0;
+}
+h1, h2, h3 {
+    margin: 0;
+    font-weight: normal;
+}
+h2 {
+    padding: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    background: #f5f5f5;
+}
+h3 {
+    margin-top: 5px;
+}
+#inventory li, #equipped li {
+    font-size: 12px;
+    padding-left: 10px;
+}
+.inventoryScrollContainer {
+    height: 350px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.inventoryScrollContainer::-webkit-scrollbar {
+    display: none;
+}
+.inventoryScrollContainer > h3{
+    margin-top:0;
+}
+.gameContainer {
+    position:relative;
+    height: 100%;
+    width: 100%;
+}
+.game {
+    text-align: left;
+    display: inline-block;
+    /*border: 5px solid black;*/
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin: auto auto;
+    margin-top:-360px;
+    margin-left: -507px;
+    background: #ffffff;
+    padding: 10px;
+}
+.gridLayoutTable {
+    table-layout:fixed;
+}
+.gridLayoutTable tr:nth-child(1) {
+    vertical-align: top;
+    height: 400px;
+    max-height: 400px;
+}
+.gridLayoutTable tr:nth-child(2) {
+    vertical-align: top;
+    height: 270px;
+    max-height: 270px;
+}
+.gridLayoutTable td:nth-child(1) {
+    width: 210px;
+    max-width:210px;
+    min-width: 210px;
+    white-space: nowrap;
+}
+.gridLayoutTable td:nth-child(2) {
+    width: 526px;
+    max-width: 526px;
+    min-width: 526px;
+    padding: 0 10px;
+}
+.gridLayoutTable td:nth-child(3) {
+    width: 225px;
+    max-width: 225px;
+    min-width: 225px;
+}
+td {
+    /*border: 3px solid blue;*/
+    position:relative;
+    overflow: hidden;
+    vertical-align:top;
+}
+.box {
+    width: 100%;
+    height: 100%;
+}
+.storyContainer {
+    margin-bottom: 35px;
+    overflow: scroll;
+    width: 526px;
+    height: 270px;
+    background: #f5f5f5;
+}
+.storyContainer::-webkit-scrollbar {
+    display: none;
+}
+.storyContainer li {
+    list-style-type: none;
+    border-bottom: 3px solid #ffffff;
+    padding: 5px 10px 5px 10px;
+}
+.storyContainer input {
+    position: absolute;
+    width: 505px;
+    height: 25px;
+    /*border: 3px solid green;*/
+    bottom:0;
+    padding: 5px 10px 5px 10px;
+    margin: 0;
+    outline: none;
+    border: 0 solid;
+    font-size: 20px;
+    font-family: "Open Sans", sans-serif;
+    color: #f2f2f2;
+    background: #4d4d4d;
+}
+.storyContainer input:focus {
+    outline: 0;
+}
+.enemyPortraitContainer{
+    display: none;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: auto auto;
+    margin-top: 10px;
+    overflow: hidden;
+}
+.enemyPortraitContainer * {
+    width: 100%;
+    height:100%;
+    position: absolute;
+}
+
+/*
+    pink: #d67cda;
+    green: #4d9f3e;
+    blue: #3e589f;
+    red: #9f3a40;
+    black: #343231;
+    white: #fcfdec;
+    yellow: #cdc455;
+    orange: #e49d59;
+    purple: #9a72d4;
+ */
+.enemyPortraitColor {
+    background: #9a72d4;
+}
+#mapLevel {
+    position:absolute;
+    /*z-index:5;*/
+    font-size: 300px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: #f8f8f8;
+
+}
+#gameBoard {
+    /*z-index: 10;*/
+    overflow: hidden;
+    width: 526px;
+    height: 400px;
+    padding: 0;
+    font-size: 10px;
+}
+#gameBoard table {
+    padding: 0;
+    margin: auto auto;
+    border-collapse: collapse;
+    table-layout:fixed;
+    width: 526;
+}
+#gameGrid td {
+    border: 1px solid #f2f2f2;
+    background-color: rgba(255, 255, 255, 0);
+    text-align: center;
+    /*color: white;*/
+    vertical-align: middle;
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: 20px;
+}
+#gameGrid .blocked {
+    background-color: #e6e6e6;
+}
+#gameGrid .notVisible {
+    background-color: rgba(255, 255, 255, 0);
+}
+#gameGrid td, #gameGrid tr, #gameGrid td div {
+    width: 20px;
+    height: 20px;
+    max-width: 20px;
+    max-height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 0;
+}
+
+progress {
+    background-color: #f3f3f3;
+    border-radius: 9px;
+    /*overflow: hidden;*/
+}
+progress::-webkit-progress-bar {
+    background-color: #f3f3f3;
+    border-radius: 9px;
+}
+progress::-webkit-progress-value {
+    background-color: #737373;
+    border-radius: 9px;
+}
+
+#xpBar::-webkit-progress-value {
+    background-color: #4285f3;
+}
+#healthBar::-webkit-progress-value {
+    background-color: #db4437;
+}
+#attackBar::-webkit-progress-value {
+    background-color: #f4b400;
+}
+#defenseBar::-webkit-progress-value {
+    background-color: #0f9d58;
+}
+#monsterHealthBar::-webkit-progress-value {
+    background-color: #db4437;
+}
+#monsterAttackBar::-webkit-progress-value {
+    background-color: #f4b400;
+}
+#monsterDefenseBar::-webkit-progress-value {
+    background-color: #0f9d58;
+}
+progress::-moz-progress-bar {
+    background-color: #f3f3f3;
+}
+
+#gameOver {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    border: 2px solid #b3b3b3;
+    overflow: scroll;
+    width: 600px;
+    height: 450px;
+    background: white;
+    margin-left: -300px;
+    box-shadow: 0px 10px 40px #666;
+}
+#gameOver h2 {
+    color: #db4437;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#gameOver::-webkit-scrollbar {
+    display: none;
+}
+#byebye {
+    padding: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: -10px;
+    text-align: center;
+
+}
+#saxImg {
+    position: absolute;
+    left: 180px;
+}
+#discoBall {
+    position:absolute;
+    left: 40px;
+    top: 60px;
+    width: 180px;
+}
+
+/*#titles{
+/*display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    border: 2px solid #b3b3b3;
+    overflow: scroll;
+    width: 600px;
+    height: 450px;
+    background: white;
+    margin-left: -300px;
+    box-shadow: 0px 10px 40px #666;
+}
+#titles h2{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#titlecontent{
+text-align: justify;
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+}*/
+
+

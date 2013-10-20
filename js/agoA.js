@@ -1,14 +1,33 @@
 /*jslint browser:true */
 /*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false */
 /*global renderer */
+/*global renderer2 */
+/*global sound */
 //
-// This file is suposed to serve as an API with all the methods of the game
+// This file is supposed to serve as an API with all the methods of the game
 var agoa = (function () {
     'use strict';
     var resourceTabel,
         player,
         prettyString,
-        words;
+        words,
+        currentMonster,
+        board,
+        tiles,
+        maxAttack = 35,
+        maxDefense = 30, // 59
+        gridXMax = 25,
+        gridYMax = 19,
+        mapNr = 1,
+        greetings = [
+            "This is a world full of fluffy monsters, awesome roundhouse kicking ponies, rabid rabbits and everything else that's not normal to sane human beings",
+            "You're the mighty, fierce, awesome adventurer from the far, far, very far away world",
+            "One day, when you are strolling through the forest, you meet a weird squirrel.",
+            "He's smoking on his tobacco pipe and mutterin. The only thing you could hear and understand from his muttering is \"Princess, high, stupid and world of warcraft level 200.\"",
+            "So from all that you decided to start your own quest. Find the stone-high stupid princess and get the cheats so you can level up your bubble-spandex boy to level 200"
+        ],
+        currentGreeting = 0;
+
     /*
      * Resources for item and monster generating
      */
@@ -19,62 +38,62 @@ var agoa = (function () {
         monsterArray: [{
             type: "Shark",
             attack: 3,
-            defence: 1,
+            defense: 1,
             health: 25,
             sourceArray: "monsterArray"
         }, {
             type: "Troll",
             attack: 3,
-            defence: 1,
+            defense: 1,
             health: 30,
             sourceArray: "monsterArray"
         }, {
             type: "Beholder",
             attack: 3,
-            defence: 1,
+            defense: 1,
             health: 40,
             sourceArray: "monsterArray"
         }, {
             type: "Dragon",
-            attack: 5,
-            defence: 2,
-            health: 60,
+            attack: 4,
+            defense: 2,
+            health: 50,
             sourceArray: "monsterArray"
         }, {
             type: "Wizard",
-            attack: 7,
-            defence: 1,
+            attack: 5,
+            defense: 1,
             health: 15,
             sourceArray: "monsterArray"
         }, {
-            type: "Ponny",
+            type: "Pony",
             attack: 2,
-            defence: 1,
+            defense: 1,
             health: 20,
             sourceArray: "monsterArray"
         }, {
             type: "Chihuahua",
             attack: 2,
-            defence: 2,
+            defense: 2,
             health: 15,
             sourceArray: "monsterArray"
         }, {
             type: "Demon",
-            attack: 6,
-            defence: 2,
-            health: 50,
+            attack: 4,
+            defense: 2,
+            health: 45,
             sourceArray: "monsterArray"
         }, {
             type: "Borat",
             attack: 3,
-            defence: 1,
+            defense: 1,
             health: 30,
             sourceArray: "monsterArray"
         }, {
             type: "Tom Blackmore",
-            attack: 6,
-            defence: 3,
-            health: 40,
+            attack: 4,
+            defense: 2,
+            health: 30,
             sourceArray: "monsterArray"
         }],
         /*
@@ -83,91 +102,101 @@ var agoa = (function () {
         colorArray: [{
             type: "Pink",
             attack: 1.3,
-            defence: 0.8,
-            sourceArray: "colorArray"
+            defense: 0.8,
+            sourceArray: "colorArray",
+            hex: '#d67cda'
         }, {
             type: "Green",
             attack: 1.4,
-            defence: 1,
-            sourceArray: "colorArray"
+            defense: 1,
+            sourceArray: "colorArray",
+            hex: '#4d9f3e'
         }, {
             type: "Blue",
             attack: 1.3,
-            defence: 1.8,
-            sourceArray: "colorArray"
+            defense: 1.8,
+            sourceArray: "colorArray",
+            hex: '#3e589f'
         }, {
             type: "Red",
             attack: 1.8,
-            defence: 0.6,
-            sourceArray: "colorArray"
+            defense: 0.6,
+            sourceArray: "colorArray",
+            hex: '#9f3a40'
         }, {
             type: "Black",
             attack: 1,
-            defence: 1,
-            sourceArray: "colorArray"
+            defense: 1,
+            sourceArray: "colorArray",
+            hex: '#343231'
         }, {
             type: "White",
             attack: 0.5,
-            defence: 1.9,
-            sourceArray: "colorArray"
+            defense: 1.9,
+            sourceArray: "colorArray",
+            hex: '#fafaf2'
+            // #fcfdec
         }, {
             type: "Yellow",
             attack: 0.8,
-            defence: 0.8,
-            sourceArray: "colorArray"
+            defense: 0.8,
+            sourceArray: "colorArray",
+            hex: '#cdc455'
         }, {
             type: "Orange",
             attack: 1.8,
-            defence: 1.5,
-            sourceArray: "colorArray"
+            defense: 1.5,
+            sourceArray: "colorArray",
+            hex: '#e49d59'
         }, {
             type: "Purple",
             attack: 2,
-            defence: 1,
-            sourceArray: "colorArray"
+            defense: 1,
+            sourceArray: "colorArray",
+            hex: '#9a72d4'
         }],
         /*
          * Fluff resources
          */
         fluffArray: [{
             type: "Funky",
-            attack: 1,
-            defence: 1,
+            attack: 1.3,
+            defense: 1.3,
             sourceArray: "fluffArray"
         }, {
             type: "Fluffy",
-            attack: 1,
-            defence: 1,
+            attack: 1.1,
+            defense: 1.1,
             sourceArray: "fluffArray"
         }, {
             type: "Shiny",
             attack: 1.5,
-            defence: 1.4,
+            defense: 1.4,
             sourceArray: "fluffArray"
         }, {
             type: "Rusty",
             attack: 0.5,
-            defence: 1,
+            defense: 0.8,
             sourceArray: "fluffArray"
         }, {
             type: "Enchanted",
             attack: 2,
-            defence: 2,
+            defense: 1.7,
             sourceArray: "fluffArray"
         }, {
             type: "Common",
             attack: 1,
-            defence: 1,
+            defense: 1,
             sourceArray: "fluffArray"
         }, {
             type: "Beautiful",
-            attack: 1.2,
-            defence: 1,
+            attack: 1.4,
+            defense: 1.4,
             sourceArray: "fluffArray"
         }, {
             type: "Disco",
-            attack: 1.3,
-            defence: 1.4,
+            attack: 1.2,
+            defense: 1.3,
             sourceArray: "fluffArray"
         }],
         /*
@@ -176,32 +205,32 @@ var agoa = (function () {
         weaponArray: [{
             type: "Dagger",
             attack: 1.2,
-            defence: 1,
+            defense: 1,
             sourceArray: "weaponArray"
         }, {
             type: "2H-Sword",
-            attack: 2,
-            defence: 1,
+            attack: 1.8,
+            defense: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Axe-Spray",
-            attack: 1.7,
-            defence: 1,
+            attack: 1.5,
+            defense: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Wand",
-            attack: 1.9,
-            defence: 1,
+            attack: 1.7,
+            defense: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Knuckles",
             attack: 1.4,
-            defence: 1,
+            defense: 1,
             sourceArray: "weaponArray"
         }, {
             type: "Whip",
             attack: 1.3,
-            defence: 1,
+            defense: 1,
             sourceArray: "weaponArray"
         }],
         /*
@@ -210,17 +239,17 @@ var agoa = (function () {
         armorArray: [{
             type: "Chest",
             attack: 1,
-            defence: 1.6,
+            defense: 1.9,
             sourceArray: "armorArray"
         }, {
             type: "Helm",
             attack: 1,
-            defence: 1.4,
+            defense: 1.6,
             sourceArray: "armorArray"
         }, {
             type: "Cup",
             attack: 1,
-            defence: 1.2,
+            defense: 1.4,
             sourceArray: "armorArray"
         }],
         /*
@@ -229,48 +258,87 @@ var agoa = (function () {
         sizeArray: [{
             type: "Tiny",
             attack: 0.8,
-            defence: 0.8,
+            defense: 0.8,
             sourceArray: "sizeArray"
         }, {
             type: "Small",
             attack: 0.9,
-            defence: 0.8,
+            defense: 0.8,
             sourceArray: "sizeArray"
         }, {
             type: "Average",
             attack: 1,
-            defence: 1,
+            defense: 1,
             sourceArray: "sizeArray"
         }, {
             type: "Big",
             attack: 1.2,
-            defence: 1.2,
+            defense: 1.2,
             sourceArray: "sizeArray"
         }, {
             type: "Giant",
             attack: 1.4,
-            defence: 1.2,
+            defense: 1.4,
             sourceArray: "sizeArray"
         }, {
             type: "Mighty",
             attack: 1.6,
-            defence: 1.1,
+            defense: 1.6,
             sourceArray: "sizeArray"
         }]
     };
     /*
-     * This is the player with all moethods and values available in this file, for public values and methods see bottom of file.
+     * This is the player with all methods and values available in this file, for public values and methods see bottom of file.
      */
+
+    function checkIfMonsterNearby() {
+        var tof = false,
+            monsterLeft = tiles[player.cord.y * gridXMax + player.cord.x - 1].monster,
+            monsterRight = tiles[player.cord.y * gridXMax + player.cord.x + 1].monster,
+            monsterUp = tiles[(player.cord.y - 1) * gridXMax + player.cord.x].monster,
+            monsterDown = tiles[(player.cord.y + 1) * gridXMax + player.cord.x].monster;
+
+        if (undefined !== monsterRight && monsterRight.alive()) {
+            tof = true;
+            currentMonster = monsterRight;
+        } else if (undefined !== monsterUp && monsterUp.alive()) {
+            tof = true;
+            currentMonster = monsterUp;
+        } else if (undefined !== monsterLeft && monsterLeft.alive()) {
+            tof = true;
+            currentMonster = monsterLeft;
+        } else if (undefined !== monsterDown && monsterDown.alive()) {
+            tof = true;
+            currentMonster = monsterDown;
+        }
+
+        if (tof) {
+            player.fighting = true;
+            renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type, currentMonster.boss);
+            sound.monster();
+        }
+
+        return tof;
+    }
+
     player = {
-        name: "",
-        fighting: true,
+        name: "Hero",
+        fighting: false,
         xp: 1,
         baseAttack: 3,
-        baseDefence: 2,
+        baseDefense: 1,
         health: 50,
         maxHealth: 50,
+        cord: {
+            x: 1,
+            y: 1
+        },
+        oldCord: {
+            x: 1,
+            y: 1
+        },
         potionsRemaining: 5,
-        inventory: { // Inventory has some items right now for demoing, should be empty when playing. 
+        inventory: { // Inventory has some items right now for demoing, should be empty when playing.
             armor: [{
                 // Tiny red common chest
                 typeValue: 0,
@@ -278,7 +346,7 @@ var agoa = (function () {
                 fluffValue: 5,
                 colorValue: 3,
                 attack: 1,
-                defence: 1,
+                defense: 1,
                 sourceArray: "armorArray"
             }, {
                 // Tiny green common helm
@@ -287,7 +355,7 @@ var agoa = (function () {
                 fluffValue: 5,
                 colorValue: 1,
                 attack: 1,
-                defence: 1,
+                defense: 1,
                 sourceArray: "armorArray"
             }, {
                 // Tiny pink common cup
@@ -296,26 +364,28 @@ var agoa = (function () {
                 fluffValue: 5,
                 colorValue: 0,
                 attack: 1,
-                defence: 1,
+                defense: 1,
                 sourceArray: "armorArray"
             }],
             weapon: [{
-                // Tiny green common dagger
-                typeValue: 0,
-                sizeValue: 0,
+                //
+                typeValue: 4,
+                sizeValue: 2,
                 fluffValue: 5,
                 colorValue: 1,
-                attack: 1,
-                defence: 1,
+                attack: 2,
+                defense: 1,
                 sourceArray: "weaponArray"
-            }, {
+            }]
+        },
+        /*, {
                 // Average green fluffy 2H-Sword
                 typeValue: 1,
                 sizeValue: 2,
                 fluffValue: 1,
                 colorValue: 1,
                 attack: 3,
-                defence: 1,
+                defense: 1,
                 sourceArray: "weaponArray"
             }, {
                 // Mighty red funky sword
@@ -324,11 +394,10 @@ var agoa = (function () {
                 fluffValue: 0,
                 colorValue: 3,
                 attack: 5,
-                defence: 1,
+                defense: 1,
                 sourceArray: "weaponArray"
-            }]
-        },
-        equiped: {
+            }*/
+        equipped: {
             chest: {
                 // Tiny green common chest
                 typeValue: 0,
@@ -336,7 +405,7 @@ var agoa = (function () {
                 fluffValue: 5,
                 colorValue: 1,
                 attack: 1,
-                defence: 1,
+                defense: 1,
                 sourceArray: "armorArray"
             },
             head: {
@@ -346,7 +415,7 @@ var agoa = (function () {
                 fluffValue: 5,
                 colorValue: 1,
                 attack: 1,
-                defence: 1,
+                defense: 1,
                 sourceArray: "armorArray"
             },
             crotch: {
@@ -356,22 +425,30 @@ var agoa = (function () {
                 fluffValue: 5,
                 colorValue: 1,
                 attack: 1,
-                defence: 1,
+                defense: 1,
                 sourceArray: "armorArray"
             },
             weapon: {
-                // Tiny green common dagger
-                typeValue: 0,
-                sizeValue: 0,
+                //
+                typeValue: 4,
+                sizeValue: 2,
                 fluffValue: 5,
                 colorValue: 1,
-                attack: 1,
-                defence: 1,
+                attack: 2,
+                defense: 1,
                 sourceArray: "weaponArray"
             }
         },
+        setName: function (name) {
+            player.name = name;
+            renderer2.updadePlaceholderForInput("What do you want to do...?");
+            player.printHero();
+        },
+        getName: function () {
+            return player.name;
+        },
         getLevel: function () {
-            return Math.ceil(player.xp / 20);
+            return Math.ceil(player.xp / 30);
         },
         getXp: function () {
             return player.xp;
@@ -388,31 +465,43 @@ var agoa = (function () {
         getInventory: function () {
             return player.inventory;
         },
-        getEquiped: function () {
-            return player.equiped;
+        getEquipped: function () {
+            return player.equipped;
         },
         getTotalAttack: function () {
             var total;
-            total = player.baseAttack * player.equiped.weapon.attack;
+            total = player.baseAttack * player.equipped.weapon.attack;
             return total;
         },
-        getTotalDefence: function () {
+        getTotalDefense: function () {
             var total;
-            total = player.baseDefence * player.equiped.chest.defence * player.equiped.head.defence;
+            total = player.baseDefense * player.equipped.chest.defense * player.equipped.head.defense * player.equipped.crotch.defense;
             return total;
+        },
+        printHero: function () {
+            var xpPercent = (player.xp % 30) / 30 * 100;
+            renderer2.printToLog.hero(player.name, player.getLevel(), xpPercent, (player.health / player.maxHealth) * 100, (player.getTotalAttack() / maxAttack) * 100, (player.getTotalDefense() / maxDefense) * 100);
+        },
+        dinged: function () {
+            player.maxHealth += 5;
+            player.health = player.maxHealth;
+            player.printHero();
+            sound.ding();
         },
         drinkPotion: function () {
             if (player.potionsRemaining > 0) {
                 var potionResult = 0;
                 player.potionsRemaining -= 1;
-                potionResult += Math.ceil(15 + 10 * Math.random());
+                potionResult += Math.ceil(15 + mapNr * 10 * Math.random());
                 player.health += potionResult;
                 if (player.health > player.maxHealth) {
                     player.health = player.maxHealth;
                 }
-                renderer.printToLog.drankPotion(potionResult, player.health);
+                renderer2.printToLog.drankPotion(potionResult, player.health);
+                player.printHero();
+                renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
             } else {
-                renderer.printToLog.noPotions();
+                renderer2.printToLog.noPotions();
             }
             return;
         },
@@ -422,24 +511,79 @@ var agoa = (function () {
             } else if (item.sourceArray === "armorArray") {
                 player.inventory.armor.push(item);
             }
-            renderer.printToLog.addToHistory(prettyString.item(item) + " added to your inventory.");
+            renderer2.printToLog.addToHistory(prettyString.item(item) + " added to your inventory.");
         },
         equipItem: function (item) {
             if (item.sourceArray === "weaponArray") {
-                player.equiped.weapon = item;
+                player.equipped.weapon = item;
             } else {
                 switch (item.typeValue) {
                 case 0:
-                    player.equiped.chest = item;
+                    player.equipped.chest = item;
                     break;
                 case 1:
-                    player.equiped.head = item;
+                    player.equipped.head = item;
                     break;
                 case 2:
-                    player.equiped.crotch = item;
+                    player.equipped.crotch = item;
                     break;
                 }
             }
+            player.printHero();
+            renderer2.printToLog.equipped(player.equipped);
+        },
+        movePlayer: function (direction) {
+            // Background Music starts to play as soon as you MOVE :)
+            // gameBoardSquares[player.cord.y * gridXMax + player.cord.x].innerText = '';
+            if (!player.fighting && player.health > 0 && player.name !== "Hero") {
+                sound.backgroundMusic();
+                switch (direction) {
+                case 0:
+                    if (player.cord.y > 0 && !tiles[(player.cord.y - 1) * gridXMax + player.cord.x].blocked) {
+                        player.oldCord.x = player.cord.x;
+                        player.oldCord.y = player.cord.y;
+                        player.cord.y -= 1;
+                    } else {
+                        sound.hitWall();
+                    }
+                    break;
+                case 1:
+                    if (player.cord.x < gridXMax - 1 && !tiles[player.cord.y * gridXMax + player.cord.x + 1].blocked) {
+                        player.oldCord.x = player.cord.x;
+                        player.oldCord.y = player.cord.y;
+                        player.cord.x += 1;
+                    } else {
+                        sound.hitWall();
+                    }
+                    break;
+                case 2:
+                    if (player.cord.y < gridYMax - 1 && !tiles[(player.cord.y + 1) * gridXMax + player.cord.x].blocked) {
+                        player.oldCord.x = player.cord.x;
+                        player.oldCord.y = player.cord.y;
+                        player.cord.y += 1;
+                    } else {
+                        sound.hitWall();
+                    }
+                    break;
+                case 3:
+                    if (player.cord.x > 0 && !tiles[player.cord.y * gridXMax + player.cord.x - 1].blocked) {
+                        player.oldCord.x = player.cord.x;
+                        player.oldCord.y = player.cord.y;
+                        player.cord.x -= 1;
+                    } else {
+                        sound.hitWall();
+                    }
+                    break;
+                }
+                if (tiles[player.cord.y * gridXMax + player.cord.x].goal === true) {
+                    board.reset();
+                    sound.newMap();
+                } else {
+                    renderer2.map.grid(player.cord, player.oldCord, tiles);
+                    checkIfMonsterNearby();
+                }
+            }
+            return;
         }
     };
     prettyString = { // prettyString is a 'collection' of methods for concatenating strings from the stored values of an item.
@@ -451,7 +595,7 @@ var agoa = (function () {
             return sizeStr + " " + colorStr + " " + fluffStr + " " + itemTypeStr;
         }
     };
-    words = { // our collection of word for comparsion with the input text
+    words = { // our collection of word for comparison with the input text
         actions: { // action words that a player may enter
             hit: ["kill", "poke", "attack", "hit", "kick", "punch", "stab"],
             pat: ["pat", "stroke", "pet"],
@@ -460,12 +604,12 @@ var agoa = (function () {
             drink: ["drink", "chug", "potion", "pot"],
             look: ["look", "search"],
             take: ["take", "loot", "pick", "fetch"],
-            equiped: ["equiped"],
-            inventory: ["inventory", "bag", "bags", "items", "stach"],
+            equipped: ["equipped"],
+            inventory: ["inventory", "bag", "bags", "items", "stash"],
             win: ["pablo", "win"],
             clear: ["clear"],
             quit: ["quit", "q", "exit"]
-        }, // direction words 
+        }, // direction words
         subcategories: {
             items: {
                 weapons: {
@@ -477,7 +621,7 @@ var agoa = (function () {
                     5: ["whip"]
                 },
                 armor: {
-                    0: ["chest", "breast", "harnesk"],
+                    0: ["chest", "breast", "cuirass"],
                     1: ["head", "helm", "helmet"],
                     2: ["crotch", "cup"]
                 }
@@ -519,13 +663,13 @@ var agoa = (function () {
         return randomizer;
     }
 
-    function calculatePowerForItem(item) { // calculate and set the attack and defence of an item or monster
+    function calculatePowerForItem(item) { // calculate and set the attack and defense of an item or monster
         var attack,
-            defence;
+            defense;
         attack = resourceTabel.sizeArray[item.sizeValue].attack * resourceTabel.fluffArray[item.fluffValue].attack * resourceTabel.colorArray[item.colorValue].attack * resourceTabel[item.sourceArray][item.typeValue].attack;
-        defence = resourceTabel.sizeArray[item.sizeValue].defence * resourceTabel.fluffArray[item.fluffValue].defence * resourceTabel.colorArray[item.colorValue].defence * resourceTabel[item.sourceArray][item.typeValue].defence;
+        defense = resourceTabel.sizeArray[item.sizeValue].defense * resourceTabel.fluffArray[item.fluffValue].defense * resourceTabel.colorArray[item.colorValue].defense * resourceTabel[item.sourceArray][item.typeValue].defense;
         item.attack = Math.round(attack);
-        item.defence = Math.round(defence);
+        item.defense = Math.ceil(defense);
         return item;
     }
 
@@ -558,14 +702,36 @@ var agoa = (function () {
     }
 
     function generateRandomMonster() {
-        var monster = generateRandomFromArray("monsterArray");
-        monster.health = resourceTabel.monsterArray[monster.typeValue].health;
+        var monster = generateRandomFromArray("monsterArray"),
+            health = Math.round(resourceTabel.monsterArray[monster.typeValue].health * (mapNr / 2));
+        monster.health = health;
+        monster.maxHealth = health;
+        monster.attack = Math.round(monster.attack * (mapNr / 2));
+        monster.alive = function () {
+            return monster.health > 0;
+        };
         return monster;
+    }
+
+    function generateRandomMapBoss() {
+        var boss = generateGenericItemDescription(),
+            health = Math.round(30 * mapNr / 3);
+        boss.typeValue = 9;
+        boss.sourceArray = "monsterArray";
+        boss = calculatePowerForItem(boss);
+        boss.maxHealth = health;
+        boss.health = health;
+        boss.attack = Math.round(boss.attack * (mapNr / 2) + 4);
+        boss.boss = true;
+        boss.alive = function () {
+            return boss.health > 0;
+        };
+        return boss;
     }
 
     function getKeysFromStringInWordsObject(text, category) {
         /*
-         * The logic behind finding key words in freeform text from input.
+         * The logic behind finding key words in free-form text from input.
          * Will return an array of all the key words (from an object) that you are looking for in a text string.
          */
         if (text) {
@@ -604,7 +770,7 @@ var agoa = (function () {
         /*
          * This will try and find an item in your inventory that matches your description.
          * will first check for type, if only one of that type exists a match has been found.
-         * If there are more than one item of that kind, check for other attriburtes that
+         * If there are more than one item of that kind, check for other attributes that
          * describes the item, color, size or fluff.
          */
         var items = [],
@@ -618,7 +784,7 @@ var agoa = (function () {
             attributesMatched = {
                 color: false,
                 fluff: false,
-                size: false
+                sizez: false
             };
         items = getKeysFromStringInWordsObject(text, words.subcategories.items.weapons);
         if (!items.length) {
@@ -675,11 +841,11 @@ var agoa = (function () {
                 for (i = 0; i < posibleItems.length; i += 1) {
                     if (posibleItems[i].sizeValue === Number(sizes[0])) {
                         moreLikleyItems.push(posibleItems[i]);
-                        attributesMatched.size = true;
+                        attributesMatched.sizez = true;
                     }
                 }
             }
-            if (moreLikleyItems.length === 1 || (attributesMatched.color && attributesMatched.fluff && attributesMatched.size)) {
+            if (moreLikleyItems.length === 1 || (attributesMatched.color && attributesMatched.fluff && attributesMatched.sizez)) {
                 return moreLikleyItems[0];
             }
             if (moreLikleyItems.length > 1) {
@@ -696,22 +862,6 @@ var agoa = (function () {
         return undefined;
     }
 
-    function resolveCombat(monster) {
-        /*
-         * Damage to monsters and players is calculated by:
-         * damagae = attackers damagae + (random 1 to 3) - defenders defence;
-         * tho there is a minimum of 1 damage.
-         */
-        var damageToPlayer = Math.ceil((monster.attack + Math.random() * 3) - player.getTotalDefence()),
-            damageToMonster = Math.ceil((player.getTotalAttack() + Math.random() * 3) - monster.defence);
-        damageToPlayer = damageToPlayer > 0 ? damageToPlayer : 1;
-        damageToMonster = damageToMonster > 0 ? damageToMonster : 1;
-        player.health = player.health - damageToPlayer;
-        monster.health = monster.health - damageToMonster;
-        renderer.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
-        return monster;
-    }
-
     function getPotentialLoot() {
         /*
          * Check if there is any loot, if there is, generate a random item and return it.
@@ -723,145 +873,326 @@ var agoa = (function () {
         return item;
     }
 
-    function takeActionOnString(text, item) {
-        renderer.printToLog.addToHistory(text);
-        var input = renderer.promptToUser(text),
-            actions = getActionsFromString(input),
-            i,
-            j,
-            match,
-            stillInEngagement = true;
-        if (actions) {
-            stillInEngagement = true;
-            for (i = 0; i < actions.length; i += 1) {
-                switch (actions[i]) {
-                case "hit":
-                    if (player.fighting) {
-                        item = resolveCombat(item);
-                    } else {
-                        renderer.alertToUser("There is nothing relevant to hit...");
-                    }
-                    break;
-                case "pat":
-                    renderer.printToLog.addToHistory("The " + prettyString.item(item) + " does not like it.");
-                    break;
-                case "move":
-                    renderer.printToLog.addToHistory("You got away!");
-                    stillInEngagement = false;
-                    break;
-                case "drink":
-                    player.drinkPotion();
-                    break;
-                case "use":
-                    //find what to use
-                    match = matchItemInInventory(input);
-                    if (match !== undefined && !match.length) {
-                        renderer.alertToUser("You have equiped your " + prettyString.item(match));
-                        player.equipItem(match);
-                    } else if (match && match.length > 1) {
-                        renderer.printToLog.addToHistory("You have:");
-                        for (j = 0; j < match.length; j += 1) {
-                            renderer.printToLog.addToHistory(prettyString.item(match[j]));
-                        }
-                        renderer.alertToUser("You have more that one item that fits that description,\nyou have to be more specific.");
-                    } else {
-                        renderer.alertToUser("You dont have an item like that");
-                    }
-                    break;
-                case "look":
-                    renderer.printToLog.addToHistory("You look around and see a tree and a " + prettyString.item(item));
-                    break;
-                case "take":
-                    renderer.printToLog.addToHistory("You pick up a tiny rock");
-                    break;
-                case "equiped":
-                    renderer.printToLog.equiped(player.equiped);
-                    break;
-                case "inventory":
-                    renderer.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
-                    break;
-                case "win":
-                    renderer.printToLog.addToHistory("You have summoned the all-knowing genie known as Pablo de la Win");
-                    break;
-                case "clear":
-                    console.clear();
-                    break;
-                case "quit":
-                    renderer.printToLog.quit();
-                    return undefined;
-                default:
-                    renderer.printToLog.addToHistory("What do you want to do?");
-                    renderer.alertToUser("I'm sorry I do not understand what you want to do.");
-                }
-            }
-            if (stillInEngagement) {
-                return true;
-            }
+    function monsterSlain(monster) {
+        var loot, lvl;
+        player.fighting = false;
+        renderer2.printToLog.killedMonster();
+        currentMonster = undefined;
+        lvl = player.getLevel();
+        player.xp += (monster.attack + monster.defense);
+        if (lvl !== player.getLevel()) {
+            player.dinged();
+        }
+        player.printHero();
+        loot = getPotentialLoot();
+        if (undefined !== loot) {
+            renderer2.printToLog.foundLoot(loot);
+            player.addToInventory(loot);
+            renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
+        } else if (Math.random() > 0.4) { // if no loot was found, check if health potion dropped.
+            renderer2.printToLog.foundPotion();
+            player.potionsRemaining += 1;
+            renderer2.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
+        }
+    }
+
+    function resolveCombat(monster) {
+        /*
+         * Damage to monsters and players is calculated by:
+         * damage = attackers damage + (random 1 to 3) - defenders defense;
+         * if attacker is the monster damags is multiplied by 1 + (player.getLevel / 5);
+         * tho there is a minimum of 1 damage.
+         */
+        var damageToPlayer = Math.ceil((monster.attack + Math.random() * 3) * (1 + player.getLevel() / 5) - player.getTotalDefense()),
+            damageToMonster = Math.ceil((player.getTotalAttack() + Math.random() * 3) - monster.defense);
+        damageToPlayer = damageToPlayer > 0 ? damageToPlayer : 1;
+        damageToMonster = damageToMonster > 0 ? damageToMonster : 1;
+        player.health = player.health - damageToPlayer;
+        monster.health = monster.health - damageToMonster;
+        sound.hit();
+        renderer2.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
+        player.printHero();
+        renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type, currentMonster.boss);
+        if (player.getHealth() < 1) {
+            renderer2.gameOver();
+            sound.gameOver();
+            sound.backgroundMusicStop(); // Our background Music stops, as soon as we "spawn" our gameOver :)
+            player.fighting = false;
             return false;
         }
-        renderer.alertToUser("You must make a choise as you stand in front of the " + prettyString.item(item));
-        return takeActionOnString(text, item);
-    }
-
-    function initiateFightWith(monster) {
-        //if returning true, the player will continue play, if false the player quit / is dead.
-        var loot, fighting;
-        player.fighting = true;
-        while (player.fighting && player.getHealth() > 0 && monster.health > 0) {
-            fighting = takeActionOnString("You stand before the " + prettyString.item(monster), monster);
-            player.fighting = fighting;
-            if (undefined === fighting) {
-                // if fighting is undefined the user has selected quit.
-                return false;
-            }
-        }
-        if (player.fighting) {
-            if (player.health <= 0) {
-                renderer.gameOver();
-                return false;
-            }
-            if (monster.health <= 0) {
-                renderer.alertToUser("You have slain the " + prettyString.item(monster));
-                player.xp += (monster.attack + monster.defence);
-                loot = getPotentialLoot();
-                if (undefined !== loot) {
-                    renderer.printToLog.foundLoot(loot);
-                    player.addToInventory(loot);
-                } else if (Math.random() > 0.7) { // if no loot was found, check it healthpotion droped.
-                    renderer.printToLog.foundPotion();
-                    player.potionsRemaining += 1;
-                }
-                return true;
-            }
-        } else {
-            renderer.alertToUser("You cowardly run away!");
+        if (monster.health < 1) {
+            monsterSlain(monster);
             return true;
         }
+        currentMonster = monster;
+        return true;
     }
 
-    function initiateFightWithRandomMonster() {
-        return initiateFightWith(generateRandomMonster());
-    }
+    function takeActionOnString(input) {
+        if (player.name === "Hero") {
+            player.setName(input.trim());
+        } else {
+            var actions = getActionsFromString(input),
+                item = currentMonster,
+                i,
+                j,
+                match,
+                stillInEngagement = true;
+            if (actions) {
+                stillInEngagement = true;
+                for (i = 0; i < actions.length; i += 1) {
+                    switch (actions[i]) {
+                    case "hit":
+                        if (player.fighting) {
+                            stillInEngagement = resolveCombat(item);
+                        } else {
+                            renderer2.printToLog.addToHistory("There is nothing relevant to hit...");
+                        }
+                        break;
+                    case "pat":
+                        if (item) {
+                            renderer2.printToLog.addToHistory("The " + prettyString.item(item) + " does not like it.");
+                        }
 
-    function farmMonsterTillLevel(level) {
-        /*
-         * Will span new monsters untill you have reached the next level.
-         */
-        var keepGoing;
-        while (agoa.player.getHealth() > 0 && agoa.player.getLevel() < level) {
-            keepGoing = agoa.initiateFightWithRandomMonster();
-            if (!keepGoing) {
-                return false;
+                        break;
+                    case "move":
+                        if (player.fighting) {
+                            player.fighting = false;
+                            if (player.cord.x - player.oldCord.x > 0) {
+                                player.movePlayer(3);
+                            } else if (player.cord.x - player.oldCord.x < 0) {
+                                player.movePlayer(1);
+                            } else {
+                                if (player.cord.y - player.oldCord.y > 0) {
+                                    player.movePlayer(0);
+                                } else {
+                                    player.movePlayer(2);
+                                }
+                            }
+
+                            renderer2.printToLog.addToHistory("You got away!");
+                            stillInEngagement = false;
+                        }
+                        break;
+                    case "drink":
+                        player.drinkPotion();
+                        break;
+                    case "use":
+                        //find what to use
+                        match = matchItemInInventory(input);
+                        if (match !== undefined && !match.length) {
+                            renderer2.printToLog.addToHistory("You have equipped your " + prettyString.item(match));
+                            player.equipItem(match);
+                        } else if (match && match.length > 1) {
+                            renderer2.printToLog.addToHistory("You have:");
+                            for (j = 0; j < match.length; j += 1) {
+                                renderer2.printToLog.addToHistory(prettyString.item(match[j]));
+                            }
+                            renderer2.printToLog.addToHistory("You have more that one item that fits that description,\nyou have to be more specific.");
+                        } else {
+                            renderer2.printToLog.addToHistory("You don't have an item like that");
+                        }
+                        break;
+                    case "look":
+                        if (item) {
+                            renderer2.printToLog.addToHistory("You look around and see a " + prettyString.item(item));
+                        } else {
+                            renderer2.printToLog.addToHistory("You look around and see some walls");
+                        }
+                        break;
+                    case "take":
+                        renderer2.printToLog.addToHistory("You pick up a tiny rock");
+                        break;
+                    case "equipped":
+                        renderer.printToLog.equipped(player.equipped);
+                        break;
+                    case "inventory":
+                        renderer.printToLog.inventory(player.getInventory(), player.getPotionsRemaining());
+                        break;
+                    case "win":
+                        renderer2.printToLog.addToHistory("You have summoned the all-knowing genie known as Pablo de la Win");
+                        break;
+                    case "clear":
+                        console.clear();
+                        break;
+                    case "quit":
+                        renderer2.printToLog.quit();
+                        return undefined;
+                    default:
+                        renderer2.printToLog.addToHistory("What do you want to do?");
+                        renderer.alertToUser("I'm sorry I do not understand what you want to do.");
+                    }
+                }
+                if (!stillInEngagement) {
+                    player.fighting = false;
+                    currentMonster = undefined;
+                }
+                return;
+            }
+            renderer.alertToUser("You must make a choice as you stand in front of the " + prettyString.item(item));
+        }
+    }
+    board = (function () {
+        var gameBoardSquares,
+            startX = 13,
+            startY = 9,
+            i,
+            j,
+            tr,
+            td,
+            tile;
+
+        function makeTile() {
+            tile = {
+                monster: undefined,
+                blocked: true,
+                visible: true
+            };
+            return tile;
+        }
+
+        function shuffle(o) { //v1.0
+            var j, x, i;
+            for (i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
+        };
+
+        function tileForCord(x, y) {
+            'use strict';
+            return tiles[y * gridXMax + x];
+        }
+
+        function getRandomDirections() {
+            var randomDirections = [],
+                i;
+            for (i = 0; i < 4; i += 1) {
+                randomDirections.push(i + 1);
+            }
+            return shuffle(randomDirections);
+        }
+
+        function recursion(x, y) {
+            var directions = getRandomDirections(),
+                i;
+            for (i = 0; i < directions.length; i += 1) {
+                switch (directions[i]) {
+                case 1: //up
+                    if (y - 2 <= 0) {
+                        continue;
+                    }
+                    if (tileForCord(x, y - 2).blocked) {
+                        tileForCord(x, y - 2).blocked = false;
+                        tileForCord(x, y - 1).blocked = false;
+                        recursion(x, (y - 2));
+                    }
+                    break;
+                case 2: //left
+                    if (x + 2 >= gridXMax - 1) {
+                        continue;
+                    }
+                    if (tileForCord(x + 2, y).blocked) {
+                        tileForCord(x + 2, y).blocked = false;
+                        tileForCord(x + 1, y).blocked = false;
+                        recursion((x + 2), y);
+                    }
+                    break;
+                case 3: //down
+                    if (y + 2 >= gridYMax) {
+                        continue;
+                    }
+                    if (tileForCord(x, y + 2).blocked) {
+                        tileForCord(x, y + 2).blocked = false;
+                        tileForCord(x, y + 1).blocked = false;
+                        recursion(x, (y + 2));
+                    }
+                    break;
+                case 4: //right
+                    if (x - 2 <= 0) {
+                        continue;
+                    }
+                    if (tileForCord(x - 2, y).blocked) {
+                        tileForCord(x - 2, y).blocked = false;
+                        tileForCord(x - 1, y).blocked = false;
+                        recursion((x - 2), y);
+                    }
+                    break;
+                }
             }
         }
-        return keepGoing;
-    }
+
+        function createTilesArray() {
+            'use strict';
+            var currentTile,
+                tiles = [];
+            for (i = 0; i < gridYMax * gridXMax; i += 1) {
+                currentTile = makeTile();
+                tiles.push(currentTile);
+            }
+            tiles[startY * gridXMax + startX].blocked = false;
+            return tiles;
+        }
+
+        function addMonstersToTiles() {
+            var valid = true,
+                x,
+                y,
+                j,
+                monsterDensity = 0.95 - (0.1 * mapNr),
+                bottomRightCord = gridYMax * gridXMax - (2 + gridXMax),
+                topLeftCord = gridXMax + 1;
+            for (i = 0; i < tiles.length; i += 1) {
+                if (i !== player.cord.y * gridXMax + player.cord.x) {
+                    if (i === bottomRightCord || i === topLeftCord) {
+                        tiles[i].goal = true;
+                        tiles[i].monster = generateRandomMapBoss();
+                    }
+                }
+                valid = true;
+                if (i % 2 == 0 && i > gridXMax && !tiles[i].blocked && Math.random() > monsterDensity) {
+                    for (y = 1, x = 4; x > 0; y += 1, x -= 1) {
+                        if (i > gridXMax * y && i < gridXMax * y + x) {
+                            valid = false;
+                        } else if (i >= gridXMax * (gridYMax - y) - x && i <= gridXMax * (gridYMax - y)) {
+                            valid = false;
+                        }
+                    }
+                    if (valid) {
+                        tiles[i].monster = generateRandomMonster();
+                    }
+                }
+            }
+        }
+
+        function resetBoard() {
+            mapNr += 1;
+            renderer2.map.reset(mapNr);
+            tiles = createTilesArray();
+            recursion(startX, startY);
+            addMonstersToTiles();
+            renderer2.map.grid(player.cord, player.cord, tiles);
+        }
+
+        function createBoard() {
+            tiles = createTilesArray();
+            recursion(startX, startY);
+            addMonstersToTiles();
+            renderer2.map.gridBackground(tiles);
+            renderer2.map.grid(player.cord, player.cord, tiles);
+        }
+        return {
+            create: createBoard,
+            reset: resetBoard
+        }
+
+    }());
     /*
-     * All the public mothods and values.
+     * All the public methods and values.
      */
+    currentMonster = generateRandomMonster();
     return {
         player: {
-            name: player.name,
+            setName: player.setName,
+            getName: player.getName,
             fighting: player.fighting,
             getLevel: player.getLevel,
             getXp: player.getXp,
@@ -869,10 +1200,12 @@ var agoa = (function () {
             getMaxHealth: player.getMaxHealth,
             getPotionsRemaining: player.getPotionsRemaining,
             getInventory: player.getInventory,
-            getEquiped: player.getEquiped,
+            getEquipped: player.getEquipped,
             getTotalAttack: player.getTotalAttack,
-            getTotalDefence: player.getTotalDefence,
-            drinkPotion: player.drinkPotion
+            getTotalDefense: player.getTotalDefense,
+            drinkPotion: player.drinkPotion,
+            move: player.movePlayer,
+            printHero: player.printHero
         },
         prettyString: prettyString,
         calculatePowerForItem: calculatePowerForItem,
@@ -886,8 +1219,10 @@ var agoa = (function () {
             getActions: getActionsFromString,
             getDirection: getDirectionFromString
         },
-        initiateFightWith: initiateFightWith,
-        initiateFightWithRandomMonster: initiateFightWithRandomMonster,
-        farmMonsterTillLevel: farmMonsterTillLevel
+        board: board
+        // },
+        // initiateFightWith: initiateFightWith,
+        // initiateFightWithRandomMonster: initiateFightWithRandomMonster,
+        // farmMonsterTillLevel: farmMonsterTillLevel
     };
 }());

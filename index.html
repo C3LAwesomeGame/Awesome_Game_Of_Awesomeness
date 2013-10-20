@@ -1,11 +1,126 @@
 <!doctype html>
 <head>
+    <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <title>AGOA</title>
-    <script type="text/javascript" src="js/renderer_log.js"></script>
-    <script type="text/javascript" src="js/agoA.js"></script>
-    <script type="text/javascript" src="js/game.js"></script>
+    <!-- <link href="css/agoA.css"  rel="StyleSheet" type="text/css" /> -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <link href="css/intro.css"  rel="StyleSheet" type="text/css" />
+    <link href="css/main.css"  rel="StyleSheet" type="text/css" />
 </head>
 <body>
-   
+    <audio id="gamesound"></audio>
+    <audio id="introSound" src="audio/starwars.mp3" ></audio>
+    <audio id="backM" src="audio/agoa.mp3" type="audio/mpeg" loop="loop"></audio>
+    <div class="gameContaienr">
+        <div class="game">
+            <table class="gridLayoutTable">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div id="inventory" class="box">
+                                <h2>Inventory</h2>
+                                <div class="inventoryScrollContainer">
+                                    <h3>Armor</h3>
+                                    <ul></ul>
+                                    <h3>Weapons</h3>
+                                    <ul></ul>
+                                    <h3>Potions</h3>
+                                    <ul></ul>
+                                </div>
+                            </div> <!-- #inventory -->
+                        </td>
+                        <td>
+                            <span id="mapLevel">1</span>
+                            <div id="gameBoard" class="box">
+                                <table id="gameGrid">
+                                    <tbody></tbody>
+                                </table>
+                            </div> <!-- #gameBoard -->
+                        </td>
+                        <td>
+                            <div class="enemy box">
+
+
+                                <h2>Monster</h2>
+                                <ul>
+                                    <li>Health: <br><progress id="monsterHealthBar" value="0" max="100"></progress></li>
+                                    <li>Attack: <br><progress id="monsterAttackBar" value="0" max="100"></progress></li>
+                                    <li>Defense: <br><progress id="monsterDefenseBar" value="0" max="100"></progress></li>
+                                </ul>
+                                <div id="enemyPortraitContainer" class="enemyPortraitContainer">
+                                    <span class="enemyPortraitColor"></span>
+                                    <img src="img/Fluffy.png" id="enemyPortraitFluff">
+                                    <img src="img/Wizard.png" id="enemyPortrait" class="enemyPortrait">
+                                    <img src="img/noSign.png" id="noSign">
+                                </div> <!-- #enemyPortraitContainer -->
+
+                            </div> <!-- .enemy -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="equipped" class="box">
+                                <h2>Equipped</h2>
+                                <h3>Head</h3>
+                                <ul></ul>
+                                <h3>Chest</h3>
+                                <ul></ul>
+                                <h3>Crotch</h3>
+                                <ul></ul>
+                                <h3>Weapons</h3>
+                                <ul></ul>
+                            </div> <!-- #equipped -->
+                        </td>
+                        <td>
+                            <div class="storyContainer">
+                                <ul></ul>
+                                <input id="userInputField" type="text" placeholder="What is your name traveler?" autofocus>
+                            </div> <!-- .storyContainer -->
+                        </td>
+                        <td>
+                            <div class="hero box">
+                                <h2>Hero</h2>
+                                <ul>
+                                    <li>Level: <span id="levelSpan">1</span><br><progress id="xpBar" value="3" max="100"></progress></li>
+                                    <li>Health: <br><progress id="healthBar" value="100" max="100"></progress></li>
+                                    <li>Attack: <br><progress id="attackBar" value="8" max="100"></progress></li>
+                                    <li>Defense: <br><progress id="defenseBar" value="1" max="100"></progress></li>
+                                </ul>
+                            </div> <!-- .hero -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table> <!-- .gridLayoutTable -->
+        </div> <!-- .game -->
+    </div>
+    <div id="gameOver">
+        <h2>GAME OVER!!!</h2>
+        <div id="byebye">
+            <img src="img/ponySax.gif" id="saxImg"/>
+            <img src="img/DiscoBall.gif" id="discoBall">
+        </div>
+    </div><!--gameOver-->
+
+    <div id="intro">
+        <h1>Awesome Game Of Awesomeness</h1>
+        <div id="titles">
+            <div id="titlecontent">
+                <p>
+                    This is a world full of fluffy monsters, awesome roundhouse kicking ponies, rabid rabbits and everything else that's not normal to sane human beings,
+                    You're the mighty, fierce, awesome adventurer from the far, far, very far away world.<br/><br/>
+                    One day, when you are strolling through the forest, you meet a weird squirrel.<br/><br/>
+                    He's smoking on his tobacco pipe and mutterin. The only thing you could hear and understand from his muttering is Princess, high, stupid and world of warcraft level 200.<br/><br/>
+                    So from all that you decided to start your own quest. Find the stone-high stupid princess and get the cheats so you can level up your bubble-spandex boy to level 200
+                </p>
+
+            </div>
+        </div>
+        <span id="skipIntro">Skip</span>
+    </div>
+    <script type="text/javascript" src="js/audio.js"></script>
+    <script type="text/javascript" src="js/renderer_html.js"></script>
+    <script type="text/javascript" src="js/agoA.js"></script>
+    <script type="text/javascript" src="js/game.js"></script>
+    <script type="text/javascript" src="js/controllers.js"></script>
 </body>
 </html>
