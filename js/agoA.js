@@ -314,7 +314,7 @@ var agoa = (function () {
 
         if (tof) {
             player.fighting = true;
-            renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type);
+            renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type, currentMonster.boss);
             sound.monster();
         }
 
@@ -368,16 +368,17 @@ var agoa = (function () {
                 sourceArray: "armorArray"
             }],
             weapon: [{
-                    // Tiny green common dagger
-                    typeValue: 0,
-                    sizeValue: 2,
-                    fluffValue: 5,
-                    colorValue: 1,
-                    attack: 1,
-                    defense: 1,
-                    sourceArray: "weaponArray"
-                }
-                /*, {
+                //
+                typeValue: 4,
+                sizeValue: 2,
+                fluffValue: 5,
+                colorValue: 1,
+                attack: 2,
+                defense: 1,
+                sourceArray: "weaponArray"
+            }]
+        },
+        /*, {
                 // Average green fluffy 2H-Sword
                 typeValue: 1,
                 sizeValue: 2,
@@ -396,8 +397,6 @@ var agoa = (function () {
                 defense: 1,
                 sourceArray: "weaponArray"
             }*/
-            ]
-        },
         equipped: {
             chest: {
                 // Tiny green common chest
@@ -430,8 +429,8 @@ var agoa = (function () {
                 sourceArray: "armorArray"
             },
             weapon: {
-                // Tiny green common dagger
-                typeValue: 0,
+                //
+                typeValue: 4,
                 sizeValue: 2,
                 fluffValue: 5,
                 colorValue: 1,
@@ -714,6 +713,22 @@ var agoa = (function () {
         return monster;
     }
 
+    function generateRandomMapBoss() {
+        var boss = generateGenericItemDescription(),
+            health = Math.round(30 * mapNr / 3);
+        boss.typeValue = 9;
+        boss.sourceArray = "monsterArray";
+        boss = calculatePowerForItem(boss);
+        boss.maxHealth = health;
+        boss.health = health;
+        boss.attack = Math.round(boss.attack * (mapNr / 2) + 4);
+        boss.boss = true;
+        boss.alive = function () {
+            return boss.health > 0;
+        };
+        return boss;
+    }
+
     function getKeysFromStringInWordsObject(text, category) {
         /*
          * The logic behind finding key words in free-form text from input.
@@ -897,7 +912,7 @@ var agoa = (function () {
         sound.hit();
         renderer2.printToLog.combatResult(player.health, monster, damageToPlayer, damageToMonster);
         player.printHero();
-        renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type);
+        renderer2.printToLog.monster(resourceTabel.monsterArray[currentMonster.typeValue].type, currentMonster.health / currentMonster.maxHealth * 100, currentMonster.attack / 32 * 100, currentMonster.defense / 10 * 100, resourceTabel.colorArray[currentMonster.colorValue].hex, resourceTabel.fluffArray[currentMonster.fluffValue].type, currentMonster.boss);
         if (player.getHealth() < 1) {
             renderer2.gameOver();
             sound.gameOver();
@@ -1129,10 +1144,11 @@ var agoa = (function () {
                 if (i !== player.cord.y * gridXMax + player.cord.x) {
                     if (i === bottomRightCord || i === topLeftCord) {
                         tiles[i].goal = true;
+                        tiles[i].monster = generateRandomMapBoss();
                     }
                 }
                 valid = true;
-                if (i > gridXMax && !tiles[i].blocked && Math.random() > monsterDensity) {
+                if (i % 2 == 0 && i > gridXMax && !tiles[i].blocked && Math.random() > monsterDensity) {
                     for (y = 1, x = 4; x > 0; y += 1, x -= 1) {
                         if (i > gridXMax * y && i < gridXMax * y + x) {
                             valid = false;
